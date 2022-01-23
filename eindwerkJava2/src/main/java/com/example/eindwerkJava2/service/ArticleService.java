@@ -27,15 +27,15 @@ public class ArticleService {
     }
 
     public Boolean addArticle(String articleName, String articleDescription, Long categoryId,
-                              Long supplierId, String thumbNail) {
+                              Long supplierId, byte[] articleImage) {
 
         if (articleRepository.existsArticleBySupplierId(supplierId)
                 && articleRepository.existsArticleByArticleName(articleName)
                 && articleRepository.existsArticleByArticleDescription(articleDescription)
-                && articleRepository.existsArticleByCategorieId(categoryId)) {
+                && articleRepository.existsArticleByCategoryId(categoryId)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,categoryId,supplierId, thumbNail);
+            Article newArticle = new Article(articleName,articleDescription,categoryId,supplierId, articleImage);
             articleRepository.save(newArticle);
             return true;
         }

@@ -9,6 +9,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     boolean existsArticleBySupplierId(Long supplierId);
     boolean existsArticleByArticleName(String articleName);
     boolean existsArticleByArticleDescription(String articleDescription);
-    boolean existsArticleByCategorieId(Long categorieId);
+    boolean existsArticleByCategoryId(Long categoryId);
     Article findByArticleId(Long articleId);
 }

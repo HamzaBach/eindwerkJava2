@@ -1,4 +1,6 @@
 HELP.md
+main/resources/application.properties
+main/java/com.example.eindwerkJava2/tools/DummyDataConfig.java
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

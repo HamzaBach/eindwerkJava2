@@ -4,12 +4,14 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@RestController
-@RequestMapping(path = "api/v1/articles")
+@Controller
+//  @RestController
+@RequestMapping(path = "articles")
 public class ArticleController {
     private final ArticleService articleService;
 
@@ -19,8 +21,10 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<Article> getArticles() {
-        return articleService.getArticles();
+    public String getArticles(Model model) {
+        List<Article> articles = articleService.getArticles();
+        model.addAttribute("ArticlesList",articles);
+        return "articles";
     }
 
     @GetMapping(path = "{articleId}")
@@ -30,8 +34,9 @@ public class ArticleController {
 
     @PostMapping(path = "newArticle")
     public void addArticle(String articleName, String articleDescription, Long categoryId,
-                           Long supplierId, String thumbNail) {
-        articleService.addArticle(articleName, articleDescription, categoryId, supplierId, thumbNail);
+                           Long supplierId, byte[] articleImage) {
+
+        articleService.addArticle(articleName, articleDescription, categoryId, supplierId, articleImage);
     }
 
 }
