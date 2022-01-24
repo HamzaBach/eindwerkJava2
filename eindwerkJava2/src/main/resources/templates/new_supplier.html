@@ -9,11 +9,18 @@
     <form action="#" th:action="@{/saveSupplier}" th:object="${supplier}", method="POST">
         <input th:field="*{supplierName}" type="text" placeholder="Supplier Name">
         <input th:field="*{adress}"  type="text"  placeholder="Adress">
-        <select>
-            <option th:each="city : ${citiesList}" th:text="${city.cityName}">
+        <select th:field="*{city}">
+            <th:block th:each="city : ${citiesList}">
+                <option th:text="${city.cityName}" th:value="${city.cityId}">
+            </th:block>
+
         </select>
-        <select>
-            <option th:each="country : ${countriesList}" th:text="${country.countryName}"}></option>
+        <select th:field="*{country}">
+            <th:block th:each="country : ${countriesList}">
+                <option th:text="${country.countryName}" th:value="${country.countryId}">
+
+            </th:block>
+
         </select>
 
         <button type="submit" class="btn btn-info">Register</button>

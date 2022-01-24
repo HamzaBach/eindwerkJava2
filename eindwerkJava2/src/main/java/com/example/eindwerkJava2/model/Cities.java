@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Cities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cityId;
+    private long cityId;
 
     @Column(name = "city_zipcode")
     private int cityZipcode;
@@ -33,7 +33,7 @@ public class Cities {
         this.cityProvince = cityProvince;
     }
 
-    public int getCityId() {
+    public long getCityId() {
         return cityId;
     }
 
@@ -53,8 +53,5 @@ public class Cities {
         this.cityZipcode = cityZipcode;
     }
 
-    @Override
-    public String toString() {
-        return cityName+ " - " + cityZipcode;
-    }
+
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Countries {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int countryId;
+    private long countryId;
 
     @Column(name = "country_name")
     private String countryName;
@@ -17,7 +17,7 @@ public class Countries {
 
 
 
-    public int getCountryId() {
+    public long getCountryId() {
         return countryId;
     }
 
@@ -41,8 +41,4 @@ public class Countries {
         this.iso = iso;
     }
 
-    @Override
-    public String toString() {
-        return  countryName;
-    }
 }
