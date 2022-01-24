@@ -2,6 +2,7 @@ package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Category;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,15 +29,15 @@ public class ArticleService {
     }
 
     public Boolean addArticle(String articleName, String articleDescription, Category category,
-                              Long supplierId, byte[] articleImage) {
+                              Supplier supplier, byte[] articleImage) {
 
-        if (articleRepository.existsArticleBySupplierId(supplierId)
+        if (articleRepository.existsArticleBySupplier(supplier)
                 && articleRepository.existsArticleByArticleName(articleName)
                 && articleRepository.existsArticleByArticleDescription(articleDescription)
                 && articleRepository.existsArticleByCategory(category)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,category,supplierId, articleImage);
+            Article newArticle = new Article(articleName,articleDescription,category,supplier, articleImage);
             articleRepository.save(newArticle);
             return true;
         }

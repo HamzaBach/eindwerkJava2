@@ -20,27 +20,29 @@ public class Article {
     @ManyToOne
     @JoinColumn(name="categoryId")
     private Category category;
-    private Long supplierId;//TODO: refer to dependent classes!!!
+    @ManyToOne
+    @JoinColumn(name="supplierId")
+    private Supplier supplier;
     private String articleBarcode;
     private byte[] articleImage;
 
     public Article() {
     }
-    public Article( String articleName, String articleDescription,
-    Category category, Long supplierId, byte[] articleImage){
+    public Article(String articleName, String articleDescription,
+                   Category category, Supplier supplier, byte[] articleImage){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
-        this.supplierId=supplierId;
+        this.supplier = supplier;
         this.articleImage = articleImage;
     }
 
     public Article( String articleName, String articleDescription,
-                    Category category, Long supplierId){
+                    Category category, Supplier supplier){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
-        this.supplierId=supplierId;
+        this.supplier = supplier;
     }
 
     //Getters & Setters:
@@ -95,12 +97,12 @@ public class Article {
         this.category = category;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public String getArticleBarcode() {

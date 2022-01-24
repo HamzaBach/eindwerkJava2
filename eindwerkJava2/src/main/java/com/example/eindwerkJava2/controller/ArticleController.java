@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Category;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class ArticleController {
 
     @PostMapping(path = "newArticle")
     public void addArticle(String articleName, String articleDescription, Category category,
-                           Long supplierId, byte[] articleImage) {
+                           Supplier supplierId, byte[] articleImage) {
 
         articleService.addArticle(articleName, articleDescription, category, supplierId, articleImage);
     }
