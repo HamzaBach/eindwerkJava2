@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/Category")
+@RequestMapping(path = "Categories")
 
 public class CategoryController {
     private final CategoryService categoryService;
@@ -21,7 +21,7 @@ public class CategoryController {
     @GetMapping
     public List<Category> getCategories() {return categoryService.getCategories();}
 
-    @PostMapping(path = "/newCategory")
+    @PostMapping(path = "newCategory")
     public void addCategory(@ModelAttribute("category") Category category){
         categoryService.addCategory(category);
     }
