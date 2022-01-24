@@ -20,6 +20,8 @@
                 <th>Adress</th>
                 <th>City</th>
                 <th>Country</th>
+                <th></th>
+
             </tr>
             </thead>
             <tbody>
@@ -28,6 +30,9 @@
                 <td th:text="${supplier.adress}"></td>
                 <td th:text="${supplier.city}"></td>
                 <td th:text="${supplier.country}"></td>
+                <td>
+                   <a th:href="@{'/supplier/edit/' + ${supplier.supplierId}} ">EDIT</a>
+                </td>
             </tr>
             </tbody>
         </table>

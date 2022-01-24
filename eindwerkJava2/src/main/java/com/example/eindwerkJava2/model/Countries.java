@@ -41,4 +41,9 @@ public class Countries {
         this.iso = iso;
     }
 
+
+    @Override
+    public String toString() {
+        return countryName;
+    }
 }

@@ -27,6 +27,10 @@ public class Supplier {
     public Supplier() {
     }
 
+    public int getSupplierId() {
+        return supplierId;
+    }
+
     public String getSupplierName() {
         return supplierName;
     }

@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Supplier;
+import com.example.eindwerkJava2.repositories.SupplierRepository;
 import com.example.eindwerkJava2.service.CitiesService;
 import com.example.eindwerkJava2.service.CountriesService;
 import com.example.eindwerkJava2.service.SupplierService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -40,6 +42,13 @@ public class SupplierController {
     @PostMapping("/saveSupplier")
     public String saveSupplier(@ModelAttribute("supplier") Supplier supplier){
         this.supplierService.saveSupplier(supplier);
-        return "redirect:/";
+        return "redirect:/supplier";
+    }
+
+
+    @GetMapping("/supplier/edit/{supplierId}")
+    public String showEditSupplierForm(@PathVariable("supplierId") Integer id, Model model){
+
+        return "supplier_edit";
     }
 }
