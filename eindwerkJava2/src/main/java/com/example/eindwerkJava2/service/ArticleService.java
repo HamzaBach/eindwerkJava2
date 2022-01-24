@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,16 +27,16 @@ public class ArticleService {
         } else throw new IllegalStateException("Article with id " + articleId + " does not exist!");
     }
 
-    public Boolean addArticle(String articleName, String articleDescription, Long categoryId,
+    public Boolean addArticle(String articleName, String articleDescription, Category category,
                               Long supplierId, byte[] articleImage) {
 
         if (articleRepository.existsArticleBySupplierId(supplierId)
                 && articleRepository.existsArticleByArticleName(articleName)
                 && articleRepository.existsArticleByArticleDescription(articleDescription)
-                && articleRepository.existsArticleByCategoryId(categoryId)) {
+                && articleRepository.existsArticleByCategory(category)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,categoryId,supplierId, articleImage);
+            Article newArticle = new Article(articleName,articleDescription,category,supplierId, articleImage);
             articleRepository.save(newArticle);
             return true;
         }

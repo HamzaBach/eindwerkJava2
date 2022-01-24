@@ -17,7 +17,9 @@ public class Article {
     private Long articleId;
     private String articleName;
     private String articleDescription;
-    private Long categoryId;//TODO: refer to dependent classes!!!
+    @ManyToOne
+    @JoinColumn(name="categoryId")
+    private Category category;
     private Long supplierId;//TODO: refer to dependent classes!!!
     private String articleBarcode;
     private byte[] articleImage;
@@ -25,19 +27,19 @@ public class Article {
     public Article() {
     }
     public Article( String articleName, String articleDescription,
-    Long categoryId, Long supplierId, byte[] articleImage){
+    Category category, Long supplierId, byte[] articleImage){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
-        this.categoryId=categoryId;
+        this.category=category;
         this.supplierId=supplierId;
         this.articleImage = articleImage;
     }
 
     public Article( String articleName, String articleDescription,
-                    Long categoryId, Long supplierId){
+                    Category category, Long supplierId){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
-        this.categoryId=categoryId;
+        this.category=category;
         this.supplierId=supplierId;
     }
 
@@ -85,12 +87,12 @@ public class Article {
         this.articleDescription = articleDescription;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryId(Category category) {
+        this.category = category;
     }
 
     public Long getSupplierId() {
