@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Supplier</title>
+</head>
+<body>
+    <h1>New Supplier</h1>
+    <form action="#" th:action="@{/saveSupplier}" th:object="${supplier}", method="POST">
+        <input th:field="*{supplierName}" type="text" placeholder="Supplier Name">
+        <input th:field="*{adress}"  type="text"  placeholder="Adress">
+
+
+        <select th:field="*{city}">
+            <th:block th:each="city : ${citiesList}">
+                <option th:text="${city.cityName}" th:value="${city.cityId}">
+            </th:block>
+        </select>
+
+
+        <select th:field="*{country}">
+            <th:block th:each="country : ${countriesList}">
+                <option th:text="${country.countryName}" th:value="${country.countryId}">
+            </th:block>
+        </select>
+
+        <button type="submit" class="btn btn-info">Register</button>
+    </form>
+
+</body>
+</html>
