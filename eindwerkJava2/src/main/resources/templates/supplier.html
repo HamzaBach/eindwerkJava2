@@ -16,13 +16,12 @@
         <table class="table table-primary" style="margin:20px">
             <thead>
             <tr>
-                <th>Country</th>
+                <th>Name</th>
                 <th>Adress</th>
                 <th>City</th>
                 <th>Country</th>
                 <th></th>
                 <th></th>
-
             </tr>
             </thead>
             <tbody>
@@ -32,12 +31,11 @@
                 <td th:text="${supplier.city}"></td>
                 <td th:text="${supplier.country}"></td>
                 <td><a th:href="@{'/editSupplier/' + ${supplier.supplierId}} ">EDIT</a></td>
-                <td><a th:href="@{'/deleteSupplier/' + ${supplier.supplierId}+d}">DELETE</a></td>
+                <td><a th:href="@{'/deleteSupplier/' + ${supplier.supplierId}}">DELETE</a></td>
 
             </tr>
             </tbody>
         </table>
-
 
     </div>
 
