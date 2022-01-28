@@ -26,7 +26,7 @@ public class ArticleController {
     public String getArticles(Model model) {
         List<Article> articles = articleService.getArticles();
         model.addAttribute("ArticlesList",articles);
-        return "articles";
+        return "landing_page";
     }
 
     @GetMapping(path = "{articleId}")
