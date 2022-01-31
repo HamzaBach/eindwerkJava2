@@ -17,18 +17,28 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse")
     private List<Location> locations;
 
-
-    public int getWarehouseId(){
+    public int getWarehouseId() {
         return warehouseId;
     }
+
     public void setWarehouseId(int warehouseId) {
         this.warehouseId = warehouseId;
     }
+
     public String getWarehouseName() {
         return warehouseName;
     }
+
     public void setWarehouseName(String warehouseName) {
         this.warehouseName = warehouseName;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 }
 

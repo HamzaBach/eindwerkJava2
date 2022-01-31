@@ -27,10 +27,7 @@ public class LocationService {
         return this.locationRepository.findAll();
     }
 
-    public void addLocation(int locationId, String locationName, Warehouse warehouse, Boolean singleLocation) {
-
-        Location location = new Location(locationId, locationName, warehouse, singleLocation);
-
+    public void addLocation(Location location) {
         locationRepository.save(location);
     }
 

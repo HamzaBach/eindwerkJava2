@@ -10,11 +10,11 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int locationId;
 
-    @Column(name="Location")
+    @Column(name="locationName")
     private String locationName;
 
     @ManyToOne
-    @JoinColumn(name="warehouseId")
+    @JoinColumn(name="warehouse_Id")
     private Warehouse warehouse;
 
     @Column(name="singleStorage")
@@ -36,10 +36,28 @@ public class Location {
     public void setLocationId(int locationId) {
         this.locationId = locationId;
     }
-    public String getLocation() {
+
+    public String getLocationName() {
         return locationName;
     }
-    public void setLocation(String locationName) {
+
+    public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public boolean isSingleStorage() {
+        return singleStorage;
+    }
+
+    public void setSingleStorage(boolean singleStorage) {
+        this.singleStorage = singleStorage;
     }
 }
