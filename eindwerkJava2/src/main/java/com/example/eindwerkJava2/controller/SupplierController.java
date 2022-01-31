@@ -8,10 +8,7 @@ import com.example.eindwerkJava2.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class SupplierController {
@@ -36,7 +33,7 @@ public class SupplierController {
         model.addAttribute("supplier", new Supplier());
         model.addAttribute("citiesList", citiesService.getAllCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
-        return "new_supplier";
+        return "form_supplier";
     }
 
     @PostMapping("/saveSupplier")
@@ -46,9 +43,20 @@ public class SupplierController {
     }
 
 
-    @GetMapping("/supplier/edit/{supplierId}")
-    public String showEditSupplierForm(@PathVariable("supplierId") Integer id, Model model){
-
-        return "supplier_edit";
+    @GetMapping("editSupplier/{supplierId}")
+    public String showEditSupplierForm(@PathVariable("supplierId") Long supplierId, Model model){
+        Supplier supplier = supplierService.findById(supplierId).get();
+        model.addAttribute("supplier", supplier);
+        model.addAttribute("citiesList", citiesService.getAllCities());
+        model.addAttribute("countriesList", countriesService.getAllCountries());
+        return "form_supplier";
     }
+
+
+
+
+
+
+
+
 }

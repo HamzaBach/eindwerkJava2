@@ -8,7 +8,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int supplierId;
+    private Long supplierId;
 
     @Column(name = "sup_name")
     private String supplierName;
@@ -24,10 +24,17 @@ public class Supplier {
     @JoinColumn(name = "country")
     private Countries country;
 
+    @Column(name = "active")
+    private boolean active;
+
     public Supplier() {
     }
 
-    public int getSupplierId() {
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public Long getSupplierId() {
         return supplierId;
     }
 
@@ -61,6 +68,14 @@ public class Supplier {
 
     public void setCountry(Countries country) {
         this.country = country;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
 
