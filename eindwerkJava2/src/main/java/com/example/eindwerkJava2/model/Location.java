@@ -8,7 +8,7 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int locationId;
+    private Long locationId;
 
     @Column(name="locationName")
     private String locationName;
@@ -23,17 +23,17 @@ public class Location {
     public Location() {
     }
 
-    public Location(int locationId, String locationName, Warehouse warehouse, boolean singleStorage) {
+    public Location(Long locationId, String locationName, Warehouse warehouse, boolean singleStorage) {
         this.locationId = locationId;
         this.locationName = locationName;
         this.warehouse = warehouse;
         this.singleStorage = singleStorage;
     }
 
-    public int getLocationId(){
+    public Long getLocationId(){
         return locationId;
     }
-    public void setLocationId(int locationId) {
+    public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
 

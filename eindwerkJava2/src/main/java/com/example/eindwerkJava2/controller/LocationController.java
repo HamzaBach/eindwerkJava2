@@ -14,19 +14,24 @@ import java.util.List;
 
 @Controller
 public class LocationController {
+
+@Autowired
 private LocationService locationService;
+@Autowired
+private WarehouseService warehouseService;
 
 
-    @Autowired
-    public LocationController(LocationService locationService)
-    {this.locationService = locationService;}
+    public LocationController(LocationService locationService, WarehouseService warehouseService)
+    {this.locationService = locationService;
+    this.warehouseService = warehouseService;}
+
 
     @GetMapping(path = "/")
     public String hello(){
         return "index";
     }
 
-    @GetMapping(path = "/locations")
+    @GetMapping(path = "/location")
     public String listLocations(Model model){
         List<Location> listLocations = locationService.getAllLocations();
         model.addAttribute("listLocations",listLocations);
@@ -35,14 +40,14 @@ private LocationService locationService;
     @GetMapping(path = "/newLocation")
     public String showNewLocationForm(Model model){
         model.addAttribute("location", new Location());
-
+        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
         return "newLocationForm";
     }
 
-    @PostMapping("/locations/save")
+    @PostMapping("/location/save")
     public String saveLocation(Location location){
         locationService.addLocation(location);
-    return "redirect:/locations";
+    return "redirect:/location";
     }
 
 

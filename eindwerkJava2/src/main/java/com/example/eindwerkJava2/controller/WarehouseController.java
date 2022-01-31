@@ -5,26 +5,41 @@ import com.example.eindwerkJava2.model.Warehouse;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "eindwerk/warehouse")
+@Controller
 public class WarehouseController {
     private WarehouseService warehouseService;
 
     @Autowired
     public WarehouseController(WarehouseService warehouseService) {
+
         this.warehouseService = warehouseService;
     }
 
-    @GetMapping
-    public List<Warehouse> getWarehouses() {
-        return warehouseService.getAllWarehouses();
+
+    @GetMapping(path = "/warehouse")
+    public String listWarehouses(Model model) {
+        List<Warehouse> listWarehouses = warehouseService.getAllWarehouses();
+        model.addAttribute("listWarehouses", listWarehouses);
+        return "warehouse";
+    }
+
+    @GetMapping(path = "/newWarehouse")
+    public String showNewLocationForm(Model model){
+        model.addAttribute("warehouse", new Warehouse());
+        return "newWarehouseForm";
+    }
+
+
+    @PostMapping("/warehouse/save")
+    public String saveLocation(Warehouse warehouse) {
+        warehouseService.addWarehouse(warehouse);
+        return "redirect:/warehouse";
     }
 
 

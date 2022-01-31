@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="Warehouse")
+@Table(name="warehouse")
 public class Warehouse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int warehouseId;
+    private Long warehouseId;
 
     @Column(name="warehouseName")
     private String warehouseName;
@@ -17,11 +17,11 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse")
     private List<Location> locations;
 
-    public int getWarehouseId() {
+    public Long getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(int warehouseId) {
+    public void setWarehouseId(Long warehouseId) {
         this.warehouseId = warehouseId;
     }
 
