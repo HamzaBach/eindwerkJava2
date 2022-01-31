@@ -19,9 +19,7 @@
         <div>
             <input type="text" th:field="*{locationName}" class="form-control" required/>
         </div>
-        <div>
-            <label class=col-form-label"">Warehouse: </label>
-        </div>
+
 
         <div class="col-lg-3">
             <select class="form-control" id="warehouse" name="warehouse" th:field="*{warehouse}"  >
@@ -41,7 +39,7 @@
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" th:field="*{SingleStorage}">
             <label class="form-check-label" for="flexCheckDefault">
-                Default checkbox
+                Single storage ?
             </label>
         </div>
 
