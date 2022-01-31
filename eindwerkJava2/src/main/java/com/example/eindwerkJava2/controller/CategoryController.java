@@ -3,13 +3,13 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "Categories")
-
+@Controller
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -21,9 +21,34 @@ public class CategoryController {
     @GetMapping
     public List<Category> getCategories() {return categoryService.getCategories();}
 
-    @PostMapping(path = "newCategory")
-    public void addCategory(@ModelAttribute("category") Category category){
-        categoryService.addCategory(category);
+    @GetMapping("/category")
+    public String viewCategories(Model model){
+        model.addAttribute("categoriesList", categoryService.getCategories());
+        return "category";
+    }
+
+    @GetMapping("/showNewCategoryForm")
+    public String showNewCategoryForm(Model model){
+        Category category = new Category();
+
+        model.addAttribute("category", new Category());
+
+        return "form_category";
+    }
+
+    @PostMapping("/saveCategory")
+    public String saveCategory(@ModelAttribute("category") Category category){
+        this.categoryService.addCategory(category);
+        return "redirect:/category";
+    }
+
+
+    @GetMapping("editCategory/{categoryId}")
+    public String showEditCategoryForm(@PathVariable("categoryId") Long categoryId, Model model){
+        Category category = categoryService.findById(categoryId).get();
+        model.addAttribute("category", category);
+
+        return "form_category";
     }
 
 }

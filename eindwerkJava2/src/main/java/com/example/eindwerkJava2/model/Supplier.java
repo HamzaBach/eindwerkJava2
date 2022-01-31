@@ -38,6 +38,11 @@ public class Supplier {
         this.active=active;
     }
 
+    @Override
+    public String toString() {
+        return supplierName;
+    }
+
     public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
     }
