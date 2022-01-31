@@ -1,11 +1,13 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Category;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -25,6 +27,12 @@ public class CategoryService {
 
 
         categoryRepository.save(category);
+    }
+
+
+
+    public Optional<Category> findById(long id){
+        return categoryRepository.findById(id);
     }
 
 }
