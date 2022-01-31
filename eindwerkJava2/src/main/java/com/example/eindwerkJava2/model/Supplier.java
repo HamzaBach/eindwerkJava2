@@ -29,6 +29,14 @@ public class Supplier {
 
     public Supplier() {
     }
+    public Supplier(String supplierName, String adress,
+                    Cities city, Countries country, boolean active){
+        this.supplierName=supplierName;
+        this.adress=adress;
+        this.city=city;
+        this.country=country;
+        this.active=active;
+    }
 
     public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;

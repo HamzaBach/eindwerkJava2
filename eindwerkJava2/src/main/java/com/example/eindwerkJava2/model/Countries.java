@@ -15,6 +15,12 @@ public class Countries {
     @Column(name="iso")
     private String iso;
 
+    public Countries(){}
+    public Countries(String countryName, String iso){
+        this.countryName=countryName;
+        this.iso=iso;
+    }
+
 
 
     public long getCountryId() {
