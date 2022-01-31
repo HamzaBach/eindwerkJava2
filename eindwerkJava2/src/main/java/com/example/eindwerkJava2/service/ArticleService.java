@@ -11,9 +11,10 @@ import java.util.List;
 
 @Service
 public class ArticleService {
+    @Autowired
     private final ArticleRepository articleRepository;
 
-    @Autowired
+
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
@@ -42,6 +43,10 @@ public class ArticleService {
             return true;
         }
     }
+    public void saveArticle(Article article){
+        articleRepository.save(article);
+    }
+
 
 
 }
