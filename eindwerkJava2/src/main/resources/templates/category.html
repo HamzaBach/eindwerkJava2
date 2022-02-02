@@ -9,11 +9,14 @@
 
 </head>
 <body>
-<div align="center" style="margin: 100px">
-    <h1>categories</h1>
-    <a th:href = "@{/showNewCategoryForm}" class="btn btn-primary" style="margin:20px">New category</a>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
 
-    <table class="table table-primary" style="margin:20px">
+<div align="center" style="margin: 100px">
+    <h1>Categories</h1>
+    <a th:href = "@{/showNewCategoryForm}" class="btn btn-primary btn-lg" style="margin:20px">New category</a>
+
+    <table class="table table-striped table-hover" style="margin:20px">
         <thead>
         <tr>
             <th>Category Name</th>
