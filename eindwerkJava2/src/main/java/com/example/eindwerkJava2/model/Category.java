@@ -21,10 +21,6 @@ public class Category {
 
     }
 
-    @Override
-    public String toString() {
-        return  categoryName ;
-    }
 
     public Long getCategoryId() {
         return categoryId;
