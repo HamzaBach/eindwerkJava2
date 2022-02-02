@@ -43,23 +43,26 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(Model model) {
         model.addAttribute("article",new Article());
-        model.addAttribute("CategoriesList", categoryService.getCategories());
-        model.addAttribute("SuppliersList", supplierService.getAllSuppliers());
+        model.addAttribute("categoriesList", categoryService.getCategories());
+        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         List<Article> articles = articleService.getArticles();
-        model.addAttribute("ArticlesList",articles);
+        model.addAttribute("articlesList",articles);
         return "articles";
     }
 
-   @RequestMapping(value="/articles/showNewArticleForm")
-    public String showNewArticleForm(Model model){
-
-        return "articles";
-    }
-
-    @PostMapping("/newArticle")
-    public String newArticle(@ModelAttribute("article") Article article){
+    @PostMapping("/saveArticle")
+    public String saveArticle(@ModelAttribute("article") Article article){
         this.articleService.saveArticle(article);
         return "redirect:/articles";
+    }
+
+    @GetMapping("editArticle/{articleId}")
+    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model){
+        Article article = articleService.findById(articleId).get();
+        model.addAttribute("article", article);
+        model.addAttribute("categoriesList", categoryService.getCategories());
+        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        return "form_article";
     }
 
 

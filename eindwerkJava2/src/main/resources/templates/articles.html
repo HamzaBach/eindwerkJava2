@@ -36,15 +36,19 @@
         <th scope="col">Category</th>
         <th scope="col">Supplier</th>
         <th scope="col">Barcode</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
         </thead>
         <tbody>
-        <tr th:each="article: ${ArticlesList}">
+        <tr th:each="article: ${articlesList}">
             <td th:text="${article.articleId}"></td>
             <td th:text="${article.articleName}"></td>
             <td th:text="${article.articleDescription}"></td>
             <td th:text="${article.category.categoryName}"></td>
             <td th:text="${article.supplier.supplierName}"></td>
             <td th:text="${article.articleBarcode}"></td>
+            <td><a th:href="@{'/editArticle/' + ${article.articleId}} ">EDIT</a></td>
+            <td><a th:href="@{'/deleteArticle/' + ${article.articleId}}">DELETE</a></td>
         </tr>
         </tbody>
     </table>
@@ -64,7 +68,7 @@
             </div>
 
             <div class="modal-body">
-                <form th:object="${article}" th:action="@{/newArticle}" , method="POST">
+                <form th:object="${article}" th:action="@{/saveArticle}" , method="POST">
                     <div class="mb-3 form-group">
                         <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}"
                                class="form-control">
@@ -80,7 +84,7 @@
                     <div class="mb-3 form-group">
                         <label for="newArticleCategory" class="form-label">Category</label>
                         <select th:field="*{category}" class="form-control" id="newArticleCategory">
-                            <th:block th:each="category : ${CategoriesList}">
+                            <th:block th:each="category : ${categoriesList}">
                                 <option th:text="${category.categoryName}" th:value="${category.categoryId}">
                             </th:block>
                         </select>
@@ -89,7 +93,7 @@
                     <div class="mb-3 form-group">
                         <label for="newArticleSupplier" class="form-label">Supplier</label>
                         <select th:field="*{supplier}" class="form-control" id="newArticleSupplier">
-                            <th:block th:each="supplier : ${SuppliersList}">
+                            <th:block th:each="supplier : ${suppliersList}">
                                 <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">
                             </th:block>
                         </select>
