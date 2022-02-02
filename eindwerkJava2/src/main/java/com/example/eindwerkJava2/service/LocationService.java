@@ -20,7 +20,7 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public List<Location> findByLocationId(int locationId){
+    public List<Location> findByLocationId(Long locationId){
         return this.locationRepository.findByLocationId(locationId);
     }
     public List<Location> getAllLocations() {

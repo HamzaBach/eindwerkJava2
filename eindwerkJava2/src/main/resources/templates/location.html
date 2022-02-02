@@ -22,7 +22,7 @@ hello
         <td th:text="${location.locationId}"></td>
         <td th:text="${location.locationName}"></td>
         <td th:text="${location.warehouse.warehouseName}"></td>
-        <td> <input type="checkbox" th:checked="${location.singleStorage}"/></td>
+        <td> <input disabled type="checkbox" th:checked="${location.singleStorage}"/></td>
 
     </tr>
     </tbody>

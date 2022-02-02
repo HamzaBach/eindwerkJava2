@@ -26,6 +26,14 @@ public class WarehouseService {
         warehouseRepository.save(warehouse);
     }
 
+    public Warehouse findWarehouse(Long warehouseId){
+        Warehouse warehouse = warehouseRepository.findByWarehouseId(warehouseId);
+        return warehouse;
+    }
+    public void deleteWarehouse(Warehouse warehouse){
+        warehouseRepository.delete(warehouse);
+    }
+
 
 
 }

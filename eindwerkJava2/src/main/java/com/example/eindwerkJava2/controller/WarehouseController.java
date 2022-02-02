@@ -42,5 +42,19 @@ public class WarehouseController {
         return "redirect:/warehouse";
     }
 
+    @GetMapping(path = "/deleteWarehouse")
+    public String showdeleteWarehouse(Model model){
+        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
+        return "deleteWarehouse";
+    }
+
+    @PostMapping("/warehouse/delete/{warehouseId}")
+    public String updateUser(@PathVariable("warehouseId") Long warehouseId, Model model) {
+        Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
+        warehouseService.deleteWarehouse(warehouse);
+    return "redirect:/warehouse";
+    }
+
+
 
 }
