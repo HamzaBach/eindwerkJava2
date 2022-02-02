@@ -36,7 +36,6 @@
         <th scope="col">Category</th>
         <th scope="col">Supplier</th>
         <th scope="col">Barcode</th>
-<!--        <th></th>-->
         </thead>
         <tbody>
         <tr th:each="article: ${ArticlesList}">
@@ -46,7 +45,6 @@
             <td th:text="${article.category.categoryName}"></td>
             <td th:text="${article.supplier.supplierName}"></td>
             <td th:text="${article.articleBarcode}"></td>
-<!--            <td><a th:href="@{'/openArticle/' + ${article.articleId}} ">OPEN</a></td>-->
         </tr>
         </tbody>
     </table>
@@ -55,10 +53,11 @@
 </div>
 
 
-<!-- New Article Modal -->
+<!-- Modal -->
 <div class="modal fade" id="newArticleModal" tabindex="-1">
-    <div class="modal-dialog modal-fullscreen-md-down">
+    <div class="modal-dialog">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h5 class="modal-title">New article</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -105,8 +104,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <!-- Optional JavaScript -->
