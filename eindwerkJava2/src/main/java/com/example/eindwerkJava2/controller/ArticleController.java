@@ -50,10 +50,12 @@ public class ArticleController {
         return "articles";
     }
 
-   @RequestMapping(value="/articles/showNewArticleForm")
-    public String showNewArticleForm(Model model){
-
-        return "articles";
+    @GetMapping("openArticle/{articleId}")
+    public String showEditSupplierForm(@PathVariable("articleId") Long articleId, Model model){
+        Article article = articleService.findById(articleId).get();
+        model.addAttribute("article", article);
+        model.addAttribute("CategoriesList", categoryService.getCategories());
+        return "form_supplier";
     }
 
     @PostMapping("/newArticle")
