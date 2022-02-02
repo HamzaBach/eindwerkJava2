@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArticleService {
@@ -45,6 +46,10 @@ public class ArticleService {
     }
     public void saveArticle(Article article){
         articleRepository.save(article);
+    }
+
+    public Optional<Article> findById(Long id){
+        return articleRepository.findById(id);
     }
 
 
