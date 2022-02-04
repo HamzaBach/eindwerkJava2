@@ -14,9 +14,9 @@
 </head>
 <body>
 <div th:fragment="navbar">
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top py-3">
+    <nav class="navbar navbar-expand-xl bg-dark navbar-dark fixed-top py-3">
         <div class="container">
-            <a th:href="@{landing_page}" class="navbar-brand">Eindproject Java 2</a>
+            <a th:href="@{/landing_page}" class="navbar-brand">Eindproject Java 2</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
                 <span class="navbar-toggler-icon"></span>
@@ -29,8 +29,8 @@
                             Articles
                         </a>
                         <ul class="dropdown-menu" >
-                            <li><a class="dropdown-item" th:href="@{articles}">Articles</a></li>
-                            <li><a class="dropdown-item" th:href="@{category}">Categories</a></li>
+                            <li><a class="dropdown-item" th:href="@{/articles}">Articles</a></li>
+                            <li><a class="dropdown-item" th:href="@{/category}">Categories</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -48,7 +48,7 @@
                             Suppliers
                         </a>
                         <ul class="dropdown-menu" >
-                            <li><a class="dropdown-item" th:href=@{supplier}>Suppliers</a></li>
+                            <li><a class="dropdown-item" th:href=@{/supplier}>Suppliers</a></li>
                             <li><a class="dropdown-item" href="#">Articles supplier</a></li>
                             <li><a class="dropdown-item" href="#">Country codes</a></li>
                             <li><a class="dropdown-item" href="#">ZIP codes</a></li>
@@ -63,7 +63,22 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">Settings</a>
                     </li>
+                    <li class="nav-item">
+                        <div class="input-group">
+                            <form class="navbar-form navbar-left" action="/action_page.php">
+                                <div class="row">
+                                    <div class="form-group col-8">
+                                        <input type="text" class="form-control" placeholder="Search" name="search">
+                                    </div>
+                                    <button type="submit" class="btn btn-success col-4">
+                                        <i class="bi bi-search me-2"></i>Search
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
+
             </div>
         </div>
     </nav>

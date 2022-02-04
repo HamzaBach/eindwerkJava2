@@ -16,12 +16,13 @@
 <!--Navbar component-->
 <div th:include="fragments/header::navbar"/>
 
-<div align="center" style="margin: 100px">
+<div align="center" style="margin: 100px" >
     <h1>Articles</h1>
     <div align="center" style="mb-3">
-        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#newArticleModal">
+        <a th:href = "@{/showNewArticleForm}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
+        <!--<button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#newArticleModal">
             New article
-        </button>
+        </button>-->
     </div>
 
     <div class="mb-2 d-flex justify-content-between align-items-center">
@@ -58,56 +59,56 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="newArticleModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<!--<div class="modal fade" id="newArticleModal" tabindex="-1">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
 
-            <div class="modal-header">
-                <h5 class="modal-title">New article</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title">New article</h5>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>-->
+<!--            </div>-->
 
-            <div class="modal-body">
-                <form th:object="${article}" th:action="@{/saveArticle}" , method="POST">
-                    <div class="mb-3 form-group">
-                        <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}"
-                               class="form-control">
+<!--            <div class="modal-body">-->
+<!--                <form th:object="${article}" th:action="@{/saveArticle}" , method="POST">-->
+<!--                    <div class="mb-3 form-group">-->
+<!--                        <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}"-->
+<!--                               class="form-control">-->
 
-                        <label for="newArticleName" class="form-label">Name</label>
-                        <input type="text" th:field="*{articleName}" class="form-control" id="newArticleName">
-                    </div>
-                    <div class="mb-3 form-group">
-                        <label for="newArticleDescription" class="form-label">Description</label>
-                        <textarea class="form-control" th:field=*{articleDescription} rows="4" id="newArticleDescription"></textarea>
-                    </div>
+<!--                        <label for="newArticleName" class="form-label">Name</label>-->
+<!--                        <input type="text" th:field="*{articleName}" class="form-control" id="newArticleName">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3 form-group">-->
+<!--                        <label for="newArticleDescription" class="form-label">Description</label>-->
+<!--                        <textarea class="form-control" th:field=*{articleDescription} rows="4" id="newArticleDescription"></textarea>-->
+<!--                    </div>-->
 
-                    <div class="mb-3 form-group">
-                        <label for="newArticleCategory" class="form-label">Category</label>
-                        <select th:field="*{category}" class="form-control" id="newArticleCategory">
-                            <th:block th:each="category : ${categoriesList}">
-                                <option th:text="${category.categoryName}" th:value="${category.categoryId}">
-                            </th:block>
-                        </select>
-                    </div>
+<!--                    <div class="mb-3 form-group">-->
+<!--                        <label for="newArticleCategory" class="form-label">Category</label>-->
+<!--                        <select th:field="*{category}" class="form-control" id="newArticleCategory">-->
+<!--                            <th:block th:each="category : ${categoriesList}">-->
+<!--                                <option th:text="${category.categoryName}" th:value="${category.categoryId}">-->
+<!--                            </th:block>-->
+<!--                        </select>-->
+<!--                    </div>-->
 
-                    <div class="mb-3 form-group">
-                        <label for="newArticleSupplier" class="form-label">Supplier</label>
-                        <select th:field="*{supplier}" class="form-control" id="newArticleSupplier">
-                            <th:block th:each="supplier : ${suppliersList}">
-                                <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">
-                            </th:block>
-                        </select>
-                    </div>
+<!--                    <div class="mb-3 form-group">-->
+<!--                        <label for="newArticleSupplier" class="form-label">Supplier</label>-->
+<!--                        <select th:field="*{supplier}" class="form-control" id="newArticleSupplier">-->
+<!--                            <th:block th:each="supplier : ${suppliersList}">-->
+<!--                                <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">-->
+<!--                            </th:block>-->
+<!--                        </select>-->
+<!--                    </div>-->
 
-                    <button type="submit" class="btn btn-primary" >Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<!--                    <button type="submit" class="btn btn-primary" >Submit</button>-->
+<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>-->
 
-                </form>
+<!--                </form>-->
 
-            </div>
-        </div>
-    </div>
-</div>
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <!-- Optional JavaScript -->
