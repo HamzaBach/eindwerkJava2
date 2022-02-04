@@ -39,8 +39,8 @@
                         </a>
                         <ul class="dropdown-menu" >
                             <li><a class="dropdown-item" href="#">Inventory</a></li>
-                            <li><a class="dropdown-item" href="#">Warehouses</a></li>
-                            <li><a class="dropdown-item" href="#">Locations</a></li>
+                            <li><a class="dropdown-item" th:href="@{/warehouse}">Warehouses</a></li>
+                            <li><a class="dropdown-item" th:href="@{/location}">Locations</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -49,13 +49,13 @@
                         </a>
                         <ul class="dropdown-menu" >
                             <li><a class="dropdown-item" th:href=@{/supplier}>Suppliers</a></li>
-                            <li><a class="dropdown-item" href="#">Articles supplier</a></li>
+                            <li><a class="dropdown-item" th:href="@{/article_supplier}">Articles supplier</a></li>
                             <li><a class="dropdown-item" href="#">Country codes</a></li>
                             <li><a class="dropdown-item" href="#">ZIP codes</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Employees</a>
+                        <a th:href="@{/users}" class="nav-link">Employees</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">Movement</a>
