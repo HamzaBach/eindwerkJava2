@@ -50,6 +50,16 @@ public class ArticleController {
         return "articles";
     }
 
+    @GetMapping("/showNewArticleForm")
+    public String showNewArticleForm(Model model) {
+        model.addAttribute("article",new Article());
+        model.addAttribute("categoriesList", categoryService.getCategories());
+        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        List<Article> articles = articleService.getArticles();
+        model.addAttribute("articlesList",articles);
+        return "form_article";
+    }
+
     @PostMapping("/saveArticle")
     public String saveArticle(@ModelAttribute("article") Article article){
         this.articleService.saveArticle(article);

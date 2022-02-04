@@ -11,6 +11,9 @@
     <title>Article</title>
 </head>
 <body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
 <div align="center" style="margin: 100px">
 
     <div th:if="${article.articleId == null}">
@@ -20,41 +23,53 @@
         <h1>Edit Article</h1>
     </div>
 
-    <div>
-        <form th:action="@{/saveArticle}" th:object="${article}" , method="POST">
-            <div class="mb-3 form-group text-start">
-                <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control p-2"/>
-                <label for="articleName" class="form-label">Name</label>
-                <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control" id="articleName">
-            </div>
-            <div class="mb-3 form-group text-start">
-                <label for="articleDescription" class="form-label">Description</label>
-                <input th:field="*{articleDescription}" type="text" placeholder="Description" class="form-control" id="articleDescription">
-            </div>
-            <div class="mb-3 form-group text-start">
-                <label for="articleCategory" class="form-label">Description</label>
-                <select th:field="*{category}" class="form-select" id="articleCategory">
-                    <th:block th:each="category : ${categoriesList}">
-                        <option th:text="${category.categoryName}" th:value="${category.categoryId}">
-                    </th:block>
-                </select>
-            </div>
-            <div class="mb-3 form-group text-start">
-                <label for="articleSupplier" class="form-label">Supplier</label>
-                <select th:field="*{supplier}" class="form-select" id="articleSupplier">
-                    <th:block th:each="supplier : ${suppliersList}">
-                        <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">
-                    </th:block>
-                </select>
-            </div>
-            <div class="mb-3 form-group text-start">
-                <label for="articleBarcode" class="form-label">Barcode</label>
-                <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control" id="articleBarcode">
-            </div>
 
-            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        <form th:action="@{/saveArticle}" th:object="${article}" , method="POST">
+            <div class="row">
+            <div class="col-md-8">
+                <div class="mb-3 form-group text-start">
+                    <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control p-2"/>
+                    <label for="articleName" class="form-label">Name</label>
+                    <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control" id="articleName">
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleDescription" class="form-label">Description</label>
+                    <input th:field="*{articleDescription}" type="text" placeholder="Description" class="form-control" id="articleDescription">
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleCategory" class="form-label">Description</label>
+                    <select th:field="*{category}" class="form-select" id="articleCategory">
+                        <th:block th:each="category : ${categoriesList}">
+                            <option th:text="${category.categoryName}" th:value="${category.categoryId}">
+                        </th:block>
+                    </select>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleSupplier" class="form-label">Supplier</label>
+                    <select th:field="*{supplier}" class="form-select" id="articleSupplier">
+                        <th:block th:each="supplier : ${suppliersList}">
+                            <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">
+                        </th:block>
+                    </select>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleBarcode" class="form-label">Barcode</label>
+                    <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control" id="articleBarcode">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg">Save</button>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-image hover-overlay ripple">
+                    <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/055.webp" class="img-fluid rounded" />
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(57, 192, 237, 0.2);"></div>
+                    </a>
+                </div>
+            </div>
+            </div>
         </form>
-    </div>
+
 
 
 </div>
