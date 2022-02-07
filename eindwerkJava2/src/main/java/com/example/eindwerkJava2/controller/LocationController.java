@@ -2,6 +2,7 @@ package com.example.eindwerkJava2.controller;
 
 
 import com.example.eindwerkJava2.model.Location;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.model.Warehouse;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.WarehouseService;
@@ -51,6 +52,12 @@ private WarehouseService warehouseService;
     }
 
 
+    @GetMapping("editLocation/{locationId}")
+    public String editLocation(@PathVariable("locationId") Long locationId, Model model){
+        Location location = locationService.findByLocationId(locationId);
+        model.addAttribute("location", location);
+        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
+        return "form_location";}
 
 
 

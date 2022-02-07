@@ -27,8 +27,7 @@ public class WarehouseService {
     }
 
     public Warehouse findWarehouse(Long warehouseId){
-        Warehouse warehouse = warehouseRepository.findByWarehouseId(warehouseId);
-        return warehouse;
+        return this.warehouseRepository.findByWarehouseId(warehouseId);
     }
     public void deleteWarehouse(Warehouse warehouse){
         warehouseRepository.delete(warehouse);

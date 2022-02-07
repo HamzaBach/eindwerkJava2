@@ -20,7 +20,7 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public List<Location> findByLocationId(Long locationId){
+    public Location findByLocationId(Long locationId){
         return this.locationRepository.findByLocationId(locationId);
     }
     public List<Location> getAllLocations() {
@@ -30,6 +30,7 @@ public class LocationService {
     public void addLocation(Location location) {
         locationRepository.save(location);
     }
+
 
 }
 

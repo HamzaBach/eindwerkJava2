@@ -32,7 +32,7 @@ public class WarehouseController {
     @GetMapping(path = "/newWarehouse")
     public String showNewLocationForm(Model model){
         model.addAttribute("warehouse", new Warehouse());
-        return "newWarehouseForm";
+        return "form_warehouse";
     }
 
 
@@ -42,17 +42,12 @@ public class WarehouseController {
         return "redirect:/warehouse";
     }
 
-    @GetMapping(path = "/deleteWarehouse")
-    public String showdeleteWarehouse(Model model){
-        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
-        return "deleteWarehouse";
-    }
 
-    @PostMapping("/warehouse/delete/{warehouseId}")
-    public String updateUser(@PathVariable("warehouseId") Long warehouseId, Model model) {
+    @GetMapping("/editWarehouse/{warehouseId}")
+    public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
-        warehouseService.deleteWarehouse(warehouse);
-    return "redirect:/warehouse";
+        model.addAttribute("warehouse",warehouse);
+    return "form_warehouse";
     }
 
 
