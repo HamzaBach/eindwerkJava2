@@ -13,18 +13,14 @@ import java.util.List;
 
 @Controller
 public class WarehouseController {
-    private WarehouseService warehouseService;
 
     @Autowired
-    public WarehouseController(WarehouseService warehouseService) {
-
-        this.warehouseService = warehouseService;
-    }
+    private WarehouseService warehouseService;
 
 
     @GetMapping(path = "/warehouse")
     public String listWarehouses(Model model) {
-        List<Warehouse> listWarehouses = warehouseService.getAllWarehouses();
+        List<Warehouse> listWarehouses = warehouseService.activeWarehouses();
         model.addAttribute("listWarehouses", listWarehouses);
         return "warehouse";
     }

@@ -35,6 +35,10 @@ public class WarehouseService {
         this.warehouseRepository.save(warehouse);
     }
 
+    public List<Warehouse> activeWarehouses(){
+        return this.warehouseRepository.activeWarehouses();
+    }
+
 
 
 

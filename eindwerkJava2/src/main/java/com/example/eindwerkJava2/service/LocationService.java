@@ -34,7 +34,10 @@ public class LocationService {
     public void deleteLocation(Location location){
         location.setActiveLocation(0);
         this.locationRepository.save(location);
+    }
 
+    public List<Location> activeLocations(){
+        return this.locationRepository.activeLocations();
     }
 
 

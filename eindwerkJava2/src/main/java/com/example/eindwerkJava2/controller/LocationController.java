@@ -22,19 +22,11 @@ private LocationService locationService;
 private WarehouseService warehouseService;
 
 
-    public LocationController(LocationService locationService, WarehouseService warehouseService)
-    {this.locationService = locationService;
-    this.warehouseService = warehouseService;}
 
-
-    @GetMapping(path = "/")
-    public String hello(){
-        return "index";
-    }
 
     @GetMapping(path = "/location")
     public String listLocations(Model model){
-        List<Location> listLocations = locationService.getAllLocations();
+        List<Location> listLocations = locationService.activeLocations();
         model.addAttribute("listLocations",listLocations);
         return "location";}
 
