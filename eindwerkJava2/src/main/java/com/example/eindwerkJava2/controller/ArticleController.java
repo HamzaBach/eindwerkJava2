@@ -50,6 +50,13 @@ public class ArticleController {
         return "articles";
     }
 
+    @GetMapping("deleteArticle/{articleId}")
+    public String deleteArticle(@PathVariable("articleId") Long articleId){
+        Article article = articleService.findById(articleId).get();
+        this.articleService.deleteArticle(article);
+        return "redirect:/articles";
+    }
+
     @GetMapping("/showNewArticleForm")
     public String showNewArticleForm(Model model) {
         model.addAttribute("article",new Article());
