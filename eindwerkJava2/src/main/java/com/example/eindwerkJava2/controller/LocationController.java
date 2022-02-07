@@ -59,6 +59,13 @@ private WarehouseService warehouseService;
         model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
         return "form_location";}
 
+    @GetMapping("deleteLocation/{locationId}")
+    public String deleteLocation(@PathVariable("locationId") Long locationId, Model model){
+        Location location = locationService.findByLocationId(locationId);
+        this.locationService.deleteLocation(location);
+        return "redirect:/location";
+    }
+
 
 
 

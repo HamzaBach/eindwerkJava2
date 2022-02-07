@@ -50,6 +50,11 @@ public class WarehouseController {
     return "form_warehouse";
     }
 
-
+    @GetMapping("deleteWarehouse/{warehouseId}")
+    public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model){
+        Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
+        this.warehouseService.deleteWarehouse(warehouse);
+        return "redirect:/warehouse";
+    }
 
 }

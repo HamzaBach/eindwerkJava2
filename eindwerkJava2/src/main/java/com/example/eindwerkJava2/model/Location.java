@@ -20,14 +20,27 @@ public class Location {
     @Column(name="singleStorage")
     private boolean singleStorage;
 
+    @Column(name = "active")
+    private int activeLocation = 1;
+
+
     public Location() {
     }
 
-    public Location(Long locationId, String locationName, Warehouse warehouse, boolean singleStorage) {
+    public Location(Long locationId, String locationName, Warehouse warehouse, boolean singleStorage, int activeLocation) {
         this.locationId = locationId;
         this.locationName = locationName;
         this.warehouse = warehouse;
         this.singleStorage = singleStorage;
+        this.activeLocation = activeLocation;
+    }
+
+    public int getActiveLocation() {
+        return activeLocation;
+    }
+
+    public void setActiveLocation(int activeLocation) {
+        this.activeLocation = activeLocation;
     }
 
     public Long getLocationId(){
