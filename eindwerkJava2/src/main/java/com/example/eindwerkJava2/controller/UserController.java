@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "users")
+@RequestMapping
 public class UserController {
     private final UserService userService;
     @Autowired
@@ -19,7 +19,7 @@ public class UserController {
         this.userService=userService;
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public String getUsers(Model model){
         List<User> users = userService.getUsers();
         model.addAttribute("UsersList",users);
