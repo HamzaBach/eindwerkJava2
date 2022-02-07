@@ -20,8 +20,8 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public List<Article> getArticles() {
-        return this.articleRepository.findAll();
+    public List<Article> getActiveArticles() {
+        return this.articleRepository.findByActiveArticle(1);
     }
 
     public Article getArticle(Long articleId){
