@@ -9,9 +9,13 @@
 
 </head>
 <body>
+
+<div th:include="fragments/header::navbar"/>
+
+
 <div align="center" style="margin: 100px">
     <h1>Article_Supplier</h1>
-    <a th:href = "@{/showNewArticleSupplierForm}" class="btn btn-primary" style="margin:20px">New Supplier</a>
+    <a th:href = "@{/showNewArticleSupplierForm}" class="btn btn-primary" style="margin:20px">New Article_Supplier</a>
 
     <table class="table table-primary" style="margin:20px">
         <thead>
@@ -19,14 +23,18 @@
             <th>Article</th>
             <th>Supplier</th>
             <th>Price</th>
+            <th>Partnr</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="art_supp : ${articleSupplierList}">
+        <tr th:each="artSupp : ${articleSupplierList}">
+            <td th:text="${artSupp.article.articleName}"></td>
+            <td th:text="${artSupp.supplier.supplierName}"></td>
+            <td th:text="${artSupp.price}"></td>
+            <td th:text="${artSupp.partnr}"></td>
+            <td><a th:href="@{'/editArticleSupplier/'+${artSupp.articleSupplierId}}">EDIT</a></td>
 
-            <td th:text="${art_supp.article.articleName}"></td>
-            <td th:text="${art_supp.supplier.supplierName}"></td>
-            <td th:text="${art_supp.price}"></td>
         </tr>
         </tbody>
     </table>

@@ -8,14 +8,24 @@
     <title>New Article_Supplier</title>
 </head>
 <body>
+
+<div th:include="fragments/header::navbar"/>
+
+
 <div align="center" style="margin: 100px">
+    <div th:if="${articleSupplier.articleSupplierId == null}">
+        <h1>New Article Supplier</h1>
+    </div>
+    <div th:unless="${articleSupplier.articleSupplierId == null}">
+        <h1>Edit Article Supplier</h1>
+    </div>
 
 
 
+    <form action="#" th:action="@{/saveArticleSupplier}" th:object="${articleSupplier}", method="POST" >
+        <input type="hidden" th:field="*{articleSupplierId}" th:value="${articleSupplier.articleSupplierId}" class="form-control"/>
 
-    <form action="#" th:action="@{/saveArticleSupplier}" th:object="${article_supplier}", method="POST" >
-
-        <select th:field="*{supplier}" class="form-select" aria-label="Default select example">
+        <select th:field="*{supplier}" class="form-select">
             <th:block th:each="supplier : ${supplierList}">
                 <option th:text="${supplier.supplierName}" th:value="${supplier.supplierId}">
             </th:block>
@@ -28,6 +38,8 @@
         </select>
 
         <input th:field="*{price}"  type="text"  placeholder="Price" class="form-control">
+        <input th:field="*{partnr}"  type="text"  placeholder="Partnr" class="form-control">
+
 
 
         <button type="submit" class="btn btn-info">Save</button>

@@ -27,6 +27,9 @@ public class SupplierServiceImpl implements SupplierService {
     public Optional<Supplier> findById(long id){
         return supplierRepository.findById(id);
     }
-
-
+    @Override
+    public void deleteSupplier(Supplier supplier){
+        supplier.setActiveSupplier(0);
+        this.supplierRepository.save(supplier);
+    }
 }
