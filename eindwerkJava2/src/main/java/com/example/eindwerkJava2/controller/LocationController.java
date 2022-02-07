@@ -34,7 +34,7 @@ private WarehouseService warehouseService;
     public String showNewLocationForm(Model model){
         model.addAttribute("location", new Location());
         model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
-        return "newLocationForm";
+        return "form_location";
     }
 
     @PostMapping("/location/save")
