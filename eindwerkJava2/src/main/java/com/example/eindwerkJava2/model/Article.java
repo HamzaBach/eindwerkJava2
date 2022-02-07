@@ -28,6 +28,7 @@ public class Article {
     private byte[] articleImage;
 
     public Article() {
+        this.activeArticle=1;
     }
     public Article(String articleName, String articleDescription,
                    Category category, Supplier supplier, byte[] articleImage, int activeArticle){

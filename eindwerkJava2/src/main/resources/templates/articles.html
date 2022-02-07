@@ -41,7 +41,7 @@
         <th scope="col">Delete</th>
         </thead>
         <tbody>
-        <tr th:each="article: ${articlesList}"th:if="${article.activeArticle == 1}">
+        <tr th:each="article: ${articlesList}">
             <td th:text="${article.articleId}"></td>
             <td th:text="${article.articleName}"></td>
             <td th:text="${article.articleDescription}"></td>

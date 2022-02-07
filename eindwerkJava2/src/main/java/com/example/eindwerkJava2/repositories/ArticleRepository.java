@@ -5,6 +5,8 @@ import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     boolean existsArticleByArticleId (Long articleId);
@@ -13,4 +15,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     boolean existsArticleByArticleDescription(String articleDescription);
     boolean existsArticleByCategory(Category category);
     Article findByArticleId(Long articleId);
+    List<Article> findByActiveArticle(int activeArticle);
 }
