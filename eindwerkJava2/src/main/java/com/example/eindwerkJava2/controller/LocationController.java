@@ -33,7 +33,7 @@ private WarehouseService warehouseService;
     @GetMapping(path = "/newLocation")
     public String showNewLocationForm(Model model){
         model.addAttribute("location", new Location());
-        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
+        model.addAttribute("warehouseList", warehouseService.activeWarehouses());
         return "form_location";
     }
 
