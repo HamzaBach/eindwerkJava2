@@ -31,7 +31,7 @@ public class ArticleService {
     }
 
     public Boolean addArticle(String articleName, String articleDescription, Category category,
-                              Supplier supplier, byte[] articleImage) {
+                              Supplier supplier, byte[] articleImage, int activeArticle) {
 
         if (articleRepository.existsArticleBySupplier(supplier)
                 && articleRepository.existsArticleByArticleName(articleName)
@@ -39,7 +39,7 @@ public class ArticleService {
                 && articleRepository.existsArticleByCategory(category)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,category,supplier, articleImage);
+            Article newArticle = new Article(articleName,articleDescription,category,supplier, articleImage, activeArticle);
             articleRepository.save(newArticle);
             return true;
         }
@@ -50,6 +50,11 @@ public class ArticleService {
 
     public Optional<Article> findById(Long id){
         return articleRepository.findById(id);
+    }
+
+    public void deleteArticle(Article article){
+        article.setActiveArticle(0);
+        this.articleRepository.save(article);
     }
 
 
