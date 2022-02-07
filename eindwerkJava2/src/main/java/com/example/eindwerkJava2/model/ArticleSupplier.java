@@ -23,6 +23,9 @@ public class ArticleSupplier {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "active")
+    private int activeArticleSupplier;
+
     public ArticleSupplier() {
     }
 
@@ -64,5 +67,13 @@ public class ArticleSupplier {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getActiveArticleSupplier() {
+        return activeArticleSupplier;
+    }
+
+    public void setActiveArticleSupplier(int activeArticleSupplier) {
+        this.activeArticleSupplier = activeArticleSupplier;
     }
 }

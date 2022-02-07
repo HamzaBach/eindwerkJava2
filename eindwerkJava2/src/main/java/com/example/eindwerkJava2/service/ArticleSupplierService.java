@@ -26,7 +26,9 @@ public class ArticleSupplierService{
         return articleSupplierRepository.findById(id);
     }
 
-
-
+    public void deleteArticleSupplier(ArticleSupplier articleSupplier){
+            articleSupplier.setActiveArticleSupplier(0);
+            this.articleSupplierRepository.save(articleSupplier);
+        }
 
 }

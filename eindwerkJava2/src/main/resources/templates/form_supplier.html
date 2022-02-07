@@ -7,6 +7,8 @@
     <title>Supplier</title>
 </head>
 <body>
+<div th:include="fragments/header::navbar"/>
+
 <div align="center" style="margin: 100px">
 
 
@@ -15,7 +17,7 @@
     </div>
     <div th:unless="${supplier.supplierId == null}">
         <h1>Edit Supplier</h1>
-    </div>
+    </div>zag
 
     <form action="#" th:action="@{/saveSupplier}" th:object="${supplier}", method="POST" >
         <input type="hidden" th:field="*{supplierId}" th:value="${supplier.supplierId}" class="form-control"/>

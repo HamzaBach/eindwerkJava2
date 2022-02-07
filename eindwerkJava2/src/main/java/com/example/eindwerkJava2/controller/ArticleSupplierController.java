@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.ArticleSupplier;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.SupplierService;
@@ -49,5 +50,11 @@ public class ArticleSupplierController {
         model.addAttribute("articleList", articleService.getArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
         return "form_article_supplier";
+    }
+    @GetMapping("deleteArticleSupplier/{articleSupplierId}")
+    public String deleteArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
+        ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
+        this.articleSupplierService.deleteArticleSupplier(articleSupplier);
+        return "redirect:/article_supplier";
     }
 }
