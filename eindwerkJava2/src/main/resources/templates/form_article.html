@@ -28,13 +28,13 @@
             <div class="row">
             <div class="col-md-8">
                 <div class="mb-3 form-group text-start">
-                    <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control p-2"/>
+                    <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label">Name</label>
                     <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control" id="articleName">
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="articleDescription" class="form-label">Description</label>
-                    <input th:field="*{articleDescription}" type="text" placeholder="Description" class="form-control" id="articleDescription">
+                    <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description" class="form-control" id="articleDescription"/>
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="articleCategory" class="form-label">Description</label>
@@ -61,10 +61,17 @@
             </div>
             <div class="col-md-4">
                 <div class="bg-image hover-overlay ripple">
-                    <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/055.webp" class="img-fluid rounded" />
+                    <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/055.webp" class="img-fluid rounded" id="articleImage" />
                     <a href="#!">
                         <div class="mask" style="background-color: rgba(57, 192, 237, 0.2);"></div>
                     </a>
+                </div>
+                <div class="p-2">
+                    <form action="/action_page.php">
+                        <label for="img">Select image:</label>
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit" class="btn btn-success">
+                    </form>
                 </div>
             </div>
             </div>

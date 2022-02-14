@@ -2,17 +2,12 @@ package com.example.eindwerkJava2.controller;
 
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.Category;
-import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.CategoryService;
-import com.example.eindwerkJava2.service.SupplierService;
 import com.example.eindwerkJava2.service.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,9 +40,16 @@ public class ArticleController {
         model.addAttribute("article",new Article());
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
-        List<Article> articles = articleService.getArticles();
+        List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
         return "articles";
+    }
+
+    @GetMapping("deleteArticle/{articleId}")
+    public String deleteArticle(@PathVariable("articleId") Long articleId){
+        Article article = articleService.findById(articleId).get();
+        this.articleService.deleteArticle(article);
+        return "redirect:/articles";
     }
 
     @GetMapping("/showNewArticleForm")
@@ -55,7 +57,7 @@ public class ArticleController {
         model.addAttribute("article",new Article());
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
-        List<Article> articles = articleService.getArticles();
+        List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
         return "form_article";
     }
