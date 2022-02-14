@@ -28,7 +28,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="supplier : ${suppliersList}" th:if="${supplier.activeSupplier == 1}">
+            <tr th:each="supplier : ${suppliersList}">
                     <td th:text="${supplier.supplierName}"></td>
                     <td th:text="${supplier.adress}"></td>
                     <td th:text="${supplier.city.cityName}"></td>

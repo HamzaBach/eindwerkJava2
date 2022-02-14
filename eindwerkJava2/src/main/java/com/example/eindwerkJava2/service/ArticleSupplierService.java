@@ -15,7 +15,7 @@ public class ArticleSupplierService{
     private ArticleSupplierRepository articleSupplierRepository;
 
     public List<ArticleSupplier> getAllArticleSuppliers(){
-        return articleSupplierRepository.findAll();
+        return articleSupplierRepository.getAllArticleSuppliers();
     }
 
     public void saveArticleSupplier(ArticleSupplier articleSupplier){

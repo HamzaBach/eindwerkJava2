@@ -30,15 +30,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="artSupp : ${articleSupplierList}" th:if="${artSupp.activeArticleSupplier == 1}">
+        <tr th:each="artSupp : ${articleSupplierList}">
             <td th:text="${artSupp.article.articleName}"></td>
             <td th:text="${artSupp.supplier.supplierName}"></td>
             <td th:text="${artSupp.price}"></td>
             <td th:text="${artSupp.partnr}"></td>
             <td><a th:href="@{'/editArticleSupplier/'+${artSupp.articleSupplierId}}">EDIT</a></td>
             <td><a th:href="@{'/deleteArticleSupplier/' + ${artSupp.articleSupplierId}}">DELETE</a></td>
-
-
         </tr>
         </tbody>
     </table>

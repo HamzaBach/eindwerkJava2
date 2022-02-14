@@ -16,11 +16,12 @@ public class Cities {
     @Column(name = "city_name")
     private String cityName;
 
-
-
     @Column(name = "city_province")
     private String cityProvince;
 
+    /**
+     * 
+     */
     public Cities(){};
     public Cities(int cityZipcode, String cityName, String cityProvince){
         this.cityZipcode=cityZipcode;

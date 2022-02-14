@@ -20,12 +20,10 @@ public class CategoryService {
     }
 
 
-    public List<Category> getCategories(){ return this.categoryRepository.findAll();}
+    public List<Category> getCategories(){ return categoryRepository.findAllActiveCategories();}
 
 
     public void addCategory( Category category ){
-
-
         categoryRepository.save(category);
     }
 
@@ -33,6 +31,11 @@ public class CategoryService {
 
     public Optional<Category> findById(long id){
         return categoryRepository.findById(id);
+    }
+
+    public void deleteCategory(Category category){
+        category.setActive(0);
+        this.categoryRepository.save(category);
     }
 
 }

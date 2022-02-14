@@ -2,6 +2,8 @@ package com.example.eindwerkJava2.model;
 
 import javax.persistence.*;
 
+
+
 @Entity
 @Table()
 public class ArticleSupplier {
@@ -24,7 +26,7 @@ public class ArticleSupplier {
     private double price;
 
     @Column(name = "active")
-    private int activeArticleSupplier;
+    private int activeArticleSupplier =1;
 
     public ArticleSupplier() {
     }
