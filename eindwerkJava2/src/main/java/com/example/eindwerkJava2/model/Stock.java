@@ -1,9 +1,6 @@
 package com.example.eindwerkJava2.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -11,47 +8,56 @@ import javax.persistence.Table;
 public class Stock {
 
     @Id
-    @GeneratedValue
-    private int stockId;
-    private int locationId;
-    private int articleId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long stockId;
+
+    @ManyToOne
+    @JoinColumn(name="location_id")
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name="articleId")
+    private Article article;
+
     private double amount;
 
-    public Stock(int stockId, int locationId, int articleId, double amount){
+    @Column(name = "activeStock")
+    private int activeStock = 1;
 
+    public Stock(Long stockId, Location location, Article article, double amount, int activeStock) {
         this.stockId = stockId;
-        this.locationId = locationId;
-        this.articleId = articleId;
+        this.location = location;
+        this.article = article;
         this.amount = amount;
-
+        this.activeStock = activeStock;
     }
 
     public Stock(){
 
     }
 
-    public int getStockId() {
+    public Long getStockId() {
         return stockId;
     }
 
-    public void setStockId(int stockId) {
+    public void setStockId(Long stockId) {
         this.stockId = stockId;
     }
 
-    public int getLocationId() {
-        return locationId;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
-    public int getArticleId() {
-        return articleId;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setArticleId(int articleId) {
-        this.articleId = articleId;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public double getAmount() {
@@ -60,6 +66,14 @@ public class Stock {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public int getActiveStock() {
+        return activeStock;
+    }
+
+    public void setActiveStock(int activeStock) {
+        this.activeStock = activeStock;
     }
 
     @Override

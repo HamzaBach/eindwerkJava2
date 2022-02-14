@@ -10,9 +10,11 @@ import java.util.Optional;
 
 @Service
 public class StockService {
+
     @Autowired
     private final StockRepository stockRepository;
 
+    @Autowired
     public StockService(StockRepository stockRepository){
         this.stockRepository = stockRepository;
     }
@@ -27,6 +29,21 @@ public class StockService {
 
     public Optional<Stock> findById(long id){
         return stockRepository.findById(id);
+    }
+
+    public Stock findStockById(Long Stockid){
+        return this.stockRepository.findByStockId(Stockid);
+    }
+
+    public void deleteStock(Stock stock)
+    {
+        stock.setActiveStock(0);
+        this.stockRepository.save(stock);
+    }
+
+    public List<Stock> activeStock()
+    {
+        return this.stockRepository.activeStock();
     }
 
 

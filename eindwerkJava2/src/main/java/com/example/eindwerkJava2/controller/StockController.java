@@ -2,12 +2,15 @@ package com.example.eindwerkJava2.controller;
 
 
 import com.example.eindwerkJava2.model.Stock;
+import com.example.eindwerkJava2.service.ArticleService;
+import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -16,9 +19,15 @@ public class StockController {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private ArticleService articleService;
+
     @GetMapping("/stock")
     public String viewStock(Model model){
-        model.addAttribute("stockList",stockService.getStock());
+        model.addAttribute("stockList",stockService.activeStock());
         return "stock";
     }
 
@@ -27,9 +36,10 @@ public class StockController {
 
         Stock stock = new Stock();
         model.addAttribute("stock", stock);
+        model.addAttribute("locationList", locationService.getAllLocations());
+        model.addAttribute("articleList", articleService.getArticles());
+
         return "newStockForm";
-
-
     }
 
     @PostMapping("/saveStock")
@@ -38,6 +48,26 @@ public class StockController {
         this.stockService.saveStock(stock);
         return "redirect:/stock";
     }
+
+    @GetMapping("/updateStockForm/{stockId}")
+    public String viewUpdateStockForm(@PathVariable("stockId")Long stockId, Model model)
+    {
+        Stock stock = stockService.findStockById(stockId);
+        model.addAttribute("stock", stock);
+        model.addAttribute("locationList", locationService.getAllLocations());
+        model.addAttribute("articleList", articleService.getArticles());
+        return "newStockForm";
+    }
+
+    @GetMapping("/deleteStock/{stockId}")
+    public String deleteStock(@PathVariable("stockId")Long stockId, Model model)
+    {
+        Stock stock = stockService.findStockById(stockId);
+        this.stockService.deleteStock(stock);
+        return "redirect:/stock";
+    }
+
+
 
 
 

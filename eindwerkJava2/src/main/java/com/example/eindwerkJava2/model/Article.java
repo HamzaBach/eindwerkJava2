@@ -1,11 +1,14 @@
 package com.example.eindwerkJava2.model;
 
+import org.apache.catalina.LifecycleState;
+
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @Entity
 @Table
@@ -25,6 +28,9 @@ public class Article {
     private Supplier supplier;
     private String articleBarcode;
     private byte[] articleImage;
+    @OneToMany(mappedBy = "article")
+    private List<Stock> stock;
+
 
     public Article() {
     }

@@ -22,9 +22,12 @@
     <tbody>
     <tr th:each="Stock:${stockList}">
         <td th:text="${Stock.stockId}"></td>
-        <td th:text="${Stock.locationId}"></td>
-        <td th:text="${Stock.articleId}"></td>
+        <td th:text="${Stock.location.locationName}"></td>
+        <td th:text="${Stock.article.articleName}"></td>
         <td th:text="${Stock.amount}"></td>
+
+        <td><a th:href="@{'/updateStockForm/' + ${Stock.stockId}}">Edit</a> </td>
+        <td><a th:href="@{'/deleteStock/' + ${Stock.stockId}}">Delete</a> </td>
     </tr>
     </tbody>
 </table>
