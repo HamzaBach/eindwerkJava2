@@ -5,12 +5,25 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.CategoryService;
 import com.example.eindwerkJava2.service.SupplierServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping/*(path = "articles")*/
 public class ArticleController {
@@ -63,15 +76,36 @@ public class ArticleController {
     }
 
     @PostMapping("/saveArticle")
-    public String saveArticle(@ModelAttribute("article") Article article){
+    public String saveArticle(@ModelAttribute("article") Article article,
+                              @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        byte[] addedImage = multipartFile.getBytes();
+        if(addedImage.length!=0){
+            article.setArticleImage(addedImage);
+        }
         this.articleService.saveArticle(article);
         return "redirect:/articles";
     }
 
+    @GetMapping("/article/image/{articleId}")
+    @ResponseBody
+    void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response, Optional<Article> article)
+            throws IOException {
+        article = articleService.findById(articleId);
+        if(article.get().getArticleImage()!=null){
+            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+            response.getOutputStream().write(article.get().getArticleImage());
+            response.getOutputStream().close();
+        }
+    }
+
     @GetMapping("editArticle/{articleId}")
-    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model){
+    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) throws UnsupportedEncodingException {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
+
+//        byte[] encode = Base64.getEncoder().encode(article.getArticleImage());
+//        model.addAttribute("articleImage", new String(encode, "UTF-8"));
+
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         return "form_article";

@@ -1,5 +1,7 @@
 package com.example.eindwerkJava2.model;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,6 +27,8 @@ public class Article {
     private Supplier supplier;
     private String articleBarcode;
     private int activeArticle;
+    @Lob
+    @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
     private byte[] articleImage;
 
     public Article() {
@@ -78,7 +82,8 @@ public class Article {
     }
 
     public byte[] getArticleImage() {
-        return articleImage;
+
+        return this.articleImage;
     }
 
     public Long getArticleId() {

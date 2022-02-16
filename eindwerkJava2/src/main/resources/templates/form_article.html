@@ -24,20 +24,24 @@
     </div>
 
 
-        <form th:action="@{/saveArticle}" th:object="${article}" , method="POST">
-            <div class="row">
+    <form th:action="@{/saveArticle}"
+          th:object="${article}" , method="POST"
+          enctype="multipart/form-data">
+        <div class="row">
             <div class="col-md-8">
                 <div class="mb-3 form-group text-start">
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label">Name</label>
-                    <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control" id="articleName">
+                    <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control"
+                           id="articleName">
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="articleDescription" class="form-label">Description</label>
-                    <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description" class="form-control" id="articleDescription"/>
+                    <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description"
+                              class="form-control" id="articleDescription"/>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label for="articleCategory" class="form-label">Description</label>
+                    <label for="articleCategory" class="form-label">Category</label>
                     <select th:field="*{category}" class="form-select" id="articleCategory">
                         <th:block th:each="category : ${categoriesList}">
                             <option th:text="${category.categoryName}" th:value="${category.categoryId}">
@@ -54,31 +58,26 @@
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="articleBarcode" class="form-label">Barcode</label>
-                    <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control" id="articleBarcode">
+                    <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
+                           id="articleBarcode">
                 </div>
-
-                <button type="submit" class="btn btn-primary btn-lg">Save</button>
             </div>
             <div class="col-md-4">
                 <div class="bg-image hover-overlay ripple">
-                    <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/055.webp" class="img-fluid rounded" id="articleImage" />
-                    <a href="#!">
-                        <div class="mask" style="background-color: rgba(57, 192, 237, 0.2);"></div>
-                    </a>
+                    <img th:src="@{${'/article/image/'+article.articleId}}"
+                         class="img-fluid rounded" id="articleImage"/>
                 </div>
                 <div class="p-2">
-                    <form action="/action_page.php">
-                        <label for="img">Select image:</label>
-                        <input type="file" id="img" name="img" accept="image/*">
-                        <input type="submit" class="btn btn-success">
-                    </form>
+                    <label for="articleImg">Select image:</label>
+                    <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
-            </div>
-        </form>
-
-
-
+            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        </div>
+    </form>
+<!--
+    th:src="@{${'/article/image/'+article.articleId}}"-->
+    <!--th:src="*{'data:image/png;base64,'+ articleImage}"-->
 </div>
 
 </body>

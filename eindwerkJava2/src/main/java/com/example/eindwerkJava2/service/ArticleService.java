@@ -45,8 +45,15 @@ public class ArticleService {
         }
     }
     public void saveArticle(Article article){
+
         articleRepository.save(article);
     }
+
+  /*  Long articleId = article.getArticleId();
+        if(articleRepository.existsArticleByArticleId(articleId)){
+        articleRepository.findByArticleId(articleId).setArticleImage((byte[]) null);
+        articleRepository.save(article);
+    }*/
 
     public Optional<Article> findById(Long id){
         return articleRepository.findById(id);
