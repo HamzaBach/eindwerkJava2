@@ -29,19 +29,15 @@
             </thead>
             <tbody>
             <tr th:each="supplier : ${suppliersList}">
-
-                <td th:text="${supplier.supplierName}"></td>
-                <td th:text="${supplier.adress}"></td>
-                <td th:text="${supplier.city.cityName}"></td>
-                <td th:text="${supplier.country.countryName}"></td>
-                <td><a th:href="@{'/editSupplier/' + ${supplier.supplierId}} ">EDIT</a></td>
-                <td><a th:href="@{'/deleteSupplier/' + ${supplier.supplierId}}">DELETE</a></td>
-
+                    <td th:text="${supplier.supplierName}"></td>
+                    <td th:text="${supplier.adress}"></td>
+                    <td th:text="${supplier.city.cityName}"></td>
+                    <td th:text="${supplier.country.countryName}"></td>
+                    <td><a th:href="@{'/editSupplier/' + ${supplier.supplierId}} ">EDIT</a></td>
+                    <td><a th:href="@{'/deleteSupplier/' + ${supplier.supplierId}}">DELETE</a></td>
             </tr>
             </tbody>
         </table>
-
     </div>
-
 </body>
 </html>

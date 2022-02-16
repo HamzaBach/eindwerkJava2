@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Category;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +50,13 @@ public class CategoryController {
         model.addAttribute("category", category);
 
         return "form_category";
+    }
+
+    @GetMapping("deleteCategory/{categoryId}")
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId, Model model){
+        Category category = categoryService.findById(categoryId).get();
+        this.categoryService.deleteCategory(category);
+        return "redirect:/category";
     }
 
 }

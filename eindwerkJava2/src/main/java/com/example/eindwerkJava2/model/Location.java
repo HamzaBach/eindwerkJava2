@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="Location")
@@ -9,6 +10,9 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
+
+    @OneToMany(mappedBy = "location")
+    private List<Stock> stocks;
 
     @Column(name="locationName")
     private String locationName;
@@ -27,8 +31,12 @@ public class Location {
     public Location() {
     }
 
-    public Location(Long locationId, String locationName, Warehouse warehouse, boolean singleStorage, int activeLocation) {
+
+
+    public Location(Long locationId, List<Stock> stocks, String locationName, Warehouse warehouse, boolean singleStorage, int activeLocation) {
+
         this.locationId = locationId;
+        this.stocks = stocks;
         this.locationName = locationName;
         this.warehouse = warehouse;
         this.singleStorage = singleStorage;
@@ -72,5 +80,13 @@ public class Location {
 
     public void setSingleStorage(boolean singleStorage) {
         this.singleStorage = singleStorage;
+    }
+
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
     }
 }

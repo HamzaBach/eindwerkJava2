@@ -9,5 +9,7 @@ public interface SupplierService {
     public List<Supplier> getAllSuppliers();
     void saveSupplier(Supplier supplier);
     public Optional<Supplier> findById(long id);
+    public void deleteSupplier(Supplier supplier);
 
-}
+
+    }

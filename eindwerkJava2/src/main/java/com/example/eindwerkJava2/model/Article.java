@@ -1,11 +1,14 @@
 package com.example.eindwerkJava2.model;
 
+import org.apache.catalina.LifecycleState;
+
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @Entity
 @Table
@@ -24,25 +27,32 @@ public class Article {
     @JoinColumn(name="supplierId")
     private Supplier supplier;
     private String articleBarcode;
+    private int activeArticle;
     private byte[] articleImage;
+    @OneToMany(mappedBy = "article")
+    private List<Stock> stock;
+
 
     public Article() {
+        this.activeArticle=1;
     }
     public Article(String articleName, String articleDescription,
-                   Category category, Supplier supplier, byte[] articleImage){
+                   Category category, Supplier supplier, byte[] articleImage, int activeArticle){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
         this.supplier = supplier;
         this.articleImage = articleImage;
+        this.activeArticle = activeArticle;
     }
 
-    public Article( String articleName, String articleDescription,
+    public Article(String articleName, String articleDescription,
                     Category category, Supplier supplier){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
         this.supplier = supplier;
+        this.activeArticle = 1;
     }
 
     //Getters & Setters:
@@ -59,6 +69,18 @@ public class Article {
                 e.printStackTrace();
             }
         }
+    }
+
+    public int getActiveArticle() {
+        return activeArticle;
+    }
+
+    public void setActiveArticle(int activeArticle) {
+        this.activeArticle = activeArticle;
+    }
+
+    public void setArticleImage(byte[] articleImage) {
+        this.articleImage = articleImage;
     }
 
     public byte[] getArticleImage() {

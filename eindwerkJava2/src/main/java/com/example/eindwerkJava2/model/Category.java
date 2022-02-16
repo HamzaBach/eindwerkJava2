@@ -10,11 +10,21 @@ public class Category {
     @GeneratedValue
     private Long categoryId;
     private String categoryName;
+    private int active = 1;
+
 
     public Category(Long categoryID,String categoryName)
     {
         this.categoryId = categoryID;
         this.categoryName = categoryName;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
     public Category() {

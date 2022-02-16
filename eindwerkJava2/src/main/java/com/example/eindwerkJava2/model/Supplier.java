@@ -16,6 +16,9 @@ public class Supplier {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "active")
+    private int activeSupplier = 1;
+
     @ManyToOne
     @JoinColumn(name = "city")
     private Cities city;
@@ -24,24 +27,18 @@ public class Supplier {
     @JoinColumn(name = "country")
     private Countries country;
 
-    @Column(name = "active")
-    private boolean active;
-
     public Supplier() {
     }
     public Supplier(String supplierName, String adress,
-                    Cities city, Countries country, boolean active){
+                    Cities city, Countries country, int activeSupplier){
         this.supplierName=supplierName;
         this.adress=adress;
         this.city=city;
         this.country=country;
-        this.active=active;
+        this.activeSupplier=activeSupplier;
     }
 
-    @Override
-    public String toString() {
-        return supplierName;
-    }
+
 
     public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
@@ -83,12 +80,12 @@ public class Supplier {
         this.country = country;
     }
 
-    public boolean isActive() {
-        return active;
+    public int getActiveSupplier() {
+        return activeSupplier;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActiveSupplier(int activeSupplier) {
+        this.activeSupplier = activeSupplier;
     }
 
 
