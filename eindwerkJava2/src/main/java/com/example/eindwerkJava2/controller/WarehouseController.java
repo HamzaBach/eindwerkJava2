@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The type Warehouse controller.
+ * @author Sebastiaan
+ */
 @Controller
 public class WarehouseController {
 
@@ -18,6 +22,13 @@ public class WarehouseController {
     private WarehouseService warehouseService;
 
 
+    /**
+     * takes all active warehouses and sends them to the webpage 'warehouse'.
+     * Presents the 'warehouse' page
+     *
+     * @param model the model
+     * @return the 'warehouse' page
+     */
     @GetMapping(path = "/warehouse")
     public String listWarehouses(Model model) {
         List<Warehouse> listWarehouses = warehouseService.activeWarehouses();
@@ -25,6 +36,13 @@ public class WarehouseController {
         return "warehouse";
     }
 
+    /**
+     * Shows the 'form_warehouse' page
+     * creates a new warehouse object that will be saved.
+     *
+     * @param model the model
+     * @return the 'form_warehouse' page
+     */
     @GetMapping(path = "/newWarehouse")
     public String showNewLocationForm(Model model){
         model.addAttribute("warehouse", new Warehouse());
@@ -32,6 +50,12 @@ public class WarehouseController {
     }
 
 
+    /**
+     * Saves a new warehouse or edited warehouse whose data has been entered on the form_warehouse webpage.
+     *
+     * @param warehouse the warehouse
+     * @return redirects to the 'warehouse' page
+     */
     @PostMapping("/warehouse/save")
     public String saveLocation(Warehouse warehouse) {
         warehouseService.addWarehouse(warehouse);
@@ -39,6 +63,14 @@ public class WarehouseController {
     }
 
 
+    /**
+     * Send the user to the form_warehouse page to edit the warehouse of which the warehouseId has been selected
+     *
+     * @param warehouseId the warehouse id
+     * @param model       the model
+     * @return the 'form_warehouse' page
+     * @throws Exception the exception occurs when the ID does not exist
+     */
     @GetMapping("/editWarehouse/{warehouseId}")
     public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
@@ -46,6 +78,15 @@ public class WarehouseController {
     return "form_warehouse";
     }
 
+    /**
+     * Delete a warehouse.
+     * Doesn't actually delete a warehouse but sets the warehouse 'Active' attribute to 0
+     *
+     * @param warehouseId the warehouse id
+     * @param model       the model
+     * @return redirects to the 'warehouse' webpage
+     * @throws Exception the exception occurs when the ID does not exist
+     */
     @GetMapping("deleteWarehouse/{warehouseId}")
     public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);

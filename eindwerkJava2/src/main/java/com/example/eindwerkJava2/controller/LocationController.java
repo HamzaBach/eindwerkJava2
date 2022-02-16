@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The type Location controller.
+ * @author Sebastiaan
+ */
 @Controller
 public class LocationController {
 
@@ -22,14 +26,27 @@ private LocationService locationService;
 private WarehouseService warehouseService;
 
 
-
-
+    /**
+     * Takes all locations and sends them to the webpage via 'listLocations'
+     * Presents the 'location' page
+     *
+     * @param model model
+     * @return the 'location' page
+     */
     @GetMapping(path = "/location")
     public String listLocations(Model model){
         List<Location> listLocations = locationService.activeLocations();
         model.addAttribute("listLocations",listLocations);
         return "location";}
 
+    /**
+     * Shows the form_location page
+     * creates a new Location object that will be saved
+     * Collects all active warehouses and sends them to the webpage so user can select a warehouse.
+     * @see com.example.eindwerkJava2.model.Warehouse
+     * @param model the model
+     * @return the form_location page
+     */
     @GetMapping(path = "/newLocation")
     public String showNewLocationForm(Model model){
         model.addAttribute("location", new Location());
@@ -37,6 +54,12 @@ private WarehouseService warehouseService;
         return "form_location";
     }
 
+    /**
+     * Saves a new location or edited location whose data has been entered on the form_location webpage.
+     *
+     * @param location the location
+     * @return redirects to the 'location' page
+     */
     @PostMapping("/location/save")
     public String saveLocation(Location location){
         locationService.addLocation(location);
@@ -44,6 +67,15 @@ private WarehouseService warehouseService;
     }
 
 
+    /**
+     * Send the user to the form_location page to edit the location of which the locationId has been selected
+     *
+     * Collects all active warehouses and sends them to the webpage so user can select a warehouse.
+     * @see com.example.eindwerkJava2.model.Warehouse
+     * @param locationId the location id
+     * @param model      the model
+     * @return the form_location page
+     */
     @GetMapping("editLocation/{locationId}")
     public String editLocation(@PathVariable("locationId") Long locationId, Model model){
         Location location = locationService.findByLocationId(locationId);
@@ -51,6 +83,14 @@ private WarehouseService warehouseService;
         model.addAttribute("warehouseList", warehouseService.activeWarehouses());
         return "form_location";}
 
+    /**
+     * Delete a location.
+     * Doesn't actually delete a location but sets the locations 'Active' attribute to 0
+     *
+     * @param locationId the location id
+     * @param model      the model
+     * @return redirects to the 'location' webpage
+     */
     @GetMapping("deleteLocation/{locationId}")
     public String deleteLocation(@PathVariable("locationId") Long locationId, Model model){
         Location location = locationService.findByLocationId(locationId);
