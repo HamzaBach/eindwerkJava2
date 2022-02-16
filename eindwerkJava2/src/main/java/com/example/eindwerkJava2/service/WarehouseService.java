@@ -26,13 +26,24 @@ public class WarehouseService {
         warehouseRepository.save(warehouse);
     }
 
-    public Warehouse findWarehouse(Long warehouseId){
-        Warehouse warehouse = warehouseRepository.findByWarehouseId(warehouseId);
-        return warehouse;
+    public Warehouse findWarehouse(Long warehouseId) throws Exception {
+        if(warehouseRepository.existsById(warehouseId)){
+        return this.warehouseRepository.findByWarehouseId(warehouseId);
+    } else{
+           throw new Exception("Deze ID bestaat niet");
+        }
     }
+
     public void deleteWarehouse(Warehouse warehouse){
-        warehouseRepository.delete(warehouse);
+        warehouse.setActiveWarehouse(0);
+        this.warehouseRepository.save(warehouse);
     }
+
+    public List<Warehouse> activeWarehouses(){
+        return this.warehouseRepository.findByActiveWarehouse(1);
+    }
+
+
 
 
 

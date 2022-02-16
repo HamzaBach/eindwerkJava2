@@ -17,6 +17,27 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse")
     private List<Location> locations;
 
+    @Column(name = "active")
+    private int activeWarehouse = 1;
+
+
+    public int getActiveWarehouse() {
+        return activeWarehouse;
+    }
+    public void setActiveWarehouse(int activeWarehouse) {
+        this.activeWarehouse = activeWarehouse;
+    }
+
+    public Warehouse() {
+    }
+
+    public Warehouse(Long warehouseId, String warehouseName, List<Location> locations, int activeWarehouse) {
+        this.warehouseId = warehouseId;
+        this.warehouseName = warehouseName;
+        this.locations = locations;
+        this.activeWarehouse = activeWarehouse;
+    }
+
     public Long getWarehouseId() {
         return warehouseId;
     }

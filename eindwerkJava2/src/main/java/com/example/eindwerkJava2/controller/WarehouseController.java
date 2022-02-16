@@ -13,18 +13,14 @@ import java.util.List;
 
 @Controller
 public class WarehouseController {
-    private WarehouseService warehouseService;
 
     @Autowired
-    public WarehouseController(WarehouseService warehouseService) {
-
-        this.warehouseService = warehouseService;
-    }
+    private WarehouseService warehouseService;
 
 
     @GetMapping(path = "/warehouse")
     public String listWarehouses(Model model) {
-        List<Warehouse> listWarehouses = warehouseService.getAllWarehouses();
+        List<Warehouse> listWarehouses = warehouseService.activeWarehouses();
         model.addAttribute("listWarehouses", listWarehouses);
         return "warehouse";
     }
@@ -32,7 +28,7 @@ public class WarehouseController {
     @GetMapping(path = "/newWarehouse")
     public String showNewLocationForm(Model model){
         model.addAttribute("warehouse", new Warehouse());
-        return "newWarehouseForm";
+        return "form_warehouse";
     }
 
 
@@ -42,19 +38,19 @@ public class WarehouseController {
         return "redirect:/warehouse";
     }
 
-    @GetMapping(path = "/deleteWarehouse")
-    public String showdeleteWarehouse(Model model){
-        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
-        return "deleteWarehouse";
-    }
 
-    @PostMapping("/warehouse/delete/{warehouseId}")
-    public String updateUser(@PathVariable("warehouseId") Long warehouseId, Model model) {
+    @GetMapping("/editWarehouse/{warehouseId}")
+    public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
-        warehouseService.deleteWarehouse(warehouse);
-    return "redirect:/warehouse";
+        model.addAttribute("warehouse",warehouse);
+    return "form_warehouse";
     }
 
-
+    @GetMapping("deleteWarehouse/{warehouseId}")
+    public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
+        Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
+        this.warehouseService.deleteWarehouse(warehouse);
+        return "redirect:/warehouse";
+    }
 
 }
