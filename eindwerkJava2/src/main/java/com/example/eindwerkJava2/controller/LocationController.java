@@ -48,7 +48,7 @@ private WarehouseService warehouseService;
     public String editLocation(@PathVariable("locationId") Long locationId, Model model){
         Location location = locationService.findByLocationId(locationId);
         model.addAttribute("location", location);
-        model.addAttribute("warehouseList", warehouseService.getAllWarehouses());
+        model.addAttribute("warehouseList", warehouseService.activeWarehouses());
         return "form_location";}
 
     @GetMapping("deleteLocation/{locationId}")

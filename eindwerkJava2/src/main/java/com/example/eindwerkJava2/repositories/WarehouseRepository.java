@@ -10,7 +10,6 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 
     Warehouse findByWarehouseId(Long locationId);
 
-    @Query("SELECT u FROM Warehouse u WHERE u.activeWarehouse = 1")
-    List<Warehouse> activeWarehouses();
+    List<Warehouse> findByActiveWarehouse(int activeWarehouse);
 
 }

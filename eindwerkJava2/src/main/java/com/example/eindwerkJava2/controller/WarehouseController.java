@@ -40,14 +40,14 @@ public class WarehouseController {
 
 
     @GetMapping("/editWarehouse/{warehouseId}")
-    public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) {
+    public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
         model.addAttribute("warehouse",warehouse);
     return "form_warehouse";
     }
 
     @GetMapping("deleteWarehouse/{warehouseId}")
-    public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model){
+    public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
         this.warehouseService.deleteWarehouse(warehouse);
         return "redirect:/warehouse";

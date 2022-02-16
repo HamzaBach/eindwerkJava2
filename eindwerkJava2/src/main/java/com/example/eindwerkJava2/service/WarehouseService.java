@@ -26,8 +26,12 @@ public class WarehouseService {
         warehouseRepository.save(warehouse);
     }
 
-    public Warehouse findWarehouse(Long warehouseId){
+    public Warehouse findWarehouse(Long warehouseId) throws Exception {
+        if(warehouseRepository.existsById(warehouseId)){
         return this.warehouseRepository.findByWarehouseId(warehouseId);
+    } else{
+           throw new Exception("Deze ID bestaat niet");
+        }
     }
 
     public void deleteWarehouse(Warehouse warehouse){
@@ -36,7 +40,7 @@ public class WarehouseService {
     }
 
     public List<Warehouse> activeWarehouses(){
-        return this.warehouseRepository.activeWarehouses();
+        return this.warehouseRepository.findByActiveWarehouse(1);
     }
 
 
