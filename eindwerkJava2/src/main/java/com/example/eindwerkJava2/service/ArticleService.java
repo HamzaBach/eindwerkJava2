@@ -46,6 +46,11 @@ public class ArticleService {
     }
     public void saveArticle(Article article){
 
+        if(article.getArticleImage() == null)
+        {
+            Article currentArticle = articleRepository.getById(article.getArticleId());
+            article.setArticleImage(currentArticle.getArticleImage());
+        }
         articleRepository.save(article);
     }
 

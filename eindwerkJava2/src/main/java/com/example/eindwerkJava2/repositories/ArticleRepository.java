@@ -16,5 +16,4 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     boolean existsArticleByCategory(Category category);
     Article findByArticleId(Long articleId);
     List<Article> findByActiveArticle(int activeArticle);
-    boolean updateArticle (Article article);
 }
