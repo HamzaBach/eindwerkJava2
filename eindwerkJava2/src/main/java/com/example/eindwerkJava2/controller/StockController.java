@@ -37,7 +37,7 @@ public class StockController {
         Stock stock = new Stock();
         model.addAttribute("stock", stock);
         model.addAttribute("locationList", locationService.getAllLocations());
-        model.addAttribute("articleList", articleService.getArticles());
+        model.addAttribute("articleList", articleService.getActiveArticles());
 
         return "newStockForm";
     }
@@ -55,7 +55,7 @@ public class StockController {
         Stock stock = stockService.findStockById(stockId);
         model.addAttribute("stock", stock);
         model.addAttribute("locationList", locationService.getAllLocations());
-        model.addAttribute("articleList", articleService.getArticles());
+        model.addAttribute("articleList", articleService.getActiveArticles());
         return "newStockForm";
     }
 
