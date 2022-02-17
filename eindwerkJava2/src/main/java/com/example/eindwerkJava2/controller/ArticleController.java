@@ -5,22 +5,13 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.CategoryService;
 import com.example.eindwerkJava2.service.SupplierServiceImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,22 +90,8 @@ public class ArticleController {
     public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) throws UnsupportedEncodingException {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
-
-//        byte[] encode = Base64.getEncoder().encode(article.getArticleImage());
-//        model.addAttribute("articleImage", new String(encode, "UTF-8"));
-
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         return "form_article";
     }
-
-
-
-//    @GetMapping(path = "{articleId}")
-//    public Article getArticle(@PathVariable("articleId") Long articleId) {
-//        return articleService.getArticle(articleId);
-//    }
-
-
-
 }
