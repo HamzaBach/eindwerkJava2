@@ -87,7 +87,7 @@ public class ArticleController {
     }
 
     @GetMapping("editArticle/{articleId}")
-    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) throws UnsupportedEncodingException {
+    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
         model.addAttribute("categoriesList", categoryService.getCategories());
