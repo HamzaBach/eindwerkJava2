@@ -1,7 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import org.apache.tomcat.util.codec.binary.Base64;
-
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
