@@ -28,6 +28,8 @@ public class Article {
     private Supplier supplier;
     private String articleBarcode;
     private int activeArticle;
+    @Lob
+    @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
     private byte[] articleImage;
     @OneToMany(mappedBy = "article")
     private List<Stock> stock;
@@ -84,7 +86,8 @@ public class Article {
     }
 
     public byte[] getArticleImage() {
-        return articleImage;
+
+        return this.articleImage;
     }
 
     public Long getArticleId() {

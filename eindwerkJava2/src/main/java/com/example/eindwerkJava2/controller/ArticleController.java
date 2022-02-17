@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping/*(path = "articles")*/
 public class ArticleController {
@@ -63,27 +67,31 @@ public class ArticleController {
     }
 
     @PostMapping("/saveArticle")
-    public String saveArticle(@ModelAttribute("article") Article article){
-        this.articleService.saveArticle(article);
+    public String saveArticle(@ModelAttribute("article") Article article,
+                              @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        byte[] addedImage = multipartFile.getBytes();
+        this.articleService.saveArticle(article,addedImage);
         return "redirect:/articles";
     }
 
+    @GetMapping("/article/image/{articleId}")
+    @ResponseBody
+    void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response, Optional<Article> article)
+            throws IOException {
+        article = articleService.findById(articleId);
+        if(article.get().getArticleImage()!=null){
+            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+            response.getOutputStream().write(article.get().getArticleImage());
+            response.getOutputStream().close();
+        }
+    }
+
     @GetMapping("editArticle/{articleId}")
-    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model){
+    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) throws UnsupportedEncodingException {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         return "form_article";
     }
-
-
-
-//    @GetMapping(path = "{articleId}")
-//    public Article getArticle(@PathVariable("articleId") Long articleId) {
-//        return articleService.getArticle(articleId);
-//    }
-
-
-
 }
