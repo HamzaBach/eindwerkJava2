@@ -14,6 +14,14 @@
     <!--    Bootstrap icons -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <!--    Datatable -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" class="init">$(document).ready(function() {	$('#articlesOverview').DataTable();} );
+    </script>
 </head>
 <body>
 <!--Navbar component-->
@@ -25,29 +33,26 @@
         <a th:href="@{/showNewArticleForm}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
     </div>
 
-    <div class="mb-2 d-flex justify-content-between align-items-center">
-        <div class="position-relative"><span class="position-absolute search"><i class="fa fa-search"></i></span> <input
-                class="form-control w-100" placeholder="Search by article#, name..."></div>
-    </div>
-    <table class="table table-striped table-hover">
+
+    <table class="table table-striped table-hover dataTable" id="articlesOverview">
         <thead>
-        <th scope="col">Article Id</th>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Category</th>
-        <th scope="col">Supplier</th>
-        <th scope="col">Barcode</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
+        <th scope="col" class="sorting">Article Id</th>
+        <th scope="col" class="sorting">Name</th>
+        <th scope="col" class="sorting">Description</th>
+        <th scope="col" class="sorting">Category</th>
+        <th scope="col" class="sorting">Supplier</th>
+        <th scope="col" class="sorting">Barcode</th>
+        <th scope="col" class="sorting">Edit</th>
+        <th scope="col" class="sorting">Delete</th>
         </thead>
         <tbody>
         <tr th:each="article: ${articlesList}">
-            <td th:text="${article.articleId}"></td>
-            <td th:text="${article.articleName}"></td>
-            <td th:text="${article.articleDescription}"></td>
-            <td th:text="${article.category.categoryName}"></td>
-            <td th:text="${article.supplier.supplierName}"></td>
-            <td th:text="${article.articleBarcode}"></td>
+            <td th:text="${article.articleId}" class="sorting_1"></td>
+            <td th:text="${article.articleName}" class="sorting_1"></td>
+            <td th:text="${article.articleDescription}" class="sorting_1"></td>
+            <td th:text="${article.category.categoryName}" class="sorting_1"></td>
+            <td th:text="${article.supplier.supplierName}" class="sorting_1"></td>
+            <td th:text="${article.articleBarcode}" class="sorting_1"></td>
             <td>
                 <a th:href="@{'/editArticle/' + ${article.articleId}}" class="btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i> Edit
@@ -121,6 +126,8 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
