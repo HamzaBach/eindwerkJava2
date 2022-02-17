@@ -6,6 +6,7 @@ import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,21 +45,16 @@ public class ArticleService {
             return true;
         }
     }
-    public void saveArticle(Article article){
-
-        if(article.getArticleImage() == null)
+    public void saveArticle(Article article, byte[] articleImage){
+        if(articleImage.length==0)
         {
             Article currentArticle = articleRepository.getById(article.getArticleId());
             article.setArticleImage(currentArticle.getArticleImage());
+        }else{
+            article.setArticleImage(articleImage);
         }
         articleRepository.save(article);
     }
-
-  /*  Long articleId = article.getArticleId();
-        if(articleRepository.existsArticleByArticleId(articleId)){
-        articleRepository.findByArticleId(articleId).setArticleImage((byte[]) null);
-        articleRepository.save(article);
-    }*/
 
     public Optional<Article> findById(Long id){
         return articleRepository.findById(id);

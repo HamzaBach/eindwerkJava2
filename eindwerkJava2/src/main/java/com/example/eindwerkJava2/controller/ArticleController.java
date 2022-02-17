@@ -79,10 +79,7 @@ public class ArticleController {
     public String saveArticle(@ModelAttribute("article") Article article,
                               @RequestParam("image") MultipartFile multipartFile) throws IOException {
         byte[] addedImage = multipartFile.getBytes();
-        if(addedImage.length!=0){
-            article.setArticleImage(addedImage);
-        }
-        this.articleService.saveArticle(article);
+        this.articleService.saveArticle(article,addedImage);
         return "redirect:/articles";
     }
 

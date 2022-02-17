@@ -23,12 +23,13 @@
         <h1>Edit Article</h1>
     </div>
 
-
     <form th:action="@{/saveArticle}"
           th:object="${article}" , method="POST"
           enctype="multipart/form-data">
-        <div class="row">
-            <div class="col-md-8">
+        <div class="row" >
+            <div class="col-xl-1">
+            </div>
+            <div class="col-xl-5">
                 <div class="mb-3 form-group text-start">
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label">Name</label>
@@ -62,7 +63,7 @@
                            id="articleBarcode">
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-xl-5">
                 <div class="bg-image hover-overlay ripple">
                     <img th:src="@{${'/article/image/'+article.articleId}}"
                          class="img-fluid rounded" id="articleImage"/>
@@ -72,9 +73,22 @@
                     <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+
         </div>
+        <div class="row">
+            <div class="col-xl-1">
+            </div>
+            <div class="col-xl-5">
+                <div class="row">
+                    <div align="center">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
+
 <!--
     th:src="@{${'/article/image/'+article.articleId}}"-->
     <!--th:src="*{'data:image/png;base64,'+ articleImage}"-->
