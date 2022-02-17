@@ -19,10 +19,10 @@
 <!--Navbar component-->
 <div th:include="fragments/header::navbar"/>
 
-<div align="center" style="margin: 100px" >
+<div align="center" style="margin: 100px">
     <h1>Articles</h1>
     <div align="center" style="mb-3">
-        <a th:href = "@{/showNewArticleForm}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
+        <a th:href="@{/showNewArticleForm}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
         <!--<button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#newArticleModal">
             New article
         </button>-->
@@ -52,14 +52,14 @@
             <td th:text="${article.supplier.supplierName}"></td>
             <td th:text="${article.articleBarcode}"></td>
             <td>
-                    <a th:href="@{'/editArticle/' + ${article.articleId}}" class="btn btn-outline-primary">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
+                <a th:href="@{'/editArticle/' + ${article.articleId}}" class="btn btn-outline-primary">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
             </td>
             <td>
                 <a th:href="@{'/deleteArticle/' + ${article.articleId}}" class="btn btn-outline-danger">
                     <i class="bi bi-trash"></i> Delete
-            </a>
+                </a>
             </td>
         </tr>
         </tbody>
