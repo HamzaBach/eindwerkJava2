@@ -48,11 +48,11 @@
 //
 //            Article article1 = new Article("Iphone 12",
 //                    "The 12th generation of the Iphone is here,...",
-//                    smartphone,Apple);
+//                    smartphone);
 //            Article article2 = new Article("Airpods", "Apple airpods offer wireless sound...",
-//                    smartphoneAccessoires,Apple);
+//                    smartphoneAccessoires);
 //            Article article3 = new Article("Nokia 3310", "Unbreakable phone...",
-//                    laptopAccesoires,Nokia);
+//                    laptopAccesoires);
 //            articleRepository.save(article1);
 //            articleRepository.save(article2);
 //            articleRepository.save(article3);

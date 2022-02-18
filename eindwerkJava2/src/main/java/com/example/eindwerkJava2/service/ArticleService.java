@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
@@ -32,15 +33,14 @@ public class ArticleService {
     }
 
     public Boolean addArticle(String articleName, String articleDescription, Category category,
-                              Supplier supplier, byte[] articleImage, int activeArticle) {
+                              ArticleSupplier articleSupplier, byte[] articleImage, int activeArticle) {
 
-        if (articleRepository.existsArticleBySupplier(supplier)
-                && articleRepository.existsArticleByArticleName(articleName)
+        if (articleRepository.existsArticleByArticleName(articleName)
                 && articleRepository.existsArticleByArticleDescription(articleDescription)
                 && articleRepository.existsArticleByCategory(category)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,category,supplier, articleImage, activeArticle);
+            Article newArticle = new Article(articleName,articleDescription,category, articleImage, activeArticle);
             articleRepository.save(newArticle);
             return true;
         }
