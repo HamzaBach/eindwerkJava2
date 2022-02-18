@@ -1,7 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import org.apache.catalina.LifecycleState;
-
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +7,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+/**
+ * This class represents an article object
+ * An article has a name, description, category, article supplier, barcode, image
+ */
+
 
 @Entity
 @Table
@@ -23,37 +27,36 @@ public class Article {
     @ManyToOne
     @JoinColumn(name="categoryId")
     private Category category;
-    @ManyToOne
-    @JoinColumn(name="supplierId")
-    private Supplier supplier;
+    @Transient
+    @OneToMany
+    @JoinColumn(name="articleSupplierId", nullable = true)
+    private List<ArticleSupplier> articleSuppliersList;
     private String articleBarcode;
     private int activeArticle;
     @Lob
     @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
     private byte[] articleImage;
-    @OneToMany(mappedBy = "article")
-    private List<Stock> stock;
+/*    @OneToMany(mappedBy = "article")
+    private List<Stock> stock;*/
 
 
     public Article() {
         this.activeArticle=1;
     }
     public Article(String articleName, String articleDescription,
-                   Category category, Supplier supplier, byte[] articleImage, int activeArticle){
+                   Category category, byte[] articleImage, int activeArticle){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
-        this.supplier = supplier;
         this.articleImage = articleImage;
         this.activeArticle = activeArticle;
     }
 
     public Article(String articleName, String articleDescription,
-                    Category category, Supplier supplier){
+                    Category category){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
-        this.supplier = supplier;
         this.activeArticle = 1;
     }
 
@@ -122,12 +125,12 @@ public class Article {
         this.category = category;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public List<ArticleSupplier> getArticleSuppliersList() {
+        return articleSuppliersList;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setArticleSuppliersList(List<ArticleSupplier> articleSuppliersList) {
+        this.articleSuppliersList = articleSuppliersList;
     }
 
     public String getArticleBarcode() {

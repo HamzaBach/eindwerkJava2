@@ -2,9 +2,10 @@ package com.example.eindwerkJava2.controller;
 
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.service.ArticleService;
+import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
-import com.example.eindwerkJava2.service.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +24,15 @@ public class ArticleController {
     @Autowired
     private final CategoryService categoryService;
     @Autowired
-    private final SupplierServiceImpl supplierService;
+    private final ArticleSupplierService articleSupplierService;
 
 
     public ArticleController(ArticleService articleService,
                              CategoryService categoryService,
-                             SupplierServiceImpl supplierService) {
+                             ArticleSupplierService articleSupplier) {
         this.articleService = articleService;
         this.categoryService = categoryService;
-        this.supplierService=supplierService;
+        this.articleSupplierService =articleSupplier;
     }
 
     @GetMapping("/landing_page")
@@ -42,8 +43,8 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(Model model) {
         model.addAttribute("article",new Article());
-        model.addAttribute("categoriesList", categoryService.getCategories());
-        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+//        model.addAttribute("categoriesList", categoryService.getCategories());
+//        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
         return "articles";
@@ -60,7 +61,7 @@ public class ArticleController {
     public String showNewArticleForm(Model model) {
         model.addAttribute("article",new Article());
         model.addAttribute("categoriesList", categoryService.getCategories());
-        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+//        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
         return "form_article";
@@ -91,7 +92,7 @@ public class ArticleController {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
         model.addAttribute("categoriesList", categoryService.getCategories());
-        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
         return "form_article";
     }
 }

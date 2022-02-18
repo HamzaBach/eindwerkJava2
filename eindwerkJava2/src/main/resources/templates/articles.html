@@ -33,14 +33,13 @@
         <a th:href="@{/showNewArticleForm}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
     </div>
 
-
     <table class="table table-striped table-hover dataTable" id="articlesOverview">
         <thead>
         <th scope="col" class="sorting">Article Id</th>
         <th scope="col" class="sorting">Name</th>
         <th scope="col" class="sorting">Description</th>
         <th scope="col" class="sorting">Category</th>
-        <th scope="col" class="sorting">Supplier</th>
+       <!-- <th scope="col" class="sorting">Supplier</th>-->
         <th scope="col" class="sorting">Barcode</th>
         <th scope="col" class="sorting">Edit</th>
         <th scope="col" class="sorting">Delete</th>
@@ -51,7 +50,7 @@
             <td th:text="${article.articleName}" class="sorting_1"></td>
             <td th:text="${article.articleDescription}" class="sorting_1"></td>
             <td th:text="${article.category.categoryName}" class="sorting_1"></td>
-            <td th:text="${article.supplier.supplierName}" class="sorting_1"></td>
+           <!-- <td th:text="${article.supplier.supplierName}" class="sorting_1"></td>-->
             <td th:text="${article.articleBarcode}" class="sorting_1"></td>
             <td>
                 <a th:href="@{'/editArticle/' + ${article.articleId}}" class="btn btn-outline-primary">
