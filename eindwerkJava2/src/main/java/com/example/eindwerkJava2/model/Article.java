@@ -10,6 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * This class represents an article object
+ * An article has a name, description, category, article supplier, barcode, image
+ */
+
+
 @Entity
 @Table
 public class Article {
