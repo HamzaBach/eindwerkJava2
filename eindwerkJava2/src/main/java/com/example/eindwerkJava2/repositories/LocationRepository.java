@@ -8,11 +8,26 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * The interface Location repository.
+ * @author Sebastiaan
+ */
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
-Location findByLocationId(Long locationId);
+    /**
+     * Find by location by it's id.
+     *
+     * @param locationId the location id
+     * @return the location
+     */
+    Location findByLocationId(Long locationId);
 
 
+    /**
+     * Active locations list.
+     *
+     * @return the list with all active locations
+     */
     @Query("SELECT u FROM Location u WHERE u.activeLocation = 1")
     List<Location> activeLocations();
 
