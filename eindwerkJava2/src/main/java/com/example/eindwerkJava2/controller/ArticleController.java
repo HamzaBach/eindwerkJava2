@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
@@ -123,11 +124,14 @@ public class ArticleController {
 
 
     @GetMapping(value="/article/barcode/{articleId}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<BufferedImage> barbecueEAN13Barcode(@PathVariable("articleId") Long articleId)
+    public ResponseEntity<BufferedImage> getBarcode(@PathVariable("articleId") Long articleId)
             throws Exception {
         Article article = articleService.findById(articleId).get();
         Barcode barcode = BarcodeFactory.createCode128(article.getArticleBarcode());
-//      Method to alter the font: barcode.setFont(BARCODE_TEXT_FONT);
+
+        barcode.setDrawingText(true);
+        Font font=new Font("Plain",Font.PLAIN,8);
+        barcode.setFont(font);
         return ResponseEntity.ok(BarcodeImageHandler.getImage(barcode));
     }
     @Bean
