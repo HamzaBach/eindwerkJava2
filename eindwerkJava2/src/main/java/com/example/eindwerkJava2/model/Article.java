@@ -1,6 +1,11 @@
 package com.example.eindwerkJava2.model;
 
+import net.sourceforge.barbecue.Barcode;
+import net.sourceforge.barbecue.BarcodeFactory;
+import net.sourceforge.barbecue.BarcodeImageHandler;
+
 import javax.persistence.*;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +36,8 @@ public class Article {
     @OneToMany
     @JoinColumn(name="articleSupplierId", nullable = true)
     private List<ArticleSupplier> articleSuppliersList;
+    @OneToOne
+    private ArticleSupplier articleSupplier;
     private String articleBarcode;
     private int activeArticle;
     @Lob
@@ -74,6 +81,14 @@ public class Article {
                 e.printStackTrace();
             }
         }
+    }
+
+    public ArticleSupplier getArticleSupplier() {
+        return articleSupplier;
+    }
+
+    public void setArticleSupplier(ArticleSupplier articleSupplier) {
+        this.articleSupplier = articleSupplier;
     }
 
     public int getActiveArticle() {
@@ -140,4 +155,5 @@ public class Article {
     public void setArticleBarcode(String articleBarcode) {
         this.articleBarcode = articleBarcode;
     }
+
 }

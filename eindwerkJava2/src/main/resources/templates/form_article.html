@@ -82,6 +82,15 @@
                     <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
+            <div class="bg-image hover-overlay ripple">
+                <img th:src="@{${'/article/barcode/'+article.articleId}}"
+                     class="img-fluid rounded" id="articleBarcodeImage"
+                     style="object-fit:contain;
+                         width:400px;
+                         height:200px;
+                         border: solid 1px #CCC"
+                />
+            </div>
         </div>
         <div class="row">
             <div class="col-xl-1">
