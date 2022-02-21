@@ -1,7 +1,9 @@
 package com.example.eindwerkJava2.controller;
 
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Stock;
+import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.StockService;
@@ -23,7 +25,7 @@ public class StockController {
     private LocationService locationService;
 
     @Autowired
-    private ArticleSupplierService articleSupplierService;
+    private ArticleService articleService;
 
     @GetMapping("/stock")
     public String viewStock(Model model){
@@ -37,7 +39,7 @@ public class StockController {
         Stock stock = new Stock();
         model.addAttribute("stock", stock);
         model.addAttribute("locationList", locationService.getAllLocations());
-        model.addAttribute("articleSupplierList", articleSupplierService.getAllArticleSuppliers());
+        model.addAttribute("articleList", articleService.getActiveArticles());
 
         return "newStockForm";
     }
@@ -55,7 +57,7 @@ public class StockController {
         Stock stock = stockService.findStockById(stockId);
         model.addAttribute("stock", stock);
         model.addAttribute("locationList", locationService.getAllLocations());
-        model.addAttribute("articleSupplierList", articleSupplierService.getAllArticleSuppliers());
+        model.addAttribute("articleList", articleService.getActiveArticles());
         return "newStockForm";
     }
 
