@@ -17,17 +17,17 @@ public class Stock {
 
     @ManyToOne
     @JoinColumn(name="articleId")
-    private ArticleSupplier articleSupplier;
+    private Article article;
 
     private double amount;
 
     @Column(name = "activeStock")
     private int activeStock = 1;
 
-    public Stock(Long stockId, Location location, ArticleSupplier articleSupplier, double amount, int activeStock) {
+    public Stock(Long stockId, Location location, Article articleSupplier, double amount, int activeStock) {
         this.stockId = stockId;
         this.location = location;
-        this.articleSupplier = articleSupplier;
+        this.article = articleSupplier;
         this.amount = amount;
         this.activeStock = activeStock;
     }
@@ -52,12 +52,12 @@ public class Stock {
         this.location = location;
     }
 
-    public ArticleSupplier getArticleSupplier() {
-        return articleSupplier;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setArticleSupplier(ArticleSupplier articleSupplier) {
-        this.articleSupplier = articleSupplier;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public double getAmount() {
