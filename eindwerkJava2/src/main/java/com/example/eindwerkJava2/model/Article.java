@@ -36,6 +36,8 @@ public class Article {
     @OneToMany
     @JoinColumn(name="articleSupplierId", nullable = true)
     private List<ArticleSupplier> articleSuppliersList;
+    @OneToOne
+    private ArticleSupplier articleSupplier;
     private String articleBarcode;
     private int activeArticle;
     @Lob
@@ -79,6 +81,14 @@ public class Article {
                 e.printStackTrace();
             }
         }
+    }
+
+    public ArticleSupplier getArticleSupplier() {
+        return articleSupplier;
+    }
+
+    public void setArticleSupplier(ArticleSupplier articleSupplier) {
+        this.articleSupplier = articleSupplier;
     }
 
     public int getActiveArticle() {
