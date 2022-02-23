@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 @Service
 public class BarcodeService {
+
     @Autowired
     private final ArticleService articleService;
 
@@ -23,7 +24,7 @@ public class BarcodeService {
         Article article = articleService.findById(articleId).get();
         Code128Bean barcodeGenerator = new Code128Bean();
         BitmapCanvasProvider canvas =
-                new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+                new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
         barcodeGenerator.generateBarcode(canvas, article.getArticleBarcode());
         return ResponseEntity.ok(canvas.getBufferedImage());
     }

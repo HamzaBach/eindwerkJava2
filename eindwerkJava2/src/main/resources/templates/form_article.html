@@ -40,7 +40,7 @@
         <div class="row" >
             <div class="col-xl-1">
             </div>
-            <div class="col-xl-5">
+            <div class="col-xl-4">
                 <div class="mb-3 form-group text-start">
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label">Name</label>
@@ -67,13 +67,13 @@
                            id="articleBarcode">
                 </div>
             </div>
-            <div class="col-xl-5">
+            <div class="col-xl-4">
                 <div class="bg-image hover-overlay ripple">
                     <img th:src="@{${'/article/image/'+article.articleId}}"
                          class="img-fluid rounded" id="articleImage"
                          style="object-fit:contain;
-                         width:400px;
-                         height:400px;
+                         width:500px;
+                         height:500px;
                          border: solid 1px #CCC"
                     />
                 </div>
@@ -82,11 +82,20 @@
                     <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
-            <div class="bg-image hover-overlay ripple">
-                <img th:src="@{${'/article/barcode/'+article.articleId}}"
-                     class="img-fluid rounded" id="articleBarcodeImage"
-                />
+
+            <div class="col-xl-2">
+                <div >
+                    <img th:src="@{${'/article/barcode/'+article.articleId}}"
+                         style="object-fit:contain;
+                         width:500px;
+                         height:500px;
+                         border: solid 1px #CCC"
+                    />
+                </div>
             </div>
+
+
+
         </div>
         <div class="row">
             <div class="col-xl-1">

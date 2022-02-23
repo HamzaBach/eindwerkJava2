@@ -43,8 +43,6 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(Model model) {
         model.addAttribute("article",new Article());
-//        model.addAttribute("categoriesList", categoryService.getCategories());
-//        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
         return "articles";
@@ -96,17 +94,6 @@ public class ArticleController {
         return "form_article";
     }
 
-//    @GetMapping(value="/article/barcode/{articleId}", produces = MediaType.IMAGE_PNG_VALUE)
-//    @ResponseBody
-//    void showBarcodeImage(@PathVariable("articleId") Long articleId, HttpServletResponse response, Optional<Article> article)
-//            throws IOException, BarcodeException, OutputException {
-//        byte[] barcode = articleService.getBarcodeImage(articleId);
-//        if(article.get().getArticleBarcode()!=null){
-//            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-//            response.getOutputStream().write(barcode);
-//            response.getOutputStream().close();
-//        }
-//    }
 
 
 
