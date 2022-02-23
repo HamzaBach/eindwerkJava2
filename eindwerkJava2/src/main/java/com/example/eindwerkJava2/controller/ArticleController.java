@@ -6,26 +6,12 @@ import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
-import net.sourceforge.barbecue.Barcode;
-import net.sourceforge.barbecue.BarcodeException;
-import net.sourceforge.barbecue.BarcodeFactory;
-import net.sourceforge.barbecue.BarcodeImageHandler;
-import net.sourceforge.barbecue.output.OutputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.BufferedImageHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
 import java.util.Optional;
@@ -123,21 +109,7 @@ public class ArticleController {
 //    }
 
 
-    @GetMapping(value="/article/barcode/{articleId}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<BufferedImage> getBarcode(@PathVariable("articleId") Long articleId)
-            throws Exception {
-        Article article = articleService.findById(articleId).get();
-        Barcode barcode = BarcodeFactory.createCode128(article.getArticleBarcode());
 
-        barcode.setDrawingText(true);
-        Font font=new Font("Plain",Font.PLAIN,8);
-        barcode.setFont(font);
-        return ResponseEntity.ok(BarcodeImageHandler.getImage(barcode));
-    }
-    @Bean
-    public HttpMessageConverter<BufferedImage> createImageHttpMessageConverter() {
-        return new BufferedImageHttpMessageConverter();
-    }
 
 }
 
