@@ -1,7 +1,5 @@
 package com.example.eindwerkJava2.controller;
 
-import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.BarcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
