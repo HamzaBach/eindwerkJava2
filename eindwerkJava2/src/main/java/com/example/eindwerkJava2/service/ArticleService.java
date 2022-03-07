@@ -6,7 +6,6 @@ import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +45,10 @@ public class ArticleService {
     public void saveArticle(Article article, byte[] articleImage){
         if(articleImage.length==0)
         {
-            Article currentArticle = articleRepository.getById(article.getArticleId());
-            article.setArticleImage(currentArticle.getArticleImage());
+            if(articleRepository.existsArticleByArticleId(article.getArticleId())){
+                Article currentArticle = articleRepository.getById(article.getArticleId());
+                article.setArticleImage(currentArticle.getArticleImage());
+            }
         }else{
             article.setArticleImage(articleImage);
         }
