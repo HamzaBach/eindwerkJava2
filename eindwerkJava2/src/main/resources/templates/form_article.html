@@ -58,6 +58,7 @@
                     <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
                            id="articleBarcode">
                 </div>
+
             </div>
             <div class="col-xl-4">
                 <div class="bg-image hover-overlay ripple">
@@ -76,14 +77,12 @@
             </div>
 
             <div class="col-xl-2">
-                <div >
+                <div>
                     <img th:src="@{${'/article/barcode/'+article.articleId}}"
                          style="object-fit:contain"/>
                 </div>
             </div>
 <!--            TO DO: add article supplier combo box here-->
-
-
 
         </div>
         <div class="row">
