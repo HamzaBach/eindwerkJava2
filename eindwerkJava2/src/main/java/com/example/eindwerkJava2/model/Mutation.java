@@ -13,10 +13,10 @@ public class Mutation {
     @JoinColumn(name="articleId")
     private Article article;
     private Double amount;
-    //TODO:Once Location POJO is created -> add relation as below
-    /*@ManyToOne
+
+    @ManyToOne
     @JoinColumn(name="locationId")
-    private Location location;*/
+    private Location location;
     @ManyToOne
     @JoinColumn(name="transactionTypeId")
     private TransactionType transactionType;

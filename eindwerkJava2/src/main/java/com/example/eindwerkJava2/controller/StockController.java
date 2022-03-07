@@ -4,7 +4,6 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.service.ArticleService;
-import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,4 +67,10 @@ public class StockController {
         this.stockService.deleteStock(stock);
         return "redirect:/stock";
     }
+
+
+
+
+
+
 }
