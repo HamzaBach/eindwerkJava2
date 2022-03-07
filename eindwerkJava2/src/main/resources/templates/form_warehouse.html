@@ -10,8 +10,11 @@
 <body>
 
 <div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px">
+
 <div class="container text-center">
-    <div><h1>Nieuw magazijn</h1></div>
+
 
     <div th:if="${warehouse.warehouseId == null}">
         <h1>New warehouse</h1>
@@ -25,14 +28,13 @@
         <input type="hidden" th:field="*{warehouseId}" th:value="${warehouse.warehouseId}" class="form-control"/>
 
         <div>
-            <label class=col-form-label"">Naam magazijn: </label>
-        </div>
-        <div>
-            <input type="text" th:field="*{warehouseName}" class="form-control" required/>
+            <input type="text" placeholder="Name warehouse" th:field="*{warehouseName}" class="form-control" required/>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
+
 </div>
 </body>
 </html>

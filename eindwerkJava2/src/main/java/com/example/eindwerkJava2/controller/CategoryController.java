@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -19,8 +20,7 @@ public class CategoryController {
         this.categoryService=categoryService;
     }
 
-    @GetMapping
-    public List<Category> getCategories() {return categoryService.getCategories();}
+
 
     @GetMapping("/category")
     public String viewCategories(Model model){
