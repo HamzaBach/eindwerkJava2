@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 
@@ -22,10 +24,19 @@ public class BarcodeService {
 
     public ResponseEntity<BufferedImage> generateArticleBarcodeImage(@PathVariable("articleId") Long articleId) {
         Article article = articleService.findById(articleId).get();
-        Code128Bean barcodeGenerator = new Code128Bean();
-        BitmapCanvasProvider canvas =
-                new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-        barcodeGenerator.generateBarcode(canvas, article.getArticleBarcode());
-        return ResponseEntity.ok(canvas.getBufferedImage());
+        String barcode = article.getArticleBarcode();
+        if(barcode.equals("")){
+            Code128Bean barcodeGenerator = new Code128Bean();
+            BitmapCanvasProvider canvas =
+                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+            barcodeGenerator.generateBarcode(canvas, "NoBarcodeDefined");
+            return ResponseEntity.ok(canvas.getBufferedImage());
+        }else{
+            Code128Bean barcodeGenerator = new Code128Bean();
+            BitmapCanvasProvider canvas =
+                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+            barcodeGenerator.generateBarcode(canvas, article.getArticleBarcode());
+            return ResponseEntity.ok(canvas.getBufferedImage());
+        }
     }
 }

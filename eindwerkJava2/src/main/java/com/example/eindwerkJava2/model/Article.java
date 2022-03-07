@@ -32,6 +32,7 @@ public class Article {
     @JoinColumn(name="articleSupplierId", nullable = true)
     private List<ArticleSupplier> articleSuppliersList;
     @OneToOne
+    @JoinColumn(name = "articleSupplierId")
     private ArticleSupplier articleSupplier;
     private String articleBarcode;
     private int activeArticle;
