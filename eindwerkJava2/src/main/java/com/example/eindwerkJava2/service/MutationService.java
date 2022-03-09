@@ -35,7 +35,7 @@ public class MutationService {
         mutationRepository.save(mutation);
         Stock stock = stockService.findStockByArticleId(mutation.getArticle());
         stock.setAmount(updateArticleAmount(mutation));
-        //stockService.saveStock(stock);
+        stockService.saveStock(stock);
     }
 
     public Optional<Mutation> findById(Long id) {
@@ -48,7 +48,7 @@ public class MutationService {
 
     public Double updateArticleAmount(Mutation mutation) {
         Double totalamount =0.0;
-        List<Mutation> mutationList = mutationRepository.findByArticle(mutation);
+        List<Mutation> mutationList = mutationRepository.findByArticle(mutation.getArticle());
 
         for (Mutation mutation1 : mutationList) {
            totalamount+= mutation1.getAmount() * mutation1.getTransactionType().getTransactionTypeFactor();

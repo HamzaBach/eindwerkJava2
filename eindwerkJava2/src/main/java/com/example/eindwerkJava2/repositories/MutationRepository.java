@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MutationRepository extends JpaRepository<Mutation,Long> {
 
-    List<Mutation> findByArticle(Mutation mutation );
+    List<Mutation> findByArticle(Article article);
 
 
 }
