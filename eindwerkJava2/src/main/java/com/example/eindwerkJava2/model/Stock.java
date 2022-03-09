@@ -19,12 +19,12 @@ public class Stock {
     @JoinColumn(name="articleId")
     private Article article;
 
-    private double amount;
+    private Double amount;
 
     @Column(name = "activeStock")
     private int activeStock = 1;
 
-    public Stock(Long stockId, Location location, Article articleSupplier, double amount, int activeStock) {
+    public Stock(Long stockId, Location location, Article articleSupplier, Double amount, int activeStock) {
         this.stockId = stockId;
         this.location = location;
         this.article = articleSupplier;
@@ -60,11 +60,11 @@ public class Stock {
         this.article = article;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

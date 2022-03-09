@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.service;
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,15 @@ import java.util.Optional;
 @Service
 public class StockService {
 
+
     @Autowired
     private final StockRepository stockRepository;
+
 
     @Autowired
     public StockService(StockRepository stockRepository){
         this.stockRepository = stockRepository;
+
     }
 
     public List<Stock> getStock(){
@@ -27,7 +31,7 @@ public class StockService {
         this.stockRepository.save(stock);
     }
 
-    public Optional<Stock> findById(long id){
+    public Optional<Stock> findById(Long id){
         return stockRepository.findById(id);
     }
 
@@ -35,6 +39,7 @@ public class StockService {
         return this.stockRepository.findByStockId(Stockid);
     }
 
+    public Stock findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
     public void deleteStock(Stock stock)
     {
         stock.setActiveStock(0);
