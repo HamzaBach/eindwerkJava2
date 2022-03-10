@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.controller;
 
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.LocationService;

@@ -14,26 +14,24 @@
 
 
 <div th:if="${location.locationId == null}">
-    <h1>New Supplier</h1>
+    <h1>New Location</h1>
 </div>
 <div th:unless="${location.locationId == null}">
-    <h1>Edit Supplier</h1>
+    <h1>Edit Location</h1>
 </div>
 
 <form th:action="@{/location/save}" th:object="${location}" method="post">
     <input type="hidden" th:field="*{locationId}" th:value="${location.locationId}" class="form-control"/>
 
     <div class="form-group-row">
-        <div>
-            <label class=col-form-label"">Location Name: </label>
-        </div>
+
         <div>
             <input type="text" th:field="*{locationName}" class="form-control" required/>
         </div>
 
 
-        <div class="col-lg-3">
-            <select class="form-control" id="warehouse" name="warehouse" th:field="*{warehouse}"  >
+        <div>
+            <select class="form-select" aria-label="Default select example" id="warehouse" name="warehouse" th:field="*{warehouse}"  >
                 <option value="">Kies het magazijn</option>
 
                 <th:block       th:each="warehouse : ${warehouseList}">
@@ -44,15 +42,13 @@
               </th:block>
 
             </select>
-        </div>
-
-
-        <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" th:field="*{SingleStorage}">
             <label class="form-check-label" for="flexCheckDefault">
                 Single storage ?
             </label>
         </div>
+
+
 
 
 

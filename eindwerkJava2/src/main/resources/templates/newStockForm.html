@@ -17,6 +17,8 @@
 </div>
 
 
+
+
 <div class="container">
     <h1>Stock toevoegen</h1>
 
@@ -38,7 +40,7 @@
         <select class="form-control"  id="article" name="article" th:field="*{article}">
             <option value="">Kies een artikel..</option>
 
-            <th:block th:each="article : ${articleSupplierList}">
+            <th:block th:each="article : ${articleList}">
                 <option th:value="${article.articleId}"
                         th:text="${article.articleName}"
                 ></option>
