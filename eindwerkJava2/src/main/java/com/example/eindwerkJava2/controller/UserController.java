@@ -18,15 +18,16 @@ import java.util.Optional;
 @Controller
 @RequestMapping
 public class UserController {
-    private final UserService userService;
     @Autowired
+    private final UserService userService;
+
     public UserController(UserService userService){
         this.userService=userService;
     }
 
     @GetMapping("/users")
     public String getUsers(Model model){
-        List<User> users = userService.getUsers();
+        List<User> users = userService.getActiveUsers();
         model.addAttribute("UsersList",users);
         return "users";
     }
@@ -43,8 +44,8 @@ public class UserController {
     @ResponseBody
     void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, Optional<User> user)
             throws IOException {
-        user = userService.findById(userId);
         if(user.get().getUserImage()!=null){
+            user = userService.findById(userId);
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
             response.getOutputStream().write(user.get().getUserImage());
             response.getOutputStream().close();
@@ -74,10 +75,5 @@ public class UserController {
         return "form_user";
     }
 
-/*    @GetMapping("/showNewUserForm")
-    public String showNewUserForm(Model model){
-        User user=new User();
-
-    }*/
 
 }

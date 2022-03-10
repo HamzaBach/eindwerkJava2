@@ -1,5 +1,8 @@
 package com.example.eindwerkJava2.model;
 
+import com.example.eindwerkJava2.tools.AESEncryptionImpl;
+import com.example.eindwerkJava2.tools.Encryption;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,7 +24,7 @@ public class User {
 
     public User(String userName, String password, EmployeeRole role) {
         this.userName = userName;
-        this.password = password;
+        this.password=password;
         this.role = role;
     }
 

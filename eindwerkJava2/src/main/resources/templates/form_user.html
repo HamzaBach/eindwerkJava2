@@ -26,7 +26,7 @@
     <form th:action="@{/saveUser}"
           th:object="${user}" , method="POST"
           enctype="multipart/form-data">
-        <div class="row" >
+        <div class="row">
             <div class="col-xl-1">
             </div>
             <div class="col-xl-4">
@@ -37,8 +37,8 @@
                            id="userName">
                 </div>
                 <div th:if="${user.userId == null}" class="mb-3 form-group text-start">
-                    <label for="userPassword" class="form-label">Password</label>
-                    <input th:field="*{password}" th:value="${user.password}" type="password" placeholder="password"
+                    <label for="userPassword" class="form-label"> New password</label>
+                    <input th:field="*{password}" th:value="${user.password}" type="password" placeholder="new password"
                            class="form-control" id="userPassword"/>
                 </div>
                 <div class="mb-3 form-group text-start">
@@ -49,10 +49,28 @@
                         </th:block>
                     </select>
                 </div>
+                <!--                <div th:unless="${user.userId == null}">-->
+                <!--                    <div class="mb-3 form-group text-start">-->
+                <!--                        <button type="button"  class="btn btn-outline-primary btn-lg" data-toggle="collapse" data-target="#editPassword">-->
+                <!--                            <i class="bi bi-key"> Edit password</i>-->
+                <!--                        </button>-->
+                <!--                    </div>-->
+                <!--                    <div class="collapse" id="editPassword">-->
+                <!--                        <div class="card card-body">-->
+                <!--                            <label for="newPassword" class="form-label"> New password</label>-->
+                <!--                            <input th:field="*{password}"  type="password" placeholder="new password"-->
+                <!--                                   class="form-control" id="newPassword"/>-->
+                <!--                            <p>TEXT</p>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+
             </div>
             <div class="col-xl-4">
                 <div class="bg-image hover-overlay ripple">
                     <img th:src="@{${'/user/image/'+user.userId}}"
+                         onerror="this.src='https://www.stevensegallery.com/500/500';"
                          class="img-fluid rounded" id="userImage"
                          style="object-fit:contain;
                          width:500px;
@@ -65,23 +83,23 @@
                     <input type="file" id="userImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
-
-        </div>
-        <div class="row">
-            <div class="col-xl-1">
-            </div>
-            <div class="col-xl-5">
-                <div class="row">
-                    <div align="center">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-save"></i> Save
-                        </button>
+            <div class="row">
+                <div class="col-xl-1">
+                </div>
+                <div class="col-xl-5">
+                    <div class="row">
+                        <div align="center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Save
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
