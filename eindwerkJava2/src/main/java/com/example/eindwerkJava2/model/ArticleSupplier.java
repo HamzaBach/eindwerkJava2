@@ -28,6 +28,11 @@ public class ArticleSupplier {
     @Column(name = "active")
     private int activeArticleSupplier =1;
 
+    @Column(name = "eta")
+    private int ETA;
+
+
+
     public ArticleSupplier() {
     }
 

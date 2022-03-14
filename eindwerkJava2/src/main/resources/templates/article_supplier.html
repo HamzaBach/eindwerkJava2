@@ -49,6 +49,7 @@
         </thead>
         <tbody>
         <tr th:each="artSupp : ${articleSupplierList}">
+
             <td th:text="${artSupp.article.articleName}"></td>
             <td th:text="${artSupp.supplier.supplierName}"></td>
             <td th:text="${artSupp.price}"></td>
