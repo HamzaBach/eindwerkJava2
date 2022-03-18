@@ -22,15 +22,15 @@ public class BarcodeService {
         this.articleService = articleService;
     }
 
-    public ResponseEntity<BufferedImage> generateArticleBarcodeImage(@PathVariable("articleId") Long articleId) {
+    public BufferedImage generateArticleBarcodeImage(@PathVariable("articleId") Long articleId) {
         Article article = articleService.findById(articleId).get();
         String barcode = article.getArticleBarcode();
         if(!barcode.isEmpty()){
             Code128Bean barcodeGenerator = new Code128Bean();
             BitmapCanvasProvider canvas =
-                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+                    new BitmapCanvasProvider(640, BufferedImage.TYPE_BYTE_BINARY, false, 0);
             barcodeGenerator.generateBarcode(canvas, article.getArticleBarcode());
-            return ResponseEntity.ok(canvas.getBufferedImage());
+            return canvas.getBufferedImage();
         }else{
             return null;
         }

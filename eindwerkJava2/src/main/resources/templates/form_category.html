@@ -21,8 +21,8 @@
     <form action="#" th:action="@{/saveCategory}" th:object="${category}", method="POST" >
         <input type="hidden" th:field="*{categoryId}" th:value="${category.categoryId}" class="form-control"/>
 
-        <input th:field="*{categoryName}" type="text" placeholder="category Name" class="form-control">
-        <input th:field="*{categoryAbbreviation}" type="text" placeholder="category Abbreviation" class="form-control">
+        <input th:field="*{categoryName}" type="text" placeholder="category Name" class="form-control" required>
+        <input th:field="*{categoryAbbreviation}" type="text" placeholder="category Abbreviation" class="form-control" required>
 
 
         <button type="submit" class="btn btn-info">Save</button>
