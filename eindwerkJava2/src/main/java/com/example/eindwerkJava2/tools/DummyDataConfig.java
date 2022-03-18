@@ -18,9 +18,9 @@
 //                                         WarehouseRepository warehouseRepository,
 //                                         LocationRepository locationRepository){
 //        return args ->{
-//            Category smartphone = new Category(1L, "Smartphone");
-//            Category smartphoneAccessoires = new Category(2L, "Smartphone Accesoires");
-//            Category laptopAccesoires = new Category(3L, "Laptops");
+//            Category smartphone = new Category(1L, "Smartphone", "SMTPH");
+//            Category smartphoneAccessoires = new Category(2L, "Smartphone Accesoires","SMTPH-ACC");
+//            Category laptopAccesoires = new Category(3L, "Laptops","LPTP");
 //            categoryRepository.save(smartphone);
 //            categoryRepository.save(smartphoneAccessoires);
 //            categoryRepository.save(laptopAccesoires);
@@ -48,16 +48,14 @@
 //
 //            Article article1 = new Article("Iphone 12",
 //                    "The 12th generation of the Iphone is here,...",
-//                    smartphone);
+//                    smartphone,"Iph12");
 //            Article article2 = new Article("Airpods", "Apple airpods offer wireless sound...",
-//                    smartphoneAccessoires);
+//                    smartphoneAccessoires,"APDS");
 //            Article article3 = new Article("Nokia 3310", "Unbreakable phone...",
-//                    laptopAccesoires);
+//                    laptopAccesoires,"NK3310");
 //            articleRepository.save(article1);
 //            articleRepository.save(article2);
 //            articleRepository.save(article3);
-//
-//
 //        };
 //    }
 //}

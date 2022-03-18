@@ -30,7 +30,7 @@
           th:object="${article}" , method="POST"
           enctype="multipart/form-data">
         <div class="row" >
-            <div class="col-xl-1">
+            <div class="col-xl-2">
             </div>
             <div class="col-xl-4">
                 <div class="mb-3 form-group text-start">
@@ -45,6 +45,11 @@
                               class="form-control" id="articleDescription"/>
                 </div>
                 <div class="mb-3 form-group text-start">
+                    <label for="articleAbbreviation" class="form-label">Abbreviation</label>
+                    <input th:field="*{articleAbbreviation}" type="text" placeholder="Abbreviation"
+                              class="form-control" id="articleAbbreviation"/>
+                </div>
+                <div class="mb-3 form-group text-start">
                     <label for="articleCategory" class="form-label">Category</label>
                     <select th:field="*{category}" class="form-select" id="articleCategory">
                         <th:block th:each="category : ${categoriesList}">
@@ -52,11 +57,48 @@
                         </th:block>
                     </select>
                 </div>
-
                 <div class="mb-3 form-group text-start">
                     <label for="articleBarcode" class="form-label">Barcode</label>
                     <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
                            id="articleBarcode">
+                </div>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                View barcode
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div>
+                                    <img th:src="@{${'/article/barcode/'+article.articleId}}"
+
+                                         alt="No barcode defined"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <div class="row">
+                        <div class="col-xl-8">
+                            <label for="articleSupplier" class="form-label">Chosen supplier</label>
+                            <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier">
+                                <th:block th:each="articleSupplier: ${articleSuppliersList}">
+                                    <option th:text="${articleSupplier.supplier.supplierName}" th:value="${articleSupplier.articleSupplierId}">
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="col-xl-4">
+                            <div th:unless="${article.articleSupplier == null}">
+                                <div class="row">
+                                    <label for="articlePrice" class="form-label">Price</label>
+                                    <label id="articlePrice" th:text="*{articleSupplier.price}"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -75,15 +117,13 @@
                     <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>
-
-            <div class="col-xl-2">
-                <div>
-                    <img th:src="@{${'/article/barcode/'+article.articleId}}"
-                         style="object-fit:contain"/>
-                </div>
-            </div>
-<!--            TO DO: add article supplier combo box here-->
-
+<!--            <div class="col-xl-2">-->
+<!--                <div>-->
+<!--                    <img th:src="@{${'/article/barcode/'+article.articleId}}"-->
+<!--                         style="object-fit:contain; height:500px;-->
+<!--                         border:solid 1px #CCC" alt="No barcode defined"/>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
         <div class="row">
             <div class="col-xl-1">

@@ -10,13 +10,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
     private String categoryName;
+    private String categoryAbbreviation;
     private int active = 1;
 
+    public Category() {
 
-    public Category(Long categoryID,String categoryName)
+    }
+
+    public Category(Long categoryID,String categoryName, String categoryAbbreviation)
     {
         this.categoryId = categoryID;
         this.categoryName = categoryName;
+        this.categoryAbbreviation=categoryAbbreviation;
     }
 
     public int getActive() {
@@ -27,10 +32,13 @@ public class Category {
         this.active = active;
     }
 
-    public Category() {
-
+    public String getCategoryAbbreviation() {
+        return categoryAbbreviation;
     }
 
+    public void setCategoryAbbreviation(String categoryAbbreviation) {
+        this.categoryAbbreviation = categoryAbbreviation;
+    }
 
     public Long getCategoryId() {
         return categoryId;
