@@ -30,7 +30,8 @@
     <table class="table table-striped table-hover" style="margin:20px" id="categoriesOverview">
         <thead>
         <tr>
-            <th>Category Name</th>
+            <th>Name</th>
+            <th>Abbreviation</th>
             <th></th>
             <th></th>
         </tr>
@@ -38,6 +39,7 @@
         <tbody>
         <tr th:each="category : ${categoriesList}">
             <td th:text="${category.categoryName}"></td>
+            <td th:text="${category.categoryAbbreviation}"></td>
             <td>
                 <a th:href="@{'/editCategory/' + ${category.categoryId}}" class="btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i> Edit

@@ -52,6 +52,9 @@ public class ArticleService {
         }else{
             article.setArticleImage(articleImage);
         }
+        //Generate unique barcode:
+        article.setArticleBarcode(article.getCategory().getCategoryAbbreviation()+"-"+article.getArticleAbbreviation()+"-"+article.getArticleId());
+        //Save article
         articleRepository.save(article);
     }
 
