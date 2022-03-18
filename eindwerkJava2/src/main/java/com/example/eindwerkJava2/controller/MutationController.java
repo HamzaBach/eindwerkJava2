@@ -49,7 +49,7 @@ public class MutationController {
 
      model.addAttribute("mutation",new Mutation());
      model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
-     model.addAttribute("userList",userService.getUsers());
+     model.addAttribute("userList",userService.getActiveUsers());
      model.addAttribute("articleList", articleService.getActiveArticles());
      return "form_mutation";
     }
@@ -72,7 +72,7 @@ public class MutationController {
         Mutation mutation = mutationService.findById(mutationId).get();
         model.addAttribute("mutation",mutation);
         model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
-        model.addAttribute("userList",userService.getUsers());
+        model.addAttribute("userList",userService.getActiveUsers());
         model.addAttribute("articleList", articleService.getActiveArticles());
         return "form_mutation";
     }

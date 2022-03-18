@@ -25,18 +25,14 @@ public class BarcodeService {
     public ResponseEntity<BufferedImage> generateArticleBarcodeImage(@PathVariable("articleId") Long articleId) {
         Article article = articleService.findById(articleId).get();
         String barcode = article.getArticleBarcode();
-        if(barcode.equals("")){
+        if(barcode!=null){
             Code128Bean barcodeGenerator = new Code128Bean();
             BitmapCanvasProvider canvas =
-                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-            barcodeGenerator.generateBarcode(canvas, "NoBarcodeDefined");
-            return ResponseEntity.ok(canvas.getBufferedImage());
-        }else{
-            Code128Bean barcodeGenerator = new Code128Bean();
-            BitmapCanvasProvider canvas =
-                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+                    new BitmapCanvasProvider(320, BufferedImage.TYPE_BYTE_BINARY, false, 90);
             barcodeGenerator.generateBarcode(canvas, article.getArticleBarcode());
             return ResponseEntity.ok(canvas.getBufferedImage());
+        }else{
+            return null;
         }
     }
 }
