@@ -53,7 +53,11 @@ public class ArticleService {
             article.setArticleImage(articleImage);
         }
         //Generate unique barcode:
-        article.setArticleBarcode(article.getCategory().getCategoryAbbreviation()+"-"+article.getArticleAbbreviation()+"-"+article.getArticleId());
+        if(articleRepository.existsArticleByArticleId(article.getArticleId())){
+            article.setArticleBarcode(article.getCategory().getCategoryAbbreviation()+"-"+article.getArticleAbbreviation()+"-"+article.getArticleId());
+        } else{
+            article.setArticleBarcode(article.getCategory().getCategoryAbbreviation()+"-"+article.getArticleAbbreviation()+"-"+String.valueOf(articleRepository.getMaxId()+1));
+        }
         //Save article
         articleRepository.save(article);
     }
