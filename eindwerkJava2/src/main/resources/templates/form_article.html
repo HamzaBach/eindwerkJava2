@@ -132,7 +132,7 @@
                 <div class="mb-3 form-group text-start">
                     <div th:unless="${article.articleSupplier == null}">
                         <label for="articlePrice" class="form-label">Price</label>
-                        <h3 id="articlePrice" th:text="*{articleSupplier.price}"></h3>
+                        <h3 id="articlePrice" th:text="€+*{articleSupplier.price}"></h3>
                     </div>
                 </div>
 
@@ -195,7 +195,7 @@
 <!--                    <td th:text="${articleSupplier.articleSupplierId}" class="sorting_1"></td>-->
                     <td th:text="${articleSupplier.supplier.supplierName}" class="sorting_1"></td>
                     <td th:text="${articleSupplier.partnr}" class="sorting_1"></td>
-                    <td th:text="${articleSupplier.price}" class="sorting_1"></td>
+                    <td th:text="€+${articleSupplier.price}" class="sorting_1"></td>
                 </tr>
                 </tbody>
             </table>
