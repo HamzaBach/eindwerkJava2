@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Users</title>
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px">
+
+    <div th:if="${user.userId == null}">
+        <h1>New User</h1>
+    </div>
+    <div th:unless="${user.userId == null}">
+        <h1>Edit User</h1>
+    </div>
+
+    <form th:action="@{/saveUser}"
+          th:object="${user}" , method="POST"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-xl-1">
+            </div>
+            <div class="col-xl-4">
+                <div class="mb-3 form-group text-start">
+                    <input type="hidden" th:field="*{userId}" th:value="${user.userId}" class="form-control"/>
+                    <label for="userName" class="form-label">Username</label>
+                    <input th:field="*{userName}" type="text" placeholder="Username" class="form-control"
+                           id="userName">
+                </div>
+                <div th:if="${user.userId == null}" class="mb-3 form-group text-start">
+                    <label for="userPassword" class="form-label"> New password</label>
+                    <input th:field="*{password}" th:value="${user.password}" type="password" placeholder="new password"
+                           class="form-control" id="userPassword"/>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="userRole" class="form-label">Role</label>
+                    <select th:field="*{role}" class="form-select" id="userRole">
+                        <th:block th:each="role : ${rolesList}">
+                            <option th:text="${role}" th:value="${role}">
+                        </th:block>
+                    </select>
+                </div>
+                <!--                <div th:unless="${user.userId == null}">-->
+                <!--                    <div class="mb-3 form-group text-start">-->
+                <!--                        <button type="button"  class="btn btn-outline-primary btn-lg" data-toggle="collapse" data-target="#editPassword">-->
+                <!--                            <i class="bi bi-key"> Edit password</i>-->
+                <!--                        </button>-->
+                <!--                    </div>-->
+                <!--                    <div class="collapse" id="editPassword">-->
+                <!--                        <div class="card card-body">-->
+                <!--                            <label for="newPassword" class="form-label"> New password</label>-->
+                <!--                            <input th:field="*{password}"  type="password" placeholder="new password"-->
+                <!--                                   class="form-control" id="newPassword"/>-->
+                <!--                            <p>TEXT</p>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+
+            </div>
+            <div class="col-xl-4">
+                <div class="bg-image hover-overlay ripple">
+                    <img th:src="@{${'/user/image/'+user.userId}}"
+                         onerror="this.src='https://www.stevensegallery.com/500/500';"
+                         class="img-fluid rounded" id="userImage"
+                         style="object-fit:contain;
+                         width:500px;
+                         height:500px;
+                         border: solid 1px #CCC"
+                    />
+                </div>
+                <div class="p-2">
+                    <label for="userImg">Select image:</label>
+                    <input type="file" id="userImg" name="image" accept="image/png, image/jpeg">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-1">
+                </div>
+                <div class="col-xl-5">
+                    <div class="row">
+                        <div align="center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<div th:include="fragments/header::Jquery"/>
+
+</body>
+</html>

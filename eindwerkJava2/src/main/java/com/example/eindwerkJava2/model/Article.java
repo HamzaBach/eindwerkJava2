@@ -39,6 +39,7 @@ public class Article {
     @Lob
     @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
     private byte[] articleImage;
+    private String articleAbbreviation;
 /*    @OneToMany(mappedBy = "article")
     private List<Stock> stock;*/
 
@@ -47,20 +48,22 @@ public class Article {
         this.activeArticle=1;
     }
     public Article(String articleName, String articleDescription,
-                   Category category, byte[] articleImage, int activeArticle){
+                   Category category, byte[] articleImage, int activeArticle, String articleAbbreviation){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
         this.articleImage = articleImage;
         this.activeArticle = activeArticle;
+        this.articleAbbreviation=articleAbbreviation;
     }
 
     public Article(String articleName, String articleDescription,
-                    Category category){
+                    Category category, String articleAbbreviation){
         this.articleName=articleName;
         this.articleDescription=articleDescription;
         this.category=category;
         this.activeArticle = 1;
+        this.articleAbbreviation=articleAbbreviation;
     }
 
     //Getters & Setters:
@@ -77,6 +80,14 @@ public class Article {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getArticleAbbreviation() {
+        return articleAbbreviation;
+    }
+
+    public void setArticleAbbreviation(String articleAbbreviation) {
+        this.articleAbbreviation = articleAbbreviation;
     }
 
     public ArticleSupplier getArticleSupplier() {

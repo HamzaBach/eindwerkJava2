@@ -30,14 +30,14 @@ public class ArticleService {
     }
 
     public Boolean addArticle(String articleName, String articleDescription, Category category,
-                              ArticleSupplier articleSupplier, byte[] articleImage, int activeArticle) {
+                              ArticleSupplier articleSupplier, byte[] articleImage, int activeArticle, String articleAbbreviation) {
 
         if (articleRepository.existsArticleByArticleName(articleName)
                 && articleRepository.existsArticleByArticleDescription(articleDescription)
                 && articleRepository.existsArticleByCategory(category)) {
             return false;
         } else{
-            Article newArticle = new Article(articleName,articleDescription,category, articleImage, activeArticle);
+            Article newArticle = new Article(articleName,articleDescription,category, articleImage, activeArticle, articleAbbreviation);
             articleRepository.save(newArticle);
             return true;
         }
@@ -52,6 +52,9 @@ public class ArticleService {
         }else{
             article.setArticleImage(articleImage);
         }
+        //Generate unique barcode:
+        article.setArticleBarcode(article.getCategory().getCategoryAbbreviation()+"-"+article.getArticleAbbreviation()+"-"+article.getArticleId());
+        //Save article
         articleRepository.save(article);
     }
 

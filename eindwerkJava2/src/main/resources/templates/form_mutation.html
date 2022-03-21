@@ -21,15 +21,30 @@
     <form action="#" th:action="@{/saveMutation}" th:object="${mutation}", method="POST" >
         <input type="hidden" th:field="*{mutationId}" th:value="${mutation.mutationId}" class="form-control"/>
 
-        <input th:field="*{article.articleId}" type="text" placeholder="Article ID" class="form-control">
+        <select th:field="*{article}" type="text" placeholder="Article" class="form-control">
+            <th:block th:each="article:${articleList}">
+                <option th:text="${article.articleName}" th:value="${article.articleId}">
+                </option>
+            </th:block>
+        </select>
+
+
         <input th:field="*{amount}" type="text" placeholder="Amount" class="form-control">
+
         <select th:field="*{transactionType}" type="text" placeholder="TransactionType" class="form-control">
             <th:block th:each="transactiontype:${transactiontypeList}">
                 <option th:text="${transactiontype.transactionTypeName}" th:value="${transactiontype.transactionTypeId}">
                 </option>
             </th:block>
         </select>
-        <input th:field="*{user}" type="text" placeholder="User" class="form-control">
+
+        <select th:field="*{user}" type="text" placeholder="Users" class="form-control">
+            <th:block th:each="user:${userList}">
+                <option th:text="${user.userName}" th:value="${user.userId}">
+                </option>
+            </th:block>
+        </select>
+
 
 
         <button type="submit" class="btn btn-info">Save</button>
