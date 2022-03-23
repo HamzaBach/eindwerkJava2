@@ -60,9 +60,9 @@ public class SupplierServiceImpl implements SupplierService {
             document.open();
             // step 4: we add a paragraph to the document
 
-            document.add(new Paragraph(suppliers.get(0).getSupplierName()));
+            document.add(new Paragraph(suppliers.get(0).getSupplierName().toUpperCase()));
             document.add(new Paragraph(suppliers.get(0).getAdress()));
-            document.add(new Paragraph(suppliers.get(0).getCity().getCityName()));
+            document.add(new Paragraph(suppliers.get(0).getCity().getCityZipcode()+ " "  + suppliers.get(0).getCity().getCityName()));
             document.add(new Paragraph(suppliers.get(0).getCountry().getCountryName()+"\n"+"\n"));
             document.add(new Paragraph("SYNTRAPXL"));
             document.add(new Paragraph("Thor Park 8040"));
@@ -72,9 +72,7 @@ public class SupplierServiceImpl implements SupplierService {
 
             byte[] byteArrayImage = imageService.getImages().get(0).getImageLob();
             Image image = Image.getInstance(byteArrayImage);
-            float x = 350;
-            float y = 650;
-            image.setAbsolutePosition(x,y);
+            image.setAbsolutePosition(350,650);
             document.add(image);
 
             Table table = new Table(4);
