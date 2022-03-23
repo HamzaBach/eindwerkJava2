@@ -43,9 +43,9 @@
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="userRole" class="form-label">Role</label>
-                    <select th:field="*{role}" class="form-select" id="userRole">
+                    <select th:field="*{roles}" class="form-select" id="userRole">
                         <th:block th:each="role : ${rolesList}">
-                            <option th:text="${role}" th:value="${role}">
+                            <option th:text="${role.name}" th:value="${role.id}">
                         </th:block>
                     </select>
                 </div>
