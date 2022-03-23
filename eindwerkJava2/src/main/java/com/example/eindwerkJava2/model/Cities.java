@@ -61,5 +61,8 @@ public class Cities {
         this.cityZipcode = cityZipcode;
     }
 
-
+    @Override
+    public String toString() {
+        return cityName;
+    }
 }
