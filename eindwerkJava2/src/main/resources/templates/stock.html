@@ -18,12 +18,14 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
-    <h1>Inventory</h1>
+
+     <h1>Inventory</h1>
+
     <div align="center" style="mb-3" >
-        <a th:href="@{/newStockForm}" class="btn btn-primary btn-lg" style="margin:20px">New</a>
+        <a th:href="@{/newStockForm}" class="btn btn-primary btn-lg" style="margin:20px">New Inventory</a>
     </div>
 
-    <div align="center" style="margin: 100px">
+<!--    <div align="center" style="margin: 100px">-->
 
     <table class="table table-striped table-hover dataTable" id="stockOverview">
         <thead>
@@ -31,6 +33,8 @@
         <th scope="col">Article</th>
         <th scope="col">Location</th>
         <th scope="col">Amount</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
         </thead>
         <tbody>
         <tr th:each="Stock:${stockList}">
@@ -49,7 +53,7 @@
     </div>
 
 
-<div th:fragment="Jquery">
+<div th:include="fragments/header::Jquery">
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -22,33 +22,35 @@
     <form action="#" th:action="@{/saveSupplier}" th:object="${supplier}", method="POST" >
         <input type="hidden" th:field="*{supplierId}" th:value="${supplier.supplierId}" class="form-control"/>
 
-        <input th:field="*{supplierName}" type="text" placeholder="Supplier Name" class="form-control">
-        <input th:field="*{adress}"  type="text"  placeholder="Adress" class="form-control">
-
-
-        <select th:field="*{city}" class="form-select" aria-label="Default select example">
-            <th:block th:each="city : ${citiesList}">
+        <div class="col-xl-4">
+            <div class="mb-3">
+                <input th:field="*{supplierName}" type="text" placeholder="Supplier Name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <input th:field="*{adress}"  type="text"  placeholder="Adress" class="form-control">
+            </div>
+            <div class="mb-3">
+                <select th:field="*{city}" class="form-select" aria-label="Default select example">
+                <th:block th:each="city : ${citiesList}">
                 <option th:text="${city.cityName}" th:value="${city.cityId}">
-            </th:block>
-        </select>
-
-
-        <select th:field="*{country}" class="form-select" aria-label="Default select example">
-        <th:block th:each="country : ${countriesList}">
-            <option th:text="${country.countryName}" th:value="${country.countryId}">
-        </th:block>
-    </select>
-
-        <button type="submit" class="btn btn-info">Save</button>
-
-
+                </th:block>
+                </select>
+            </div>
+            <div class="mb-3">
+               <select th:field="*{country}" class="form-select" aria-label="Default select example">
+               <th:block th:each="country : ${countriesList}">
+               <option th:text="${country.countryName}" th:value="${country.countryId}">
+               </th:block>
+               </select>
+            </div>
+            <div  class="mb-3">
+               <button type="submit" class="btn btn-primary btn-lg">
+                   <i class="bi bi-save"></i> Save
+               </button>
+            </div>
+        </div>
     </form>
-
-
-
-
 </div>
-
 </body>
 </html>
 
