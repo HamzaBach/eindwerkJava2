@@ -35,6 +35,12 @@ public class SupplierController {
         model.addAttribute("countriesList", countriesService.getAllCountries());
         return "form_supplier";
     }
+    @GetMapping("/generatePdf")
+    public String generatePdf(){
+        Supplier supplier = new Supplier();
+        supplierService.makePdf();
+        return "redirect:/supplier";
+    }
 
     @PostMapping("/saveSupplier")
     public String saveSupplier(@ModelAttribute("supplier") Supplier supplier){
