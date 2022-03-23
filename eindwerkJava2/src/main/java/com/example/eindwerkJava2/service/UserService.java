@@ -30,9 +30,9 @@ public class UserService {
         return this.userRepository.findByActiveUser(1);
     }
 
-    public Boolean addUser(String userName, String password, EmployeeRole employeeRole) {
+    public Boolean addUser(String userName, String password) {
         if (!userRepository.existsUserByUserName(userName)) {
-            User newUser = new User(userName, aesEncryption.encrypt(password,"EindprojectJavaJaar2"), employeeRole);
+            User newUser = new User(userName, aesEncryption.encrypt(password,"EindprojectJavaJaar2"));
             userRepository.save(newUser);
             return true;
         } else return false;

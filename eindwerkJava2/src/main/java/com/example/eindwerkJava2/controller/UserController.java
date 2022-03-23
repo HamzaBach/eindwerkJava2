@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.EmployeeRole;
 import com.example.eindwerkJava2.model.User;
+import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,12 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final RolesService rolesService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, RolesService rolesService){
         this.userService=userService;
+        this.rolesService=rolesService;
     }
 
     @GetMapping("/users")
@@ -55,7 +59,7 @@ public class UserController {
     @GetMapping("editUser/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
         User user = userService.findById(userId).get();
-        model.addAttribute("rolesList", EmployeeRole.values());
+        model.addAttribute("rolesList", rolesService.getAllRoles());
         model.addAttribute("user", user);
         return "form_user";
     }
@@ -71,7 +75,7 @@ public class UserController {
     @GetMapping("/showNewUserForm")
     public String showNewUserForm(Model model) {
         model.addAttribute("user",new User());
-        model.addAttribute("rolesList", EmployeeRole.values());
+        model.addAttribute("rolesList", rolesService.getAllRoles());
         return "form_user";
     }
 
