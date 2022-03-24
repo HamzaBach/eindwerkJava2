@@ -13,4 +13,5 @@ public interface RoleRepository extends JpaRepository<Role, Integer> {
             nativeQuery = true
     )
     Set<Role> getUserNotRoles(Long userId);
+
 }

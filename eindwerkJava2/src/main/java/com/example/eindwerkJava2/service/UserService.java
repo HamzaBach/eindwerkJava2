@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.User;
+import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.tools.AESEncryptionImpl;
 import com.example.eindwerkJava2.tools.Encryption;
@@ -14,14 +15,17 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final RoleRepository roleRepository;
 
     private Encryption aesEncryption = new AESEncryptionImpl();
     private String encryptedPassword;
     private final String secretKey = "EindprojectJavaJaar2";
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     public List<User> getActiveUsers() {
@@ -55,7 +59,12 @@ public class UserService {
         }
         encryptedPassword=aesEncryption.encrypt(user.getPassword(),secretKey);
         user.setPassword(encryptedPassword);
-        userRepository.save(user);
+        if(user.getUserId()==null){
+            userRepository.save(user);
+        }else{
+            user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
+            userRepository.save(user);
+        }
     }
 
     public Optional<User> findById(Long id){
