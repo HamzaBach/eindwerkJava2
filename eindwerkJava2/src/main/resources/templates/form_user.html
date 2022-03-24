@@ -8,6 +8,8 @@
     <title>Users</title>
     <!-- Bootstrap CSS & icons-->
     <div th:include="fragments/header::bootstrapCssAndIcons"/>
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
 
 </head>
 <body>
@@ -36,35 +38,64 @@
                     <input th:field="*{userName}" type="text" placeholder="Username" class="form-control"
                            id="userName">
                 </div>
-                <div th:if="${user.userId == null}" class="mb-3 form-group text-start">
+<!--                <div th:if="${user.userId == null}" class="mb-3 form-group text-start">-->
+                <div class="mb-3 form-group text-start">
                     <label for="userPassword" class="form-label"> New password</label>
                     <input th:field="*{password}" th:value="${user.password}" type="password" placeholder="new password"
                            class="form-control" id="userPassword"/>
                 </div>
-                <div class="mb-3 form-group text-start">
+<!--                <div class="mb-3 form-group text-start">
                     <label for="userRole" class="form-label">Role</label>
                     <select th:field="*{roles}" class="form-select" id="userRole">
                         <th:block th:each="role : ${rolesList}">
                             <option th:text="${role.name}" th:value="${role.id}">
                         </th:block>
                     </select>
+                </div>-->
+                <div class="mb-3 form-group text-start">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <label for="assignedRoles">Assigned roles</label>
+                            <table id="assignedRoles" class="table table-striped table-hover dataTable" >
+                                <thead>
+                                <th scope="col">Employee role</th>
+                                <th scope="col">Actions</th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="role: ${userRoles}" th:field="*{roles}">
+                                    <!--        <td th:text="${user.userId}"></td>-->
+                                    <td th:text="${role.name}" th:value="role.id" ></td>
+                                    <td>
+                                        <a th:href="@{'/unassignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-warning">
+                                            <i class="bi bi-trash"></i> Unassign role
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="notAssignedRoles">Unassigned roles</label>
+                            <table id="notAssignedRoles" class="table table-striped table-hover dataTable" >
+                                <thead>
+                                <th scope="col">Unassigned role</th>
+                                <th scope="col">Actions</th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="role: ${userNotRoles}">
+                                    <!--        <td th:text="${user.userId}"></td>-->
+                                    <td th:text="${role.name}" th:value="role.id"></td>
+                                    <td>
+                                        <a th:href="@{'/assignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-primary">
+                                            <i class="bi bi-trash"></i> Assign role
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <!--                <div th:unless="${user.userId == null}">-->
-                <!--                    <div class="mb-3 form-group text-start">-->
-                <!--                        <button type="button"  class="btn btn-outline-primary btn-lg" data-toggle="collapse" data-target="#editPassword">-->
-                <!--                            <i class="bi bi-key"> Edit password</i>-->
-                <!--                        </button>-->
-                <!--                    </div>-->
-                <!--                    <div class="collapse" id="editPassword">-->
-                <!--                        <div class="card card-body">-->
-                <!--                            <label for="newPassword" class="form-label"> New password</label>-->
-                <!--                            <input th:field="*{password}"  type="password" placeholder="new password"-->
-                <!--                                   class="form-control" id="newPassword"/>-->
-                <!--                            <p>TEXT</p>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
 
             </div>
             <div class="col-xl-4">
