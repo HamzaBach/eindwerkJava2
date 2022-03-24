@@ -17,9 +17,8 @@ public class Category {
 
     }
 
-    public Category(Long categoryID,String categoryName, String categoryAbbreviation)
+    public Category(String categoryName, String categoryAbbreviation)
     {
-        this.categoryId = categoryID;
         this.categoryName = categoryName;
         this.categoryAbbreviation=categoryAbbreviation;
     }

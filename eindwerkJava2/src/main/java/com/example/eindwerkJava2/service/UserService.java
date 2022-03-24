@@ -1,7 +1,5 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.EmployeeRole;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.tools.AESEncryptionImpl;
@@ -61,7 +59,11 @@ public class UserService {
     }
 
     public Optional<User> findById(Long id){
-        return userRepository.findById(id);
+        if(userRepository.existsUserByUserId(id)){
+            return userRepository.findById(id);
+        }else{
+            return null;
+        }
     }
 
     public void deleteUser(User user){

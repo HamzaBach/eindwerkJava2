@@ -60,6 +60,8 @@ public class UserController {
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
         User user = userService.findById(userId).get();
         model.addAttribute("rolesList", rolesService.getAllRoles());
+        model.addAttribute("userRoles", rolesService.getUserRoles(user));
+        model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
         model.addAttribute("user", user);
         return "form_user";
     }
