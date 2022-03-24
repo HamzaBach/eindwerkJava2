@@ -43,15 +43,21 @@ public class RolesService {
     }
 
     //Assign a role
-    public void assignUserRole(Long userId, Integer roleId){
-        User user = userRepository.findById(userId).orElse(null);
-        Role role = roleRepository.findById(roleId).orElse(null);
+    public Boolean assignUserRole(Long userId, Integer roleId){
+        if(userId==null){
+            return false;
+        } else {
+            User user = userRepository.findById(userId).orElse(null);
+            Role role = roleRepository.findById(roleId).orElse(null);
 
-        Set<Role> userRoles = user.getRoles();
-        userRoles.add(role);
-        user.setRoles(userRoles);
+            Set<Role> userRoles = user.getRoles();
+            userRoles.add(role);
+            user.setRoles(userRoles);
 
-        userRepository.save(user);
+            userRepository.save(user);
+            return true;
+        }
+
     }
 
     //Unassign a role
