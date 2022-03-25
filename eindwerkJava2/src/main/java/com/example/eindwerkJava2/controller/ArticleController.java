@@ -35,8 +35,8 @@ public class ArticleController {
         this.articleSupplierService =articleSupplier;
     }
 
-    @GetMapping("/landing_page")
-    public String getLandingPage(){
+    @GetMapping("/home")
+    public String getHomePage(){
         return "landing_page";
     }
 
