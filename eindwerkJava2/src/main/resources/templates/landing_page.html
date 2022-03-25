@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,9 +31,8 @@
 <section class="bg-dark text-light pt-5 p-1 text-center text-sm-start">
     <div class="container">
         <div class="d-sm-flex align-items-center justify-content-between">
-            <div><h1>Welcome to your <span class="text-warning">
-                inventory manager!
-            </span></h1>
+            <div><h1>Welcome <span sec:authentication="name" class="text-warning">Username</span> to your inventory manager!
+            </h1>
                 <p class="lead my-4">
                     <!--                Below you can find the various features you can access to manage and streamline your inventory.-->
                     Want to know more about each feature, have a look at our documentation section.
