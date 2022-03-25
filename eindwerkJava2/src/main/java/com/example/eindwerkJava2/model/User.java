@@ -37,6 +37,11 @@ public class User {
         this.userName = userName;
         this.password=password;
     }
+    public User (String userName, String password, Set<Role> roles){
+        this.userName=userName;
+        this.password=password;
+        this.roles=roles;
+    }
 
     public Long getUserId() {
         return userId;
@@ -84,5 +89,9 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addOneRole(Role role){
+        this.roles.add(role);
     }
 }

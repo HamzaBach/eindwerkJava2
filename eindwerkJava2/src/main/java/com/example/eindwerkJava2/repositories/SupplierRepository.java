@@ -12,5 +12,6 @@ import java.util.List;
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(value = "SELECT * FROM supplier WHERE active = 1", nativeQuery = true)
     List<Supplier> findAllActiveUsers();
+    boolean existsSupplierBySupplierName(String supplierName);
 
 }
