@@ -4,8 +4,6 @@ import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
-import com.example.eindwerkJava2.tools.AESEncryptionImpl;
-import com.example.eindwerkJava2.tools.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

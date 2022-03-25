@@ -76,11 +76,11 @@
                         <a th:href="@{/mutation}" class="nav-link">Mutations</a>
                     </li>
                     <li class="nav-item">
-                        <span sec:authentication="name">Username</span>
+                        <label><strong><span sec:authentication="name" class="text-warning nav-link">Username</span></strong> </label>
                     </li>
                     <li>
                         <form th:action="@{/logout}" method="post">
-                            <input type="submit" value="Logout" />
+                            <input type="submit" value="Logout" class="btn btn-secondary" />
                         </form>
                     </li>
                 </ul>
