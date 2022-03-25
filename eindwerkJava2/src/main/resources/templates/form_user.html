@@ -38,9 +38,9 @@
                     <input th:field="*{userName}" type="text" placeholder="Username" class="form-control"
                            id="userName">
                 </div>
-                <div class="mb-3 form-group text-start">
+                <div class="mb-3 form-group text-start" th:if="${user.userId==null}">
                     <label for="userPassword" class="form-label"> New password</label>
-                    <input th:field="*{password}" th:value="${user.password}" type="password" placeholder="new password"
+                    <input th:field="*{password}" type="password" placeholder="new password"
                            class="form-control" id="userPassword"/>
                 </div>
                 <div class="mb-3 form-group text-start">

@@ -1,11 +1,13 @@
 package com.example.eindwerkJava2.service;
 
+import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.tools.AESEncryptionImpl;
 import com.example.eindwerkJava2.tools.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +19,9 @@ public class UserService {
     private final UserRepository userRepository;
     @Autowired
     private final RoleRepository roleRepository;
-
-    private Encryption aesEncryption = new AESEncryptionImpl();
-    private String encryptedPassword;
-    private final String secretKey = "EindprojectJavaJaar2";
-
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    private static final Role DEFAULT_ROLE=new Role("USER");
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -32,13 +32,6 @@ public class UserService {
         return this.userRepository.findByActiveUser(1);
     }
 
-    public Boolean addUser(String userName, String password) {
-        if (!userRepository.existsUserByUserName(userName)) {
-            User newUser = new User(userName, aesEncryption.encrypt(password,"EindprojectJavaJaar2"));
-            userRepository.save(newUser);
-            return true;
-        } else return false;
-    }
 
     public User getUserByUserName(String userName) {
         if (userRepository.existsUserByUserName(userName)) {
@@ -57,14 +50,15 @@ public class UserService {
         }else{
             user.setUserImage(userImage);
         }
-        encryptedPassword=aesEncryption.encrypt(user.getPassword(),secretKey);
-        user.setPassword(encryptedPassword);
+
         if(user.getUserId()==null){
-            userRepository.save(user);
+            user.addOneRole(roleRepository.findById(1).get());
+            String encryptedPassword=passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
         }else{
             user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
-            userRepository.save(user);
         }
+        userRepository.save(user);
     }
 
     public Optional<User> findById(Long id){
