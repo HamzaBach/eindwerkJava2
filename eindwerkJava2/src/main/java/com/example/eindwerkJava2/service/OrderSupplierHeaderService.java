@@ -1,10 +1,8 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Cities;
-import com.example.eindwerkJava2.model.Location;
-import com.example.eindwerkJava2.model.OrderSupplierHeader;
-import com.example.eindwerkJava2.model.Supplier;
+import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.OrderSupplierHeaderRepository;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +21,19 @@ public class OrderSupplierHeaderService {
     public List<OrderSupplierHeader> getOrderSupplierHeaders(){
         return orderSupplierHeaderRepository.findAll();
     }
+
     public Optional<OrderSupplierHeader> findById(long id){
         return orderSupplierHeaderRepository.findById(id);
     }
 
+    public String getMaxId(Supplier supplier){return supplier.getSupplierName()+"-" + (orderSupplierHeaderRepository.getMaxId()+1);}
+
+    public void addSupplierHeader( OrderSupplierHeader orderSupplierHeader ){
+        orderSupplierHeaderRepository.save(orderSupplierHeader);
+    }
+
+    public void save(OrderSupplierHeader orderSupplierHeader) {
+        orderSupplierHeaderRepository.save(orderSupplierHeader);
+    }
 }
 
