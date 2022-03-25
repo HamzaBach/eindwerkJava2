@@ -37,14 +37,14 @@ public class RoleController {
     @GetMapping("unassignRole/{userId}/{roleId}")
     public String unassignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId){
         rolesService.unassignUserRole(userId,roleId);
-        return "redirect:/editUser/{userId}";
+        return "redirect:/edit/user/{userId}";
     }
 
     //Unassign a role
     @GetMapping("assignRole/{userId}/{roleId}")
     public String assignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId){
         rolesService.assignUserRole(userId,roleId);
-        return "redirect:/editUser/{userId}";
+        return "redirect:/edit/user/{userId}";
     }
 
 

@@ -56,7 +56,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("editUser/{userId}")
+    @GetMapping("edit/user/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
         User user = userService.findById(userId).get();
         model.addAttribute("rolesList", rolesService.getAllRoles());
@@ -67,14 +67,14 @@ public class UserController {
     }
 
 
-    @GetMapping("deleteUser/{userId}")
+    @GetMapping("delete/user/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId){
         User user = userService.findById(userId).get();
         this.userService.deleteUser(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/showNewUserForm")
+    @GetMapping("/new/user")
     public String showNewUserForm(Model model) {
         model.addAttribute("user",new User());
         model.addAttribute("rolesList", rolesService.getAllRoles());
