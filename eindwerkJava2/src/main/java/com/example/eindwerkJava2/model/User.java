@@ -1,8 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import com.example.eindwerkJava2.tools.AESEncryptionImpl;
-import com.example.eindwerkJava2.tools.Encryption;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;

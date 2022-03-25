@@ -1,12 +1,12 @@
-package com.example.eindwerkJava2.controller;
+package com.example.eindwerkJava2.Security;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AccessDeniedController {
 
-    @GetMapping("/accessDenied")
+    @GetMapping("/access-denied")
     public String getAccessDenied() {
-        return "accessDenied";
+        return "/error/accessDenied";
     }
 }

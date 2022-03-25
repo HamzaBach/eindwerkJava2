@@ -1,4 +1,4 @@
-package com.example.eindwerkJava2.tools;
+package com.example.eindwerkJava2.Security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
