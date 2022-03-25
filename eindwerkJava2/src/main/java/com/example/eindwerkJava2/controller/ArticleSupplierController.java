@@ -27,13 +27,13 @@ public class ArticleSupplierController {
         return "article_supplier";
     }
 
-    @GetMapping("/showNewArticleSupplierForm")
+    @GetMapping("/new/articleSupplier")
     public String showNewArticleSupplierForm(Model model){
         ArticleSupplier articleSupplier = new ArticleSupplier();
         model.addAttribute("articleSupplier", new ArticleSupplier());
         model.addAttribute("articleList", articleService.getActiveArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
-        return "form_article_supplier";
+        return "/forms/form_article_supplier";
     }
 
     @PostMapping("/saveArticleSupplier")
@@ -42,15 +42,15 @@ public class ArticleSupplierController {
         return "redirect:/article_supplier";
     }
 
-    @GetMapping("editArticleSupplier/{articleSupplierId}")
+    @GetMapping("edit/articleSupplier/{articleSupplierId}")
     public String editArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
         ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
         model.addAttribute("articleSupplier", articleSupplier);
         model.addAttribute("articleList", articleService.getActiveArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
-        return "form_article_supplier";
+        return "/forms/form_article_supplier";
     }
-    @GetMapping("deleteArticleSupplier/{articleSupplierId}")
+    @GetMapping("delete/articleSupplier/{articleSupplierId}")
     public String deleteArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
         ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
         this.articleSupplierService.deleteArticleSupplier(articleSupplier);

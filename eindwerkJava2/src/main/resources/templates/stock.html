@@ -20,7 +20,7 @@
 <div align="center" style="margin: 100px">
     <h1>Inventory</h1>
     <div align="center" style="mb-3">
-        <a th:href="@{/newStockForm}" class="btn btn-primary btn-lg" style="margin:20px">New</a>
+        <a th:href="@{/new/stock}" class="btn btn-primary btn-lg" style="margin:20px">New</a>
     </div>
 
     <div align="center" style="margin: 100px">
@@ -38,9 +38,9 @@
             <td th:text="${Stock.article.articleName}"></td>
             <td th:text="${Stock.location.locationName}"></td>
             <td th:text="${Stock.amount}"></td>
-            <td><a th:href="@{'/updateStockForm/' + ${Stock.stockId}}" class="btn btn-outline-primary">
+            <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary">
                 <i class="bi bi-pencil-square"></i> Edit</a></td>
-            <td><a th:href="@{'/deleteStock/' + ${Stock.stockId}}" class="btn btn-outline-danger">
+            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger">
                 <i class="bi bi-trash"></i> Delete </a></td>
         </tr>
         </tbody>

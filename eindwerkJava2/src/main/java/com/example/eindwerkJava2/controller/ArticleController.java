@@ -48,21 +48,21 @@ public class ArticleController {
         return "articles";
     }
 
-    @GetMapping("deleteArticle/{articleId}")
+    @GetMapping("delete/article/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId){
         Article article = articleService.findById(articleId).get();
         this.articleService.deleteArticle(article);
         return "redirect:/articles";
     }
 
-    @GetMapping("/showNewArticleForm")
+    @GetMapping("/new/article")
     public String showNewArticleForm(Model model) {
         model.addAttribute("article",new Article());
         model.addAttribute("categoriesList", categoryService.getCategories());
 //        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         List<Article> articles = articleService.getActiveArticles();
         model.addAttribute("articlesList",articles);
-        return "form_article";
+        return "/forms/form_article";
     }
 
     @PostMapping("/saveArticle")
@@ -85,13 +85,13 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("editArticle/{articleId}")
+    @GetMapping("edit/article/{articleId}")
     public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) {
         Article article = articleService.findById(articleId).get();
         model.addAttribute("article", article);
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
-        return "form_article";
+        return "/forms/form_article";
     }
 
 

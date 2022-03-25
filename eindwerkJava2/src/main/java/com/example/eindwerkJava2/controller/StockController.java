@@ -32,7 +32,7 @@ public class StockController {
         return "stock";
     }
 
-    @GetMapping("/newStockForm")
+    @GetMapping("/new/stock")
     public String showNewStockForm(Model model){
 
         Stock stock = new Stock();
@@ -40,7 +40,7 @@ public class StockController {
         model.addAttribute("locationList", locationService.getAllLocations());
         model.addAttribute("articleList", articleService.getActiveArticles());
 
-        return "newStockForm";
+        return "/forms/form_stock";
     }
 
     @PostMapping("/saveStock")
@@ -50,17 +50,17 @@ public class StockController {
         return "redirect:/stock";
     }
 
-    @GetMapping("/updateStockForm/{stockId}")
+    @GetMapping("/edit/stock/{stockId}")
     public String viewUpdateStockForm(@PathVariable("stockId")Long stockId, Model model)
     {
         Stock stock = stockService.findStockById(stockId);
         model.addAttribute("stock", stock);
         model.addAttribute("locationList", locationService.getAllLocations());
         model.addAttribute("articleList", articleService.getActiveArticles());
-        return "newStockForm";
+        return "/forms/form_stock";
     }
 
-    @GetMapping("/deleteStock/{stockId}")
+    @GetMapping("/delete/stock/{stockId}")
     public String deleteStock(@PathVariable("stockId")Long stockId, Model model)
     {
         Stock stock = stockService.findStockById(stockId);

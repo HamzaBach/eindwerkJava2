@@ -26,14 +26,14 @@ public class SupplierController {
         return "supplier";
     }
 
-    @GetMapping("/showNewSupplierForm")
+    @GetMapping("/new/supplier")
     public String showNewSupplierForm(Model model){
         Supplier supplier = new Supplier();
 
         model.addAttribute("supplier", new Supplier());
         model.addAttribute("citiesList", citiesService.getAllCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
-        return "form_supplier";
+        return "/forms/form_supplier";
     }
     @GetMapping("/generatePdf")
     public String generatePdf(){
@@ -49,16 +49,16 @@ public class SupplierController {
     }
 
 
-    @GetMapping("editSupplier/{supplierId}")
+    @GetMapping("edit/supplier/{supplierId}")
     public String showEditSupplierForm(@PathVariable("supplierId") Long supplierId, Model model){
         Supplier supplier = supplierService.findById(supplierId).get();
         model.addAttribute("supplier", supplier);
         model.addAttribute("citiesList", citiesService.getAllCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
-        return "form_supplier";
+        return "/forms/form_supplier";
     }
 
-    @GetMapping("deleteSupplier/{supplierId}")
+    @GetMapping("delete/supplier/{supplierId}")
     public String deleteSupplier(@PathVariable("supplierId") Long supplierId, Model model){
         Supplier supplier = supplierService.findById(supplierId).get();
         this.supplierService.deleteSupplier(supplier);

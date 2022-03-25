@@ -18,21 +18,20 @@ import java.util.Optional;
 @Controller
 
 public class MutationController {
-    private final MutationService mutationService;
-    private final UserService userService;
-    private final ArticleService articleService;
-
     @Autowired
+    private final MutationService mutationService;
+    @Autowired
+    private final UserService userService;
+    @Autowired
+    private final ArticleService articleService;
+    @Autowired
+    private TransactionService transactionService;
+
     public MutationController(MutationService mutationService, UserService userservice, ArticleService articleService) {
         this.mutationService = mutationService;
         this.userService =userservice;
         this.articleService=articleService;
     }
-
-    @Autowired
-    private TransactionService transactionService;
-
-   public List<Mutation> getMutations() {return mutationService.getMutations();}
 
     @GetMapping("/mutation")
     public String  viewMutations(Model model){
@@ -43,7 +42,7 @@ public class MutationController {
         return "mutation";
     }
 
-    @GetMapping("/showNewMutationForm")
+    @GetMapping("/new/mutation")
     public String showNewMutationForm(Model model){
      Mutation mutation = new Mutation();
 
@@ -51,7 +50,7 @@ public class MutationController {
      model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
      model.addAttribute("userList",userService.getActiveUsers());
      model.addAttribute("articleList", articleService.getActiveArticles());
-     return "form_mutation";
+     return "/forms/form_mutation";
     }
 
     @PostMapping("/saveMutation")
@@ -60,23 +59,21 @@ public class MutationController {
         return "redirect:/mutation";
     }
 
-    @GetMapping("deleteMutation/{mutationId}")
+    @GetMapping("delete/mutation/{mutationId}")
     public String deleteArticle(@PathVariable("mutationId") Long mutationId){
         Mutation mutation = mutationService.findById(mutationId).get();
         this.mutationService.deleteMutation(mutation);
         return "redirect:/mutation";
     }
 
-    @GetMapping("editMutation/{mutationId}")
+    @GetMapping("edit/mutation/{mutationId}")
     public String showEditmutationForm(@PathVariable("mutationId") Long mutationId, Model model) {
         Mutation mutation = mutationService.findById(mutationId).get();
         model.addAttribute("mutation",mutation);
         model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
         model.addAttribute("userList",userService.getActiveUsers());
         model.addAttribute("articleList", articleService.getActiveArticles());
-        return "form_mutation";
+        return "/forms/form_mutation";
     }
-
-
 
 }

@@ -63,7 +63,7 @@ public class UserController {
         model.addAttribute("userRoles", rolesService.getUserRoles(user));
         model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
         model.addAttribute("user", user);
-        return "form_user";
+        return "/forms/form_user";
     }
 
 
@@ -78,7 +78,7 @@ public class UserController {
     public String showNewUserForm(Model model) {
         model.addAttribute("user",new User());
         model.addAttribute("rolesList", rolesService.getAllRoles());
-        return "form_user";
+        return "/forms/form_user";
     }
 
 
