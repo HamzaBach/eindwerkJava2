@@ -25,7 +25,7 @@
 
 <div align="center" style="margin: 100px">
     <h1>Mutations</h1>
-    <a th:href = "@{/showNewMutationForm}" class="btn btn-primary btn-lg" style="margin:20px">New mutation</a>
+    <a th:href = "@{/new/mutation}" class="btn btn-primary btn-lg" style="margin:20px">New mutation</a>
 
     <table class="table table-striped table-hover" id="mutationOverview" style="margin:20px">
         <thead>
@@ -45,8 +45,8 @@
             <td th:text="${mutation.transactionType.transactionTypeName}"></td>
             <td th:text="${mutation.user.userName}"></td>
 
-            <td><a th:href="@{'/editMutation/' + ${mutation.mutationId}} ">EDIT</a></td>
-            <td><a th:href="@{'/deleteMutation/' + ${mutation.mutationId}}">DELETE</a></td>
+            <td><a th:href="@{'/edit/mutation/' + ${mutation.mutationId}} ">EDIT</a></td>
+            <td><a th:href="@{'/delete/mutation/' + ${mutation.mutationId}}">DELETE</a></td>
 
 
 

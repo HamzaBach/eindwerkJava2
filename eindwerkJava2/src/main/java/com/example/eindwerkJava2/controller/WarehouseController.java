@@ -43,10 +43,10 @@ public class WarehouseController {
      * @param model the model
      * @return the 'form_warehouse' page
      */
-    @GetMapping(path = "/newWarehouse")
+    @GetMapping(path = "/new/warehouse")
     public String showNewLocationForm(Model model){
         model.addAttribute("warehouse", new Warehouse());
-        return "form_warehouse";
+        return "/forms/form_warehouse";
     }
 
 
@@ -71,11 +71,11 @@ public class WarehouseController {
      * @return the 'form_warehouse' page
      * @throws Exception the exception occurs when the ID does not exist
      */
-    @GetMapping("/editWarehouse/{warehouseId}")
+    @GetMapping("/edit/warehouse/{warehouseId}")
     public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
         model.addAttribute("warehouse",warehouse);
-    return "form_warehouse";
+    return "/forms/form_warehouse";
     }
 
     /**
@@ -87,7 +87,7 @@ public class WarehouseController {
      * @return redirects to the 'warehouse' webpage
      * @throws Exception the exception occurs when the ID does not exist
      */
-    @GetMapping("deleteWarehouse/{warehouseId}")
+    @GetMapping("delete/warehouse/{warehouseId}")
     public String deleteWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
         this.warehouseService.deleteWarehouse(warehouse);

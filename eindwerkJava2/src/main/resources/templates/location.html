@@ -25,7 +25,7 @@
 
 <div align="center" style="margin: 100px">
     <h1>Locations</h1>
-    <a th:href="@{/newLocation}" class="btn btn-primary btn-lg" style="margin:20px">New location</a>
+    <a th:href="@{/new/location}" class="btn btn-primary btn-lg" style="margin:20px">New location</a>
 
     <div align="center" style="margin: 100px">
 
@@ -44,10 +44,10 @@
                 <td th:text="${location.locationName}"></td>
                 <td th:text="${location.warehouse.warehouseName}"></td>
                 <td><input disabled type="checkbox" th:checked="${location.singleStorage}"/></td>
-                <td><a th:href="@{'/editLocation/' + ${location.locationId}}" class="btn btn-outline-primary">
+                <td><a th:href="@{'/edit/location/' + ${location.locationId}}" class="btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a></td>
-                <td><a th:href="@{'/deleteLocation/' + ${location.locationId}}" class="btn btn-outline-danger">
+                <td><a th:href="@{'/delete/location/' + ${location.locationId}}" class="btn btn-outline-danger">
                     <i class="bi bi-trash"></i> Delete
                 </a></td>
             </tr>

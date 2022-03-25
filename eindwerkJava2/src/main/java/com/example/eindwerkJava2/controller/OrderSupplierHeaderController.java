@@ -33,16 +33,16 @@ public class OrderSupplierHeaderController {
         OrderSupplierHeader orderSupplierHeader =  orderSupplierHeaderService.findById(orderSupplierId).get();
         model.addAttribute("OrderSupplierHeader", orderSupplierHeader);
         model.addAttribute("suppliersList", orderSupplierHeader.getSupplier());
-        return "order_detail";
+        return "/forms/form_order_detail";
     }
 
 
 
-    @GetMapping("/CreateOrder")
+    @GetMapping("/new/order")
     public String AddOrderSupplierForm(Model model){
         model.addAttribute("OrderSupplierHeader",new OrderSupplierHeader());
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
-        return "order_detail";
+        return "/forms/form_order_detail";
     }
     @PostMapping("/SaveOrderHeadSupplier")
     public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader,Model model)

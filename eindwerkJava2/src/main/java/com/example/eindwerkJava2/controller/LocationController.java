@@ -47,11 +47,11 @@ private WarehouseService warehouseService;
      * @param model the model
      * @return the form_location page
      */
-    @GetMapping(path = "/newLocation")
+    @GetMapping(path = "/new/location")
     public String showNewLocationForm(Model model){
         model.addAttribute("location", new Location());
         model.addAttribute("warehouseList", warehouseService.activeWarehouses());
-        return "form_location";
+        return "/forms/form_location";
     }
 
     /**
@@ -76,12 +76,12 @@ private WarehouseService warehouseService;
      * @param model      the model
      * @return the form_location page
      */
-    @GetMapping("editLocation/{locationId}")
+    @GetMapping("edit/location/{locationId}")
     public String editLocation(@PathVariable("locationId") Long locationId, Model model){
         Location location = locationService.findByLocationId(locationId);
         model.addAttribute("location", location);
         model.addAttribute("warehouseList", warehouseService.activeWarehouses());
-        return "form_location";}
+        return "/forms/form_location";}
 
     /**
      * Delete a location.
@@ -91,7 +91,7 @@ private WarehouseService warehouseService;
      * @param model      the model
      * @return redirects to the 'location' webpage
      */
-    @GetMapping("deleteLocation/{locationId}")
+    @GetMapping("delete/location/{locationId}")
     public String deleteLocation(@PathVariable("locationId") Long locationId, Model model){
         Location location = locationService.findByLocationId(locationId);
         this.locationService.deleteLocation(location);

@@ -27,7 +27,7 @@
 <div align="center" style="margin: 100px">
     <h1>Warehouses</h1>
     <div align="center" style="mb-3">
-        <a th:href="@{/newWarehouse}" class="btn btn-primary btn-lg" style="margin:20px">New warehouse</a>
+        <a th:href="@{/new/warehouse}" class="btn btn-primary btn-lg" style="margin:20px">New warehouse</a>
     </div>
 
 
@@ -42,10 +42,10 @@
         <tr th:each="warehouse : ${listWarehouses}">
 <!--            <td th:text="${warehouse.warehouseId}"></td>-->
             <td th:text="${warehouse.warehouseName}"></td>
-            <td><a th:href="@{'/editWarehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-primary">
+            <td><a th:href="@{'/edit/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-primary">
                 <i class="bi bi-pencil-square"></i> Edit
             </a></td>
-            <td><a th:href="@{'/deleteWarehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger">
+            <td><a th:href="@{'/delete/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger">
                 <i class="bi bi-trash"></i> Delete
             </a></td>
         </tr>

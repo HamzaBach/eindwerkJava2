@@ -25,7 +25,7 @@
 
 <div align="center" style="margin: 100px">
     <h1>Categories</h1>
-    <a th:href = "@{/showNewCategoryForm}" class="btn btn-primary btn-lg" style="margin:20px">New category</a>
+    <a th:href = "@{/new/category}" class="btn btn-primary btn-lg" style="margin:20px">New category</a>
 
     <table class="table table-striped table-hover" style="margin:20px" id="categoriesOverview">
         <thead>
@@ -41,12 +41,12 @@
             <td th:text="${category.categoryName}"></td>
             <td th:text="${category.categoryAbbreviation}"></td>
             <td>
-                <a th:href="@{'/editCategory/' + ${category.categoryId}}" class="btn btn-outline-primary">
+                <a th:href="@{'/edit/category/' + ${category.categoryId}}" class="btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </td>
             <td>
-                <a th:href="@{'/deleteCategory/' + ${category.categoryId}}" class="btn btn-outline-danger">
+                <a th:href="@{'/delete/category/' + ${category.categoryId}}" class="btn btn-outline-danger">
                     <i class="bi bi-trash"></i> Delete
                 </a>
             </td>
