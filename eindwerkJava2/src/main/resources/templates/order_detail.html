@@ -12,7 +12,7 @@
 
     <h1>Order</h1>
     <div>
-        <form style="margin:20px">
+        <form th:action="@{/SaveOrderHeadSupplier}" th:object="${OrderSupplierHeader}", method="POST"    style="margin:20px">
             <div>
                 <div class="row">
 
@@ -20,9 +20,11 @@
                         <label>Supplier</label>
                     </div>
                     <div class="col-md-5">
-                        <select class="form-select" aria-label="Default select example">
-                            <option>Supplier1</option>
-                            <option>Supplier2</option>
+                        <select  th:field="*{supplier}" class="form-select" aria-label="Default select example">
+                            <th:block  th:each="supplier : ${suppliersList}">
+                                <option  th:value="${supplier.supplierId}" th:text="${supplier.supplierName}" ></option>
+                            </th:block>
+
                         </select>
                     </div>
                     <div class="col-md-1">
@@ -30,7 +32,7 @@
 
                     </div>
                     <div class="col-md-5">
-                        <input type="text" placeholder="Order nr°" disabled class="form-control">
+                        <input th:value="${OrderSupplierHeader.orderNumber}"type="text" placeholder="Order nr°" disabled class="form-control">
                     </div>
                 </div>
 
@@ -42,7 +44,8 @@
                         <label>Date of order:</label>
                     </div>
                     <div class="col-md-5">
-                        <input type="date" placeholder="Order open"  class="form-control">
+                        <input th:field="*{dateOfOrder}"type="date" placeholder="Order open"  class="form-control" required>
+
                     </div>
                     <div class="col-md-1">
                         <label>Order State:</label>
@@ -55,7 +58,7 @@
                     </div>
                 </div>
                 <div style="margin:10px">
-                    <button class="btn btn-primary ">Save header</button>
+                    <button class="btn btn-primary "  type="submit">Save header</button>
                 </div>
             </div>
         </form>

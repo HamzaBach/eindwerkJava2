@@ -18,6 +18,8 @@ public class OrderSupplierDetail {
     @JoinColumn(name = "article_article_id")
     private Article article;
 
+    // Naming nog na checken
+
     @Column(name="quanity")
     private int quantity;
 
