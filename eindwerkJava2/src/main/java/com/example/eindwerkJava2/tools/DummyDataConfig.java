@@ -108,11 +108,11 @@ public class DummyDataConfig {
             }
 
             List<User> dummyUsers = new ArrayList<User>();
-            User user1 = new User("Abdeljalil","ww");
-            User user2 = new User("Hamza","ww");
-            User user3 = new User("Rinaldo","ww");
-            User user4 = new User("Sebastiaan", "ww");
-            User user5 = new User("Johan","ww");
+            User user1 = new User("Abdeljalil","$2a$12$SdrK28X1fz10qM5NCxM5cumCCn9PRgH/G/oZIU5Wv6IvQBeLj4FG.");//password = ww
+            User user2 = new User("Hamza","$2a$12$SdrK28X1fz10qM5NCxM5cumCCn9PRgH/G/oZIU5Wv6IvQBeLj4FG.");//password = ww
+            User user3 = new User("Rinaldo","$2a$12$SdrK28X1fz10qM5NCxM5cumCCn9PRgH/G/oZIU5Wv6IvQBeLj4FG.");//password = ww
+            User user4 = new User("Sebastiaan", "$2a$12$SdrK28X1fz10qM5NCxM5cumCCn9PRgH/G/oZIU5Wv6IvQBeLj4FG.");//password = ww
+            User user5 = new User("Johan","$2a$12$SdrK28X1fz10qM5NCxM5cumCCn9PRgH/G/oZIU5Wv6IvQBeLj4FG.");//password = ww
             dummyUsers.add(user1);
             dummyUsers.add(user2);
             dummyUsers.add(user3);
@@ -120,6 +120,7 @@ public class DummyDataConfig {
             dummyUsers.add(user5);
             for(User user:dummyUsers){
                 if(!userRepository.existsUserByUserName(user.getUserName())){
+                    //TODO add admin roles here
                     userRepository.save(user);
                 }
             }

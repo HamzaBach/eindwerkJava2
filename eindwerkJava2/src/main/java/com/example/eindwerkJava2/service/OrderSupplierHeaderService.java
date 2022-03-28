@@ -26,14 +26,23 @@ public class OrderSupplierHeaderService {
         return orderSupplierHeaderRepository.findById(id);
     }
 
-    public String getMaxId(Supplier supplier){return supplier.getSupplierName()+"-" + (orderSupplierHeaderRepository.getMaxId()+1);}
+    public Long getMaxId(){return orderSupplierHeaderRepository.getMaxId();}
 
     public void addSupplierHeader( OrderSupplierHeader orderSupplierHeader ){
         orderSupplierHeaderRepository.save(orderSupplierHeader);
     }
 
     public void save(OrderSupplierHeader orderSupplierHeader) {
+        //Save it first so that id is created
         orderSupplierHeaderRepository.save(orderSupplierHeader);
+        //Logic to retrieve the just saved object and construct an order number based on the id:
+        Optional<OrderSupplierHeader> orderSupplierHeader1= orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
+        String supplierName=orderSupplierHeader1.get().getSupplier().getSupplierName();
+        orderSupplierHeader1.get().setOrderNumber(supplierName+"-"+orderSupplierHeader1.get().getOrderSupplierId());
+        //Logic to set dateOfOrder:
+        orderSupplierHeader1.get().setDateOrderClosed(orderSupplierHeader1.get().getDateOfOrder().plusDays(14));
+        //Resave same object but this time with orderNumber and DateOrderClosed:
+        orderSupplierHeaderRepository.save(orderSupplierHeader1.get());
     }
 }
 

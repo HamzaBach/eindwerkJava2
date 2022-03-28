@@ -21,7 +21,7 @@ public class OrderSupplierHeader {
     private LocalDate dateOfOrder;
 
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) //HBa: WTF is this? Je gaat dit toch zelf aanmaken, Generated value verwacht een Integer of een Long...
     @Column(name = "order_number")
     private String orderNumber;
 
