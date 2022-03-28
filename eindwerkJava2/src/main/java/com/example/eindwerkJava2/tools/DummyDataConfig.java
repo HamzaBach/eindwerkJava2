@@ -120,7 +120,12 @@ public class DummyDataConfig {
             dummyUsers.add(user5);
             for(User user:dummyUsers){
                 if(!userRepository.existsUserByUserName(user.getUserName())){
-                    //TODO add admin roles here
+                    userRepository.save(user);
+                }
+            }
+            for(User user:dummyUsers){
+                if(userRepository.findByUserName(user.getUserName()).getRoles().isEmpty()){
+                    user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
                 }
             }
