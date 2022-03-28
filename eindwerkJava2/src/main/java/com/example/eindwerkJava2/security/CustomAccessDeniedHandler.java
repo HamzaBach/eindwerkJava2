@@ -1,4 +1,4 @@
-package com.example.eindwerkJava2.Security;
+package com.example.eindwerkJava2.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

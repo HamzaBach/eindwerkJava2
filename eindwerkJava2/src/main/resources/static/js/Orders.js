@@ -1,6 +1,7 @@
-function EnableDisable(txtPassportNumber) {
+function EnableDisableSaveHeader() {
         //Reference the Button.
         var btnSubmit = document.getElementById("saveOrderHeader");
+        var orderNumber = document.getElementById("orderNumber");
 
         //Verify the OrderNumber has an order number.
         if (orderNumber.value.trim() != "Order nr°") {
@@ -11,3 +12,4 @@ function EnableDisable(txtPassportNumber) {
             btnSubmit.disabled = false;
         }
     };
+
