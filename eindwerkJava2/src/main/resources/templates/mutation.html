@@ -39,8 +39,8 @@
            <th scope="col">Amount</th>
            <th scope="col">TransactionType</th>
            <th scope="col">User</th>
-           <th scope="col"></th>
-           <th scope="col"></th>
+           <th scope="col">222</th>
+           <th scope="col">3333</th>
         </thead>
         <tbody>
         <tr th:each="mutation:${mutationList}">
@@ -53,12 +53,12 @@
                 <a th:href="@{'/editMutation/' + ${mutation.mutationId}} " class="btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i>Edit
                 </a>
-            <td>
+            </td>
             <td>
                 <a th:href="@{'/deleteMutation/' + ${mutation.mutationId}}" class="btn btn-outline-danger">
                    <i class="bi bi-trash"></i> Delete
                 </a>
-            <td>
+            </td>
 
         </tr>
         </tbody>

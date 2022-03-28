@@ -11,17 +11,17 @@
 
     <div th:include="fragments/header::navbar"/>
 
-    <title>category</title>
+    <title>Category</title>
 </head>
 <body>
 <div align="center" style="margin: 100px">
 
 
     <div th:if="${category.categoryId == null}">
-        <h1>New category</h1>
+        <h1>New Category</h1>
     </div>
     <div th:unless="${category.categoryId == null}">
-        <h1>Edit category</h1>
+        <h1>Edit Category</h1>
     </div>
 
     <form action="#" th:action="@{/saveCategory}" th:object="${category}", method="POST" >

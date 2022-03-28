@@ -2,10 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>-->
 
-    <title>mutation</title>
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+
+    <div th:include="fragments/header::navbar"/>
+
+    <title>Mutation</title>
 </head>
 <body>
 <div align="center" style="margin: 100px">
@@ -21,41 +26,48 @@
     <form action="#" th:action="@{/saveMutation}" th:object="${mutation}", method="POST" >
         <input type="hidden" th:field="*{mutationId}" th:value="${mutation.mutationId}" class="form-control"/>
 
-        <select th:field="*{article}" type="text" placeholder="Article" class="form-control">
-            <th:block th:each="article:${articleList}">
-                <option th:text="${article.articleName}" th:value="${article.articleId}">
-                </option>
-            </th:block>
-        </select>
+        <div class="col-xl-4">
+            <div class="mb-3">
+              <select th:field="*{article}" type="text" placeholder="Article" class="form-select">
+                   <th:block th:each="article:${articleList}">
+                       <option th:text="${article.articleName}" th:value="${article.articleId}">
+                      </option>
+                   </th:block>
+              </select>
+            </div>
 
+            <div class="mb-3">
+               <input th:field="*{amount}" type="text" placeholder="Amount" class="form-control">
+            </div>
 
-        <input th:field="*{amount}" type="text" placeholder="Amount" class="form-control">
+            <div class="mb-3">
+              <select th:field="*{transactionType}" type="text" placeholder="TransactionType" class="form-select">
+                  <th:block th:each="transactiontype:${transactiontypeList}">
+                    <option th:text="${transactiontype.transactionTypeName}" th:value="${transactiontype.transactionTypeId}">
+                    </option>
+                 </th:block>
+              </select>
+            </div>
 
-        <select th:field="*{transactionType}" type="text" placeholder="TransactionType" class="form-control">
-            <th:block th:each="transactiontype:${transactiontypeList}">
-                <option th:text="${transactiontype.transactionTypeName}" th:value="${transactiontype.transactionTypeId}">
-                </option>
-            </th:block>
-        </select>
+            <div class="mb-3">
+              <select th:field="*{user}" type="text" placeholder="Users" class="form-select">
+                  <th:block th:each="user:${userList}">
+                    <option th:text="${user.userName}" th:value="${user.userId}">
+                    </option>
+              </th:block>
+             </select>
+            </div>
 
-        <select th:field="*{user}" type="text" placeholder="Users" class="form-control">
-            <th:block th:each="user:${userList}">
-                <option th:text="${user.userName}" th:value="${user.userId}">
-                </option>
-            </th:block>
-        </select>
+            <div  class="mb-3">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </div>
 
+<!--        <button type="submit" class="btn btn-info">Save</button>-->
 
-
-        <button type="submit" class="btn btn-info">Save</button>
-
-
+        </div>
     </form>
-
-
-
-
 </div>
-
 </body>
 </html>
