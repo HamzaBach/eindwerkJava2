@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.DateFormat;
 import java.time.LocalDate;
@@ -45,12 +46,11 @@ public class OrderSupplierHeaderController {
         return "/forms/form_order_detail";
     }
     @PostMapping("/SaveOrderHeadSupplier")
-    public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader,Model model)
+    public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader, RedirectAttributes redirectAttributes)
     {
-        orderSupplierHeader.setDateOrderClosed(orderSupplierHeader.getDateOfOrder().plusDays(14));
-        orderSupplierHeader.setOrderNumber(orderSupplierHeaderService.getMaxId(orderSupplierHeader.getSupplier()));
         orderSupplierHeaderService.save(orderSupplierHeader);
-        //model.addAttribute("orderSupplierId", orderSupplierHeader.getOrderSupplierId());
+        Long orderSupplierId = orderSupplierHeaderService.getMaxId();
+        redirectAttributes.addAttribute("orderSupplierId", orderSupplierId);
         return "redirect:/viewOrderSupplier/{orderSupplierId}";
     }
 
