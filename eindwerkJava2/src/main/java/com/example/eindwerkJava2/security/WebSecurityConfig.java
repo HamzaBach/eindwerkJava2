@@ -1,4 +1,4 @@
-package com.example.eindwerkJava2.Security;
+package com.example.eindwerkJava2.security;
 
 import com.example.eindwerkJava2.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
