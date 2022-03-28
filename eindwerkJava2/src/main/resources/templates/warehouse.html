@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
 
@@ -26,7 +27,7 @@
 
 <div align="center" style="margin: 100px">
     <h1>Warehouses</h1>
-    <div align="center" style="mb-3">
+    <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
         <a th:href="@{/new/warehouse}" class="btn btn-primary btn-lg" style="margin:20px">New warehouse</a>
     </div>
 
@@ -42,10 +43,12 @@
         <tr th:each="warehouse : ${listWarehouses}">
 <!--            <td th:text="${warehouse.warehouseId}"></td>-->
             <td th:text="${warehouse.warehouseName}"></td>
-            <td><a th:href="@{'/edit/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-primary">
+            <td><a th:href="@{'/edit/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                 <i class="bi bi-pencil-square"></i> Edit
             </a></td>
-            <td><a th:href="@{'/delete/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger">
+            <td><a th:href="@{'/delete/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger"
+                   sec:authorize="hasAuthority('ADMIN')">
                 <i class="bi bi-trash"></i> Delete
             </a></td>
         </tr>
