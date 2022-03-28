@@ -54,9 +54,4 @@ public class OrderSupplierHeaderController {
         return "redirect:/viewOrderSupplier/{orderSupplierId}";
     }
 
-
-
-
-
-
 }
