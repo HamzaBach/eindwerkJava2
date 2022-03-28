@@ -20,6 +20,7 @@
            ]
         });
     });
+
     </script>
 </head>
 <body>
@@ -52,12 +53,14 @@
             <td th:text="${article.category.categoryName}"></td>
             <td th:text="${article.articleBarcode}"></td>
             <td>
-                <a th:href="@{'/edit/article/' + ${article.articleId}}" class="btn btn-outline-primary" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <a th:href="@{'/edit/article/' + ${article.articleId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </td>
             <td>
-                <a th:href="@{'/delete/article/' + ${article.articleId}}" class="btn btn-outline-danger" sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{'/delete/article/' + ${article.articleId}}" class="btn btn-outline-danger"
+                   sec:authorize="hasAuthority('ADMIN')">
                     <i class="bi bi-trash"></i> Delete
                 </a>
             </td>

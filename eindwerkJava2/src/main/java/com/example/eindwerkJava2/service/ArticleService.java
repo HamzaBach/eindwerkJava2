@@ -29,19 +29,6 @@ public class ArticleService {
         } else throw new IllegalStateException("Article with id " + articleId + " does not exist!");
     }
 
-    public Boolean addArticle(String articleName, String articleDescription, Category category,
-                              ArticleSupplier articleSupplier, byte[] articleImage, int activeArticle, String articleAbbreviation) {
-
-        if (articleRepository.existsArticleByArticleName(articleName)
-                && articleRepository.existsArticleByArticleDescription(articleDescription)
-                && articleRepository.existsArticleByCategory(category)) {
-            return false;
-        } else{
-            Article newArticle = new Article(articleName,articleDescription,category, articleImage, activeArticle, articleAbbreviation);
-            articleRepository.save(newArticle);
-            return true;
-        }
-    }
     public void saveArticle(Article article, byte[] articleImage){
         if(articleImage.length==0)
         {

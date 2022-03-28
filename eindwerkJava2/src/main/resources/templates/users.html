@@ -29,7 +29,6 @@
         </div>
         <table class="table table-striped table-hover dataTable" id="usersOverview">
             <thead>
-            <!--      <th scope="col">User Id</th>-->
             <th scope="col">Username</th>
             <th scope="col">Employee role</th>
             <th scope="col"></th>
@@ -38,7 +37,6 @@
             </thead>
             <tbody>
             <tr th:each="user: ${UsersList}">
-                <!--        <td th:text="${user.userId}"></td>-->
                 <td th:text="${user.userName}"></td>
                 <td>
                     <table>
