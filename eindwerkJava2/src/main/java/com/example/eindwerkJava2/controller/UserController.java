@@ -1,7 +1,5 @@
 package com.example.eindwerkJava2.controller;
 
-import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.EmployeeRole;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
