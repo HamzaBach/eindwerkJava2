@@ -11,7 +11,7 @@
 <div align="center" style="margin: 100px;">
 
     <h1>Order</h1>
-    <div th:object="${orderheader}">
+    <div>
 
         <form  method="GET" style="margin:20px">
             <div>
@@ -77,9 +77,12 @@
                         <td class="col-md-3">
                             <input th:field="*{quantity}" type="text" placeholder="Qty" class="form-control">
                         </td>
-
                         <td class="col-md-3">
-                            <input th:field="*{orderSupplierHeader}"   type="text"  class="form-control">
+                            <input  type="date" placeholder="Qty" class="form-control">
+                        </td>
+
+                        <td>
+                            <input hidden type="text" th:value="${orderheader.orderSupplierId}" th:name="orderSupplierHeader" th:id="orderSupplierHeader" th:errorclass="fieldError"/>
                         </td>
 
                         <td class="col-md-1">
