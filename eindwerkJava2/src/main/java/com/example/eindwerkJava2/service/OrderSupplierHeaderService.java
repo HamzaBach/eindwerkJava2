@@ -39,8 +39,6 @@ public class OrderSupplierHeaderService {
         Optional<OrderSupplierHeader> orderSupplierHeader1= orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
         String supplierName=orderSupplierHeader1.get().getSupplier().getSupplierName();
         orderSupplierHeader1.get().setOrderNumber(supplierName+"-"+orderSupplierHeader1.get().getOrderSupplierId());
-        //Logic to set dateOfOrder:
-        orderSupplierHeader1.get().setDateOrderClosed(orderSupplierHeader1.get().getDateOfOrder().plusDays(14));
         //Resave same object but this time with orderNumber and DateOrderClosed:
         orderSupplierHeaderRepository.save(orderSupplierHeader1.get());
     }

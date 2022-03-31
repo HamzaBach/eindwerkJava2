@@ -24,7 +24,7 @@ public class OrderSupplierHeaderController {
     SupplierService supplierService;
 
     @GetMapping("/orderSupplier")
-    public String viewCountries(Model model){
+    public String viewOrderSupplier(Model model){
         model.addAttribute("orderSupplierList", orderSupplierHeaderService.getOrderSupplierHeaders());
         return "orderSupplier";
     }
@@ -32,12 +32,10 @@ public class OrderSupplierHeaderController {
     @GetMapping("/viewOrderSupplier/{orderSupplierId}")
     public String showOrderSupplierForm(@PathVariable("orderSupplierId") Long orderSupplierId, Model model){
         OrderSupplierHeader orderSupplierHeader =  orderSupplierHeaderService.findById(orderSupplierId).get();
-        model.addAttribute("OrderSupplierHeader", orderSupplierHeader);
+        model.addAttribute("orderHeader", orderSupplierHeader);
         model.addAttribute("suppliersList", orderSupplierHeader.getSupplier());
         return "/forms/form_order_detail";
     }
-
-
 
     @GetMapping("/new/order")
     public String AddOrderSupplierForm(Model model){
@@ -45,6 +43,21 @@ public class OrderSupplierHeaderController {
         model.addAttribute("suppliersList", supplierService.getAllSuppliers());
         return "/forms/form_order_detail";
     }
+
+    @GetMapping("/new/orderSupplier")
+    public String chooseSupplierForm(Model model) {
+        model.addAttribute("OrderSupplierHeader", new OrderSupplierHeader());
+        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        return "new_order_supplier_header";
+    }
+
+    @GetMapping("save/orderHeader/{supplierId}")
+    public String createOrderHeadder(@PathVariable("supplierId") Long supplierId, Model model){
+        orderSupplierHeaderService.save(new OrderSupplierHeader(supplierService.findById(supplierId).get(),LocalDate.now()));
+        viewOrderSupplier(model);
+        return "orderSupplier";
+    }
+
     @PostMapping("/SaveOrderHeadSupplier")
     public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader, RedirectAttributes redirectAttributes)
     {

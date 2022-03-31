@@ -6,11 +6,9 @@ import com.example.eindwerkJava2.repositories.SupplierRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.draw.LineSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.io.*;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +22,17 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private ImageService imageService;
 
+    public SupplierServiceImpl(SupplierRepository supplierRepository) {
+        this.supplierRepository = supplierRepository;
+    }
+
     @Override
     public List<Supplier> getAllSuppliers(){
         return supplierRepository.findAllActiveUsers();
+    }
+
+    public Supplier getSupplierById(long id){
+        return supplierRepository.findById(id).get();
     }
 
     @Override
@@ -105,11 +111,7 @@ public class SupplierServiceImpl implements SupplierService {
                 table.addCell(supplier.getCity().getCityName());
                 table.addCell(supplier.getCountry().getCountryName());
             }
-
             document.add(table);
-
-
-
         } catch (DocumentException de) {
             System.err.println(de.getMessage());
         } catch (IOException ioe) {

@@ -15,6 +15,8 @@ public interface ArticleSupplierRepository extends JpaRepository<ArticleSupplier
     @Query(value = "select * from article_supplier where supplier in (select supplier_Id from supplier where active =1)", nativeQuery = true)
     List<ArticleSupplier> getAllArticleSuppliers();
 
+
+
     List<ArticleSupplier>findByArticle(Article article);
 
 }
