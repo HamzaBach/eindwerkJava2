@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.controller;
 
-import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
+/**
+ * The controller layer for connecting the front-end with the back-end for roles.
+ * @author Hamza Bachiri
+ * @version 1.0
+ */
 @Controller
 public class RoleController {
     @Autowired
