@@ -1,7 +1,9 @@
 package com.example.eindwerkJava2.controller;
 
+import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
 import com.example.eindwerkJava2.model.Supplier;
+import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
 import com.example.eindwerkJava2.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class OrderSupplierHeaderController {
@@ -22,6 +25,8 @@ public class OrderSupplierHeaderController {
     OrderSupplierHeaderService orderSupplierHeaderService;
     @Autowired
     SupplierService supplierService;
+    @Autowired
+    OrderSupplierDetailService orderSupplierDetailService;
 
     @GetMapping("/orderSupplier")
     public String viewOrderSupplier(Model model){
@@ -65,6 +70,13 @@ public class OrderSupplierHeaderController {
         Long orderSupplierId = orderSupplierHeaderService.getMaxId();
         redirectAttributes.addAttribute("orderSupplierId", orderSupplierId);
         return "redirect:/viewOrderSupplier/{orderSupplierId}";
+    }
+
+    @GetMapping("/generatePdf/{orderSupplierId}")
+    public String generatePdf(@PathVariable("orderSupplierId") Long orderHeaderId, Model model){
+        List<OrderSupplierDetail> orderList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeaderService.findById(orderHeaderId).get());
+        orderSupplierHeaderService.makePdf(orderHeaderId,orderList);
+        return "redirect:/orderSupplier";
     }
 
 }

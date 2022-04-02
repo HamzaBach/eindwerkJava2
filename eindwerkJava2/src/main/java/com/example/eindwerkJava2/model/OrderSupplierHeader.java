@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name="OrderSupplierHeader")
@@ -78,5 +79,18 @@ public class OrderSupplierHeader {
 
     public void setDateOrderClosed(LocalDate dateOrderClosed) {
         this.dateOrderClosed = dateOrderClosed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderSupplierHeader that = (OrderSupplierHeader) o;
+        return Objects.equals(orderSupplierId, that.orderSupplierId) && Objects.equals(supplier, that.supplier) && Objects.equals(dateOfOrder, that.dateOfOrder) && Objects.equals(orderNumber, that.orderNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderSupplierId, supplier, dateOfOrder, orderNumber);
     }
 }

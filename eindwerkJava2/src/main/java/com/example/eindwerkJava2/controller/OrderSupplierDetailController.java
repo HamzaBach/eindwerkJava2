@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
+
 @Controller
 public class OrderSupplierDetailController {
     @Autowired
@@ -39,6 +41,10 @@ public class OrderSupplierDetailController {
         model.addAttribute("orderSupplierDetail", new OrderSupplierDetail());
         model.addAttribute("orderheader", orderSupplierHeaderService.findById(orderHeaderId).get());
         model.addAttribute("articles", articleSupplierService.getArticlesFromSupplier(supplier));
+        model.addAttribute("orderDetails", orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader));
+        model.addAttribute("lineCounter", (orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader).size()+1));
+        model.addAttribute("today", LocalDate.now());
+
         return "/forms/form_order_detail";
     }
 
@@ -47,6 +53,16 @@ public class OrderSupplierDetailController {
         this.orderSupplierDetailService.save(orderSupplierDetail);
         return "redirect:/orderSupplier";
     }
+
+    @GetMapping("delete/orderdetail/{orderSupplierDetailId}")
+    public String deleteOrderLine(@PathVariable("orderSupplierDetailId") Long orderSupplierDetailId, Model model){
+        OrderSupplierDetail orderSupplierDetail = orderSupplierDetailService.getById(orderSupplierDetailId).get();
+        this.orderSupplierDetailService.deleteOrderLine(orderSupplierDetail);
+
+        return "redirect:/orderSupplier";
+    }
+
+
 
 
 }

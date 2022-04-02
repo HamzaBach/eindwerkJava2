@@ -57,7 +57,7 @@
                 <tr>
                     <th>Article</th>
                     <th>Quantity</th>
-                    <th>Date of Delivery</th>
+                    <th>Expected Date of Delivery</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -77,68 +77,62 @@
                         <td class="col-md-3">
                             <input th:field="*{quantity}" type="text" placeholder="Qty" class="form-control">
                         </td>
-                        <td class="col-md-3">
-                            <input  type="date" placeholder="Qty" class="form-control">
-                        </td>
+
+                    <td class="col-md-3">
+                        <input th:field="*{expecteddDayOfDelivery}" type="date" placeholder="Qty" class="form-control">
+                    </td>
 
                         <td>
-                            <input hidden type="text" th:value="${orderheader.orderSupplierId}" th:name="orderSupplierHeader" th:id="orderSupplierHeader" th:errorclass="fieldError"/>
+                            <input hidden type="text" th:value="${lineCounter}" th:name="orderlineNumber" th:id="orderlineNumber" th:errorclass="fieldError" />
                         </td>
+                    <td>
+                        <input hidden type="text" th:value="${orderheader.orderSupplierId}" th:name="orderSupplierHeader" th:id="orderSupplierHeader" th:errorclass="fieldError"/>
+                    </td>
 
                         <td class="col-md-1">
                             <button type="submit" class="btn btn-success btn-sm">Save</button>
                         </td>
 
-
                 </tr>
                 </tbody>
             </table>
-
-
-
-
         </form>
 
-
+<!--view orderlines-->
         <table class="table table-striped table-hover" style="margin:20px">
             <thead>
             <tr>
                 <th class="col-md-1">Line</th>
                 <th class="col-md-2">Article</th>
                 <th class="col-md-3">Quantity</th>
-                <th class="col-md-4">Date of Delivery</th>
+                <th class="col-md-4">Expected Date of Delivery</th>
                 <th></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col-md-1">1</td>
-                <td class="col-md-2">iPhone12</td>
-                <td class="col-md-3">5</td>
-                <td class="col-md-4">11/3/2022</td>
+            <tr th:each="orderdetail : ${orderDetails}">
+                <td class="col-md-1" th:text="${orderdetail.orderlineNumber}">1</td>
+                <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
+                <td class="col-md-3" th:text="${orderdetail.quantity}"></td>
+                <td class="col-md-3" th:text="${orderdetail.expecteddDayOfDelivery}"></td>
                 <td class="col-md-1">
                     <button type="button" class="btn btn-success btn-sm">Edit</button>
                 </td>
                 <td class="col-md-1">
-                    <button type="button" class="btn-close"></button>
-            </tr>
-            <tr>
-                <td class="col-md-1">1</td>
-                <td class="col-md-2">iPhone12</td>
-                <td class="col-md-3">5</td>
-                <td class="col-md-4">11/3/2022</td>
-                <td class="col-md-1">
-                    <button type="button" class="btn btn-success btn-sm">Edit</button>
+                    <a th:href="@{'/delete/orderdetail/' + ${orderdetail.orderSupplierDetailId}}"  class="btn-close"></a>
                 </td>
-                <td class="col-md-1">
-                    <button type="button" class="btn-close"></button>
             </tr>
+
             </tbody>
         </table>
         <div align="right">
             <button class="btn btn-primary btn-lg">CLOSE ORDER</button>
         </div>
+
+        <form>
+
+        </form>
     </div>
 </div>
 

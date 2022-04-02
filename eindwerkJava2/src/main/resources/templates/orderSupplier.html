@@ -34,6 +34,7 @@
             <td th:text="${order.orderNumber}"></td>
             <td th:text="${order.dateOrderClosed} ? 'CLOSED':'OPEN'" />
             <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">View</a></td>
+            <td><a th:href="@{'/generatePdf/'+${order.orderSupplierId}}">PDF</a></td>
         </tr>
         </tbody>
     </table>
