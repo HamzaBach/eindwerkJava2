@@ -59,7 +59,7 @@ public class OrderSupplierHeaderService {
             // we create a writer that listens to the document
             // and directs a PDF-stream to a file
             PdfWriter.getInstance(document,
-                    new FileOutputStream("OrderSupplier.pdf"));
+                    new FileOutputStream("order_"+header.getOrderNumber()+".pdf"));
             // step 3: we open the document
             document.open();
             // step 4: we add a paragraph to the document
