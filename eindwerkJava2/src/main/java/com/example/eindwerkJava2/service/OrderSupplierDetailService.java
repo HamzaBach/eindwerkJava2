@@ -42,7 +42,6 @@ public class OrderSupplierDetailService {
                 .collect(Collectors.toList());
 
 
-
         return resultList;
 
     }
@@ -53,13 +52,19 @@ public class OrderSupplierDetailService {
         Map<Article, Integer> quantityPerArticle = detailList.stream()
                 .collect(groupingBy(OrderSupplierDetail::getArticle, summingInt(OrderSupplierDetail::getQuantity)));
 
+        List<OrderSupplierDetail> checkDate = getOrderDetailsFromHeader(orderSupplierHeader);
+        Map<Article, Optional<OrderSupplierDetail>> maxDate = checkDate.stream()
+                .collect(groupingBy(OrderSupplierDetail::getArticle,
+                        maxBy(Comparator.comparing(OrderSupplierDetail::getExpectedDayOfDelivery))));
+
+
         int count = 1;
         List<OrderSupplierDetail> resultList = new ArrayList<>();
         for (Map.Entry<Article, Integer> entry : quantityPerArticle.entrySet()) {
             resultList.add(new OrderSupplierDetail(
                     entry.getKey(),
                     entry.getValue(),
-                    LocalDate.now().plusDays(10),
+                    maxDate.get(entry.getKey()).get().getExpectedDayOfDelivery(),
                     String.valueOf(count++)));
         }
         return resultList;

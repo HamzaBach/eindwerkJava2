@@ -33,9 +33,9 @@
             <td th:text="${order.dateOfOrder}"></td>
             <td th:text="${order.orderNumber}"></td>
             <td th:text="${order.dateOrderClosed} ? 'CLOSED - ' + ${order.dateOrderClosed}:'OPEN'" />
-            <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i>View</a></td>
-            <td th:unless="${order.dateOrderClosed}"><a th:href="@{'/closeOrder/'+${order.orderSupplierId}}" class="btn btn-secondary btn-sm">Close Order</a></td>
-            <td th:if="${order.dateOrderClosed}"><a th:href="@{'/generatePdf/'+${order.orderSupplierId}}" class="btn btn-success btn-sm"><i class="bi bi-file-earmark-pdf"></i>PDF</a></td>
+            <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> View</a></td>
+            <td th:unless="${order.dateOrderClosed}"><a th:href="@{'/closeOrder/'+${order.orderSupplierId}}" class="btn btn-secondary btn-sm"><i class="bi bi-x-circle"></i> Close Order</a></td>
+            <td th:if="${order.dateOrderClosed}"><a th:href="@{'/generatePdf/'+${order.orderSupplierId}}" class="btn btn-success btn-sm"><i class="bi bi-file-earmark-pdf"></i> PDF</a></td>
         </tr>
         </tbody>
     </table>
