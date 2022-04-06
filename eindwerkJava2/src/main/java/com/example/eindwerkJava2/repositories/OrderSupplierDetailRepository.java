@@ -10,15 +10,7 @@ import java.util.List;
 
 @Repository
 public interface OrderSupplierDetailRepository extends JpaRepository<OrderSupplierDetail, Long> {
-    @Query(value = "SELECT article_article_id, sum(quantity) FROM order_supplier_detail group by article_article_id", nativeQuery = true)
-    List<OrderSupplierDetail> getSumOfDetails();
 
-    @Query(value="select article_article_id, sum(quantity), MAX(expectedd_day_of_delivery)" +
-            " from order_supplier_detail " +
-                " where order_supplier_header_order_supplier_id IN(" +
-                    " select order_supplier_id from order_supplier_header " +
-                    " where order_supplier_id = 1)" +
-            " group by article_article_id;",nativeQuery = true)
-    List<OrderSupplierDetail> getCombinedOrderLines();
+
 
 }
