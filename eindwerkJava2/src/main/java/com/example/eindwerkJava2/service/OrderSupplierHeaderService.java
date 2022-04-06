@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,14 +39,17 @@ public class OrderSupplierHeaderService {
 
 
     public void save(OrderSupplierHeader orderSupplierHeader) {
-        //Save it first so that id is created
         orderSupplierHeaderRepository.save(orderSupplierHeader);
-        //Logic to retrieve the just saved object and construct an order number based on the id:
         Optional<OrderSupplierHeader> orderSupplierHeader1= orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
         String supplierName=orderSupplierHeader1.get().getSupplier().getSupplierName();
         orderSupplierHeader1.get().setOrderNumber(supplierName+"-"+orderSupplierHeader1.get().getOrderSupplierId());
-        //Resave same object but this time with orderNumber and DateOrderClosed:
         orderSupplierHeaderRepository.save(orderSupplierHeader1.get());
+    }
+
+    public void closeOrder(Long orderHeaderId){
+        OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(orderHeaderId).get();
+        orderSupplierHeader.setDateOrderClosed(LocalDate.now());
+        save(orderSupplierHeader);
     }
 
 

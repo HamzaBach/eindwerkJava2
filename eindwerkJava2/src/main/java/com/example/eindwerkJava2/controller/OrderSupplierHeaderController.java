@@ -78,5 +78,10 @@ public class OrderSupplierHeaderController {
         orderSupplierHeaderService.makePdf(orderHeaderId,orderList);
         return "redirect:/orderSupplier";
     }
+    @GetMapping("/closeOrder/{orderSupplierId}")
+    public String closeOrder(@PathVariable("orderSupplierId") Long orderHeaderId, Model model){
+        orderSupplierHeaderService.closeOrder(orderHeaderId);
+        return "redirect:/orderSupplier";
+    }
 
 }

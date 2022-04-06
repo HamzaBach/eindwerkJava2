@@ -36,6 +36,8 @@
 
             <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i>View</a></td>
             <td><a th:href="@{'/generatePdf/'+${order.orderSupplierId}}" class="btn btn-success btn-sm"><i class="bi bi-file-earmark-pdf"></i>PDF</a></td>
+            <td><a th:href="@{'/closeOrder/'+${order.orderSupplierId}}" class="btn btn-secondary btn-sm">Close Order</a></td>
+
         </tr>
         </tbody>
     </table>

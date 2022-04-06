@@ -51,17 +51,6 @@ public class OrderSupplierDetailService {
         orderSupplierDetailRepository.delete(orderSupplierDetail);
     }
 
-    public List<OrderSupplierDetail> getOrderDetailsFromHeaderCombined(OrderSupplierHeader orderSupplierHeader) {
-        List<OrderSupplierDetail> orderSupplierDetailList = getAllOrderDetails();
-        List<OrderSupplierDetail> resultList = new ArrayList<>();
-
-        for (OrderSupplierDetail orderSupplierDetail : orderSupplierDetailList) {
-            if (orderSupplierDetail.getOrderSupplierHeader().equals(orderSupplierHeader)) {
-                resultList.add(orderSupplierDetail);
-            }
-        }
-        return resultList;
-    }
 
 
 
