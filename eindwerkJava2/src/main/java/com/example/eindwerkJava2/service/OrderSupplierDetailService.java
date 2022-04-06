@@ -9,9 +9,7 @@ import org.apache.tools.ant.types.resources.selectors.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderSupplierDetailService {
@@ -36,8 +34,8 @@ public class OrderSupplierDetailService {
         List<OrderSupplierDetail> orderSupplierDetailList = getAllOrderDetails();
         List<OrderSupplierDetail> resultList = new ArrayList<>();
 
-        for (OrderSupplierDetail orderSupplierDetail:orderSupplierDetailList){
-            if(orderSupplierDetail.getOrderSupplierHeader().equals(orderSupplierHeader)){
+        for (OrderSupplierDetail orderSupplierDetail : orderSupplierDetailList) {
+            if (orderSupplierDetail.getOrderSupplierHeader().equals(orderSupplierHeader)) {
                 resultList.add(orderSupplierDetail);
             }
         }
@@ -52,6 +50,19 @@ public class OrderSupplierDetailService {
     public void deleteOrderLine(OrderSupplierDetail orderSupplierDetail) {
         orderSupplierDetailRepository.delete(orderSupplierDetail);
     }
+
+    public List<OrderSupplierDetail> getOrderDetailsFromHeaderCombined(OrderSupplierHeader orderSupplierHeader) {
+        List<OrderSupplierDetail> orderSupplierDetailList = getAllOrderDetails();
+        List<OrderSupplierDetail> resultList = new ArrayList<>();
+
+        for (OrderSupplierDetail orderSupplierDetail : orderSupplierDetailList) {
+            if (orderSupplierDetail.getOrderSupplierHeader().equals(orderSupplierHeader)) {
+                resultList.add(orderSupplierDetail);
+            }
+        }
+        return resultList;
+    }
+
 
 
 
