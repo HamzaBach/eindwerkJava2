@@ -74,7 +74,7 @@ public class OrderSupplierHeaderController {
 
     @GetMapping("/generatePdf/{orderSupplierId}")
     public String generatePdf(@PathVariable("orderSupplierId") Long orderHeaderId, Model model){
-        List<OrderSupplierDetail> orderList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeaderService.findById(orderHeaderId).get());
+        List<OrderSupplierDetail> orderList = orderSupplierDetailService.getCombinedDetailLineList(orderSupplierHeaderService.findById(orderHeaderId).get());
         orderSupplierHeaderService.makePdf(orderHeaderId,orderList);
         return "redirect:/orderSupplier";
     }

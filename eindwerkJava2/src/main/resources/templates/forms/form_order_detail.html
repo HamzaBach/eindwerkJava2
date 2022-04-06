@@ -5,11 +5,25 @@
     <title>Orders</title>
     <!-- Bootstrap CSS & icons-->
     <div th:include="fragments/header::bootstrapCssAndIcons"/>
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#articlesOverview").dataTable({
+           "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 4,5 ] }
+           ]
+        });
+    });
+    </script>
 </head>
 <body>
 <div th:include="fragments/header::navbar"/>
-<div align="center" style="margin: 100px;">
 
+<div align="center" style="margin: 100px;">
+    <div align="left">
+        <a th:href = "@{/orderSupplier}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
     <h1>Order</h1>
     <div>
 
@@ -50,6 +64,10 @@
         </form>
 
         <!--        orderdetails-->
+
+        <div th:unless="${orderheader.dateOrderClosed}" aria-hidden="true">
+            <div >
+
         <form action="#" th:action="@{/saveOrderDetail}" th:object="${orderSupplierDetail}" , method="POST">
 
             <table class="table table-striped table-hover" style="margin:20px">
@@ -79,7 +97,7 @@
                         </td>
 
                     <td class="col-md-3">
-                        <input th:field="*{expecteddDayOfDelivery}" type="date" placeholder="Qty" class="form-control">
+                        <input th:field="*{expectedDayOfDelivery}" type="date" placeholder="Qty" class="form-control">
                     </td>
 
                         <td>
@@ -97,9 +115,13 @@
                 </tbody>
             </table>
         </form>
+            </div>
+
+        </div>
 
 <!--view orderlines-->
-        <table class="table table-striped table-hover" style="margin:20px">
+
+        <table class="table table-striped table-hover dataTable" style="margin:20px" id="articlesOverview">
             <thead>
             <tr>
                 <th class="col-md-1">Line</th>
@@ -115,9 +137,8 @@
                 <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
                 <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
                 <td class="col-md-3" th:text="${orderdetail.quantity}"></td>
-                <td class="col-md-3" th:text="${orderdetail.expecteddDayOfDelivery}"></td>
+                <td class="col-md-3" th:text="${orderdetail.expectedDayOfDelivery}"></td>
                 <td class="col-md-1">
-                    <button type="button" class="btn btn-success btn-sm">Edit</button>
                 </td>
                 <td class="col-md-1">
                     <a th:href="@{'/delete/orderdetail/' + ${orderdetail.orderSupplierDetailId}}"  class="btn-close"></a>

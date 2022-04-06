@@ -43,22 +43,20 @@ public class OrderSupplierDetailController {
         model.addAttribute("articles", articleSupplierService.getArticlesFromSupplier(supplier));
         model.addAttribute("orderDetails", orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader));
         model.addAttribute("lineCounter", (orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader).size()+1));
-        model.addAttribute("today", LocalDate.now());
-
         return "/forms/form_order_detail";
     }
 
     @PostMapping("/saveOrderDetail")
     public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderSupplierDetail orderSupplierDetail){
         this.orderSupplierDetailService.save(orderSupplierDetail);
-        return "redirect:/orderSupplier";
+        return "redirect:/orderdetail/"+orderSupplierDetail.getOrderSupplierHeader().getOrderSupplierId();
     }
 
     @GetMapping("delete/orderdetail/{orderSupplierDetailId}")
     public String deleteOrderLine(@PathVariable("orderSupplierDetailId") Long orderSupplierDetailId, Model model){
         OrderSupplierDetail orderSupplierDetail = orderSupplierDetailService.getById(orderSupplierDetailId).get();
         this.orderSupplierDetailService.deleteOrderLine(orderSupplierDetail);
-        return "redirect:/orderSupplier";
+        return "redirect:/orderdetail/"+1;
     }
 
 

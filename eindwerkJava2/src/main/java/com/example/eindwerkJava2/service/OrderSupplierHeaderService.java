@@ -3,8 +3,8 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.OrderSupplierHeaderRepository;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfWriter;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +62,7 @@ public class OrderSupplierHeaderService {
             // step 2:
             // we create a writer that listens to the document
             // and directs a PDF-stream to a file
-            PdfWriter.getInstance(document,
+            PdfWriter writer = PdfWriter.getInstance(document,
                     new FileOutputStream("order_"+header.getOrderNumber()+".pdf"));
             // step 3: we open the document
             document.open();
@@ -76,6 +76,8 @@ public class OrderSupplierHeaderService {
             document.add(new Paragraph("Thor Park 8040"));
             document.add(new Paragraph("3600 Genk"));
             document.add(new Paragraph("BELGIË"));
+
+            document.add(new Paragraph("\n"+"\n"+"Ordernumber: "+header.getOrderNumber()));
 
 
 //            byte[] byteArrayImage = imageService.getImages().get(0).getImageLob();
@@ -112,9 +114,12 @@ public class OrderSupplierHeaderService {
                 table.addCell(orderdetail.getOrderlineNumber());
                 table.addCell(orderdetail.getArticle().getArticleName());
                 table.addCell(String.valueOf(orderdetail.getQuantity()));
-                table.addCell(orderdetail.getExpecteddDayOfDelivery().toString());
+                table.addCell(orderdetail.getExpectedDayOfDelivery().toString());
             }
+
             document.add(table);
+
+
         } catch (DocumentException de) {
             System.err.println(de.getMessage());
         } catch (IOException ioe) {

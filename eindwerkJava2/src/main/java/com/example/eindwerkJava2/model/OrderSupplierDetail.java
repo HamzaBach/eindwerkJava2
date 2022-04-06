@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -27,17 +26,27 @@ public class OrderSupplierDetail {
     private int quantity;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate expecteddDayOfDelivery;
+    private LocalDate expectedDayOfDelivery;
 
     @Column(name="orderline_number")
     private String orderlineNumber;
 
-    public LocalDate getExpecteddDayOfDelivery() {
-        return expecteddDayOfDelivery;
+    public OrderSupplierDetail() {
     }
 
-    public void setExpecteddDayOfDelivery(LocalDate expecteddDayOfDelivery) {
-        this.expecteddDayOfDelivery = expecteddDayOfDelivery;
+    public OrderSupplierDetail(Article article, int quantity, LocalDate expectedDayOfDelivery, String orderlineNumber) {
+        this.article = article;
+        this.quantity = quantity;
+        this.expectedDayOfDelivery = expectedDayOfDelivery;
+        this.orderlineNumber = orderlineNumber;
+    }
+
+    public LocalDate getExpectedDayOfDelivery() {
+        return expectedDayOfDelivery;
+    }
+
+    public void setExpectedDayOfDelivery(LocalDate expectedDayOfDelivery) {
+        this.expectedDayOfDelivery = expectedDayOfDelivery;
     }
 
     public Long getOrderSupplierDetailId() {
@@ -82,4 +91,6 @@ public class OrderSupplierDetail {
     public void setOrderlineNumber(String orderlineNumber) {
         this.orderlineNumber = orderlineNumber;
     }
+
+
 }
