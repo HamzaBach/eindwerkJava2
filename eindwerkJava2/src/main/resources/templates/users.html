@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,12 +24,11 @@
 
 <section>
     <div align="center" style="margin: 100px">
-        <div align="center" style="mb-3">
+        <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
             <a th:href="@{/new/user}" class="btn btn-primary btn-lg" style="margin:20px">New User</a>
         </div>
         <table class="table table-striped table-hover dataTable" id="usersOverview">
             <thead>
-            <!--      <th scope="col">User Id</th>-->
             <th scope="col">Username</th>
             <th scope="col">Employee role</th>
             <th scope="col"></th>
@@ -37,7 +37,6 @@
             </thead>
             <tbody>
             <tr th:each="user: ${UsersList}">
-                <!--        <td th:text="${user.userId}"></td>-->
                 <td th:text="${user.userName}"></td>
                 <td>
                     <table>
@@ -47,12 +46,12 @@
                     </table>
                 </td>
                 <td>
-                    <a th:href="@{'/edit/user/' + ${user.userId}}" class="btn btn-outline-primary">
+                    <a th:href="@{'/edit/user/' + ${user.userId}}" class="btn btn-outline-primary" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{'/delete/user/' + ${user.userId}}" class="btn btn-outline-danger">
+                    <a th:href="@{'/delete/user/' + ${user.userId}}" class="btn btn-outline-danger" sec:authorize="hasAuthority('ADMIN')">
                         <i class="bi bi-trash"></i> Delete
                     </a>
                 </td>
@@ -61,37 +60,6 @@
         </table>
     </div>
 </section>
-
-
-<!-- Modal -->
-<div class="modal fade" id="newUserModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New user</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="newUserName" class="form-label">User name</label>
-                        <input type="text" class="form-control" id="newUserName">
-                        <div class="form-text">Make sure to provide an unique username.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newUserPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="newUserPassword">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div th:include="fragments/header::Jquery"/>
 </body>

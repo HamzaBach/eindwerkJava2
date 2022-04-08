@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Suppliers</title>
@@ -44,12 +45,14 @@
                     <td th:text="${supplier.city.cityName}"></td>
                     <td th:text="${supplier.country.countryName}"></td>
                     <td>
-                        <a th:href="@{'/edit/supplier/' + ${supplier.supplierId}}" class="btn btn-outline-primary">
+                        <a th:href="@{'/edit/supplier/' + ${supplier.supplierId}}" class="btn btn-outline-primary"
+                           sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{'/delete/supplier/' + ${supplier.supplierId}}" class="btn btn-outline-danger">
+                        <a th:href="@{'/delete/supplier/' + ${supplier.supplierId}}" class="btn btn-outline-danger"
+                           sec:authorize="hasAuthority('ADMIN')">
                             <i class="bi bi-trash"></i> Delete
                         </a>
                     </td>
