@@ -26,6 +26,7 @@ public class Article {
             (strategy = GenerationType.IDENTITY)
     private Long articleId;
     private String articleName;
+    @Lob //Added for solving issues for too long strings.
     private String articleDescription;
     @ManyToOne
     @JoinColumn(name = "categoryId")

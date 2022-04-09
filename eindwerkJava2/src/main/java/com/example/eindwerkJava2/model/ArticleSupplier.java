@@ -35,6 +35,14 @@ public class ArticleSupplier {
 
     public ArticleSupplier() {
     }
+    public ArticleSupplier(Article article, Supplier supplier, String partnr,
+                           double price, int activeArticleSupplier){
+        this.article=article;
+        this.supplier=supplier;
+        this.partnr=partnr;
+        this.price=price;
+        this.activeArticleSupplier=activeArticleSupplier;
+    };
 
     public long getArticleSupplierId() {
         return articleSupplierId;
