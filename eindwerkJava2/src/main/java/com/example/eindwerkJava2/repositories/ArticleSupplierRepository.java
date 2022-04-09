@@ -18,5 +18,6 @@ public interface ArticleSupplierRepository extends JpaRepository<ArticleSupplier
 
 
     List<ArticleSupplier>findByArticle(Article article);
+    boolean existsArticleSupplierByArticle(Article article);
 
 }
