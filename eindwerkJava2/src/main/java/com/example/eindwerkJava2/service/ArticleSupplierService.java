@@ -7,6 +7,7 @@ import com.example.eindwerkJava2.repositories.ArticleSupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -44,5 +45,16 @@ public class ArticleSupplierService {
             }
         }
         return suppliersForArticle;
+    }
+
+    public List<Article> getArticlesFromSupplier(Supplier supplier) {
+        List<Article> articleList = new ArrayList<>();
+        List<ArticleSupplier> articleSuppliers = getAllArticleSuppliers();
+        for (ArticleSupplier articleSupplier : articleSuppliers) {
+            if (articleSupplier.getSupplier().equals(supplier)){
+                articleList.add(articleSupplier.getArticle());
+            }
+        }
+        return articleList;
     }
 }

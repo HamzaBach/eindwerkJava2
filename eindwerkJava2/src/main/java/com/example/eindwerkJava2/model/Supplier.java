@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="supplier")
@@ -88,6 +89,17 @@ public class Supplier {
         this.activeSupplier = activeSupplier;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Supplier supplier = (Supplier) o;
+        return Objects.equals(supplierId, supplier.supplierId);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(supplierId);
+    }
 }
 

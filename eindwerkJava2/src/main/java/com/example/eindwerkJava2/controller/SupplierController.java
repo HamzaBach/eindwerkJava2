@@ -29,7 +29,6 @@ public class SupplierController {
     @GetMapping("/new/supplier")
     public String showNewSupplierForm(Model model){
         Supplier supplier = new Supplier();
-
         model.addAttribute("supplier", new Supplier());
         model.addAttribute("citiesList", citiesService.getAllCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());

@@ -1,6 +1,9 @@
 package com.example.eindwerkJava2.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 
 
 @Entity
@@ -18,11 +21,33 @@ public class OrderSupplierDetail {
     @JoinColumn(name = "article_article_id")
     private Article article;
 
-    // Naming nog na checken
 
-    @Column(name="quanity")
+    @Column(name="quantity")
     private int quantity;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expectedDayOfDelivery;
+
+    @Column(name="orderline_number")
+    private String orderlineNumber;
+
+    public OrderSupplierDetail() {
+    }
+
+    public OrderSupplierDetail(Article article, int quantity, LocalDate expectedDayOfDelivery, String orderlineNumber) {
+        this.article = article;
+        this.quantity = quantity;
+        this.expectedDayOfDelivery = expectedDayOfDelivery;
+        this.orderlineNumber = orderlineNumber;
+    }
+
+    public LocalDate getExpectedDayOfDelivery() {
+        return expectedDayOfDelivery;
+    }
+
+    public void setExpectedDayOfDelivery(LocalDate expectedDayOfDelivery) {
+        this.expectedDayOfDelivery = expectedDayOfDelivery;
+    }
 
     public Long getOrderSupplierDetailId() {
         return orderSupplierDetailId;
@@ -39,4 +64,33 @@ public class OrderSupplierDetail {
     public int getQuantity() {
         return quantity;
     }
+
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+
+
+    public void setOrderSupplierHeader(OrderSupplierHeader orderSupplierHeader) {
+        this.orderSupplierHeader = orderSupplierHeader;
+    }
+
+    public void setOrderSupplierDetailId(Long orderSupplierDetailId) {
+        this.orderSupplierDetailId = orderSupplierDetailId;
+    }
+
+    public String getOrderlineNumber() {
+        return orderlineNumber;
+    }
+
+    public void setOrderlineNumber(String orderlineNumber) {
+        this.orderlineNumber = orderlineNumber;
+    }
+
+
 }
