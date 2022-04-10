@@ -69,7 +69,7 @@
                     </div>
 
                 </div>
-                <div class="mb-3 form-group text-start">
+                <div class="mb-3 form-group text-start" th:unless="${article.articleId == null}">
                     <label for="articleBarcode" class="form-label">Barcode</label>
                     <div class="row">
                         <div class="col-xl-11">
@@ -83,11 +83,9 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
 
-
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionExample" th:unless="${article.articleId == null}">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
