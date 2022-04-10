@@ -156,7 +156,7 @@ public class DummyDataConfig {
             dummyArticleSuppliers.add(nokiaProduct1);
             dummyArticleSuppliers.add(motorolaProduct1);
             for(ArticleSupplier articleSupplier:dummyArticleSuppliers){
-                if(!articleSupplierRepository.existsArticleSupplierByArticle(articleSupplier.getArticle())){
+                if((articleSupplierRepository.count()<5)){
                     articleSupplierRepository.save(articleSupplier);
                 }
             }
