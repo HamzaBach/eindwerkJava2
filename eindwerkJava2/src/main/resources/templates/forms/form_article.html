@@ -12,6 +12,7 @@
 
 
 
+
     </script>
 
     <title>Article</title>
@@ -183,17 +184,20 @@
         <div class="row">
             <table class="table table-striped table-hover dataTable" id="articleSuppliersOverview">
                 <thead>
-<!--                <th scope="col" class="sorting">Article Supplier Id</th>-->
+                <!--                <th scope="col" class="sorting">Article Supplier Id</th>-->
                 <th scope="col" class="sorting">Supplier</th>
                 <th scope="col" class="sorting">Partnr.</th>
-                <th scope="col" class="sorting">Price</th>
+                <th scope="col" class="sorting">Purchase price</th>
+                <th scope="col" class="sorting">Sales price</th>
+
                 </thead>
                 <tbody>
                 <tr th:each="articleSupplier: ${articleSuppliersList}">
-<!--                    <td th:text="${articleSupplier.articleSupplierId}" class="sorting_1"></td>-->
+                    <!--                    <td th:text="${articleSupplier.articleSupplierId}" class="sorting_1"></td>-->
                     <td th:text="${articleSupplier.supplier.supplierName}" class="sorting_1"></td>
                     <td th:text="${articleSupplier.partnr}" class="sorting_1"></td>
-                    <td th:text="€+${articleSupplier.price}" class="sorting_1"></td>
+                    <td th:text="€+${articleSupplier.purchasePrice}" class="sorting_1"></td>
+                    <td th:text="€+${articleSupplier.salesPrice}" class="sorting_1"></td>
                 </tr>
                 </tbody>
             </table>
