@@ -22,8 +22,11 @@ public class ArticleSupplier {
     @Column(name = "partnr")
     private String partnr;
 
-    @Column(name = "price")
-    private double price;
+    @Column(name = "sales_price")
+    private double salesPrice;
+
+    @Column(name = "purchase_price")
+    private double purchasePrice;
 
     @Column(name = "active")
     private int activeArticleSupplier =1;
@@ -36,13 +39,14 @@ public class ArticleSupplier {
     public ArticleSupplier() {
     }
     public ArticleSupplier(Article article, Supplier supplier, String partnr,
-                           double price, int activeArticleSupplier){
+                           double salesPrice, double purchasePrice, int activeArticleSupplier){
         this.article=article;
         this.supplier=supplier;
         this.partnr=partnr;
-        this.price=price;
+        this.salesPrice =salesPrice;
+        this.purchasePrice=purchasePrice;
         this.activeArticleSupplier=activeArticleSupplier;
-    };
+    }
 
     public long getArticleSupplierId() {
         return articleSupplierId;
@@ -76,12 +80,28 @@ public class ArticleSupplier {
         this.partnr = partnr;
     }
 
-    public double getPrice() {
-        return price;
+    public double getSalesPrice() {
+        return salesPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setSalesPrice(double salesPrice) {
+        this.salesPrice = salesPrice;
+    }
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public int getETA() {
+        return ETA;
+    }
+
+    public void setETA(int ETA) {
+        this.ETA = ETA;
     }
 
     public int getActiveArticleSupplier() {
