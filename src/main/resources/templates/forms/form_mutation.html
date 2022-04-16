@@ -64,7 +64,11 @@
                 </button>
             </div>
 
-<!--        <button type="submit" class="btn btn-info">Save</button>-->
+            <div>
+                <span th:if="${errorMessage}"  th:text="${errorMessage}">Error</span>
+            </div>
+
+            <!--        <button type="submit" class="btn btn-info">Save</button>-->
 
         </div>
     </form>
