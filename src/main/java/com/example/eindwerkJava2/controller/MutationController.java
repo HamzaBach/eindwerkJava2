@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.controller;
 
+import com.example.eindwerkJava2.Exceptions.NegativeInventoryException;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.model.Mutation;
@@ -54,10 +55,20 @@ public class MutationController {
     }
 
     @PostMapping("/saveMutation")
-    public String saveMutation(@ModelAttribute("mutation") Mutation mutation){
-        this.mutationService.addMutation(mutation);
+    public String saveMutation(@ModelAttribute("mutation") Mutation mutation, Model model) throws NegativeInventoryException {
+        try {
+            this.mutationService.addMutation(mutation);
+        } catch (NegativeInventoryException ex){
+            model.addAttribute("mutation",new Mutation());
+            model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
+            model.addAttribute("userList",userService.getActiveUsers());
+            model.addAttribute("articleList", articleService.getActiveArticles());
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "/forms/form_mutation";
+        }
         return "redirect:/mutation";
     }
+
 
     @GetMapping("delete/mutation/{mutationId}")
     public String deleteArticle(@PathVariable("mutationId") Long mutationId){
