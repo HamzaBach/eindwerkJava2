@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles supplier</title>
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#articlesSupplierOverview").dataTable({
+           "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 4,5 ] }
+           ]
+        });
+    });</script>
+</head>
+<body>
+
+<div th:include="fragments/header::navbar"/>
+
+
+<div align="center" style="margin: 100px">
+    <h1>Article Supplier</h1>
+
+    <a th:href="@{/new/articleSupplier}" class="btn btn-primary btn-lg" style="margin:20px"
+       sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">New Article Supplier</a>
+
+
+    <table class="table table-striped table-hover" style="margin:20px" id="articlesSupplierOverview">
+        <thead>
+        <tr>
+            <th>Article</th>
+            <th>Supplier</th>
+            <th>Purchase Price</th>
+            <th>Sales Price</th>
+            <th>Partnr</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="artSupp : ${articleSupplierList}">
+
+            <td th:text="${artSupp.article.articleName}"></td>
+            <td th:text="${artSupp.supplier.supplierName}"></td>
+            <td th:text="${artSupp.purchasePrice}"></td>
+            <td th:text="${artSupp.salesPrice}"></td>
+            <td th:text="${artSupp.partnr}"></td>
+            <td>
+                <a th:href="@{'/edit/articleSupplier/'+${artSupp.articleSupplierId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+            </td>
+            <td><a th:href="@{'/delete/articleSupplier/' + ${artSupp.articleSupplierId}}" class="btn btn-outline-danger"
+                   sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>

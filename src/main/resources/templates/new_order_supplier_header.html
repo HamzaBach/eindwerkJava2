@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Suppliers</title>
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#suppliersOverview").dataTable({
+           "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 4,5 ] }
+           ]
+        });
+    });</script>
+</head>
+<body>
+
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+<div align="center" style="margin: 100px">
+    <h1>New Order Supplier</h1>
+    <a th:href = "@{/new/supplier}" class="btn btn-primary btn-lg" style="margin:20px">New Supplier</a>
+
+    <table class="table table-striped table-hover" style="margin:20px" id="suppliersOverview">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Adress</th>
+            <th>City</th>
+            <th>Country</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="supplier : ${suppliersList}">
+            <td th:text="${supplier.supplierName}"></td>
+            <td th:text="${supplier.adress}"></td>
+            <td th:text="${supplier.city.cityName}"></td>
+            <td th:text="${supplier.country.countryName}"></td>
+            <td>
+                <a th:href="@{'/save/orderHeader/'+${supplier.supplierId}}" class="btn btn-outline-primary">Choose</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>

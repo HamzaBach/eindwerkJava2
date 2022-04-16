@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">$(document).ready(function() {	$('#stockOverview').DataTable();} );
+    </script>
+
+    <title>Inventory</title>
+
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px">
+    <h1>Inventory</h1>
+    <div align="center" style="margin-bottom: -3px;" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+        <a th:href="@{/new/stock}" class="btn btn-primary btn-lg" style="margin:20px">New Inventory</a>
+
+     <h1>Inventory</h1>
+
+  
+
+<!--    <div align="center" style="margin: 100px">-->
+
+    <table class="table table-striped table-hover dataTable" id="stockOverview">
+        <thead>
+        <!--        <th scope ="col">Id</th>-->
+        <th scope="col">Article</th>
+        <th scope="col">Location</th>
+        <th scope="col">Amount</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        </thead>
+        <tbody>
+        <tr th:each="Stock:${stockList}">
+            <!--            <td th:text="${Stock.stockId}"></td>-->
+            <td th:text="${Stock.article.articleName}"></td>
+            <td th:text="${Stock.location.locationName}"></td>
+            <td th:text="${Stock.amount}"></td>
+            <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <i class="bi bi-pencil-square"></i> Edit</a></td>
+            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger"
+                   sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-trash"></i> Delete </a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    </div>
+
+
+<div th:include="fragments/header::Jquery">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+</div>
+</body>
+</html>

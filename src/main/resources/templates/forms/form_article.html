@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">$(document).ready(function() {	$('#articleSuppliersOverview').DataTable();} );
+
+
+
+
+    </script>
+
+    <title>Article</title>
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px">
+
+    <div th:if="${article.articleId == null}">
+        <h1>New Article</h1>
+    </div>
+    <div th:unless="${article.articleId == null}">
+        <h1>Edit Article</h1>
+    </div>
+
+    <form th:action="@{/saveArticle}"
+          th:object="${article}" , method="POST"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-xl-2">
+            </div>
+            <div class="col-xl-4">
+                <div class="mb-3 form-group text-start">
+                    <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
+                    <label for="articleName" class="form-label">Name</label>
+                    <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control"
+                           id="articleName" required>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleDescription" class="form-label">Description</label>
+                    <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description"
+                              class="form-control" id="articleDescription" required/>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleAbbreviation" class="form-label">Abbreviation</label>
+                    <input th:field="*{articleAbbreviation}" type="text" placeholder="Abbreviation"
+                           class="form-control" id="articleAbbreviation" required/>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleCategory" class="form-label">Category</label>
+                    <div class="row">
+                        <div class="col-xl-11">
+                            <select th:field="*{category}" class="form-select" id="articleCategory" required>
+                                <th:block th:each="category : ${categoriesList}">
+                                    <option th:text="${category.categoryName}" th:value="${category.categoryId}">
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="col-xl-1">
+                            <a th:href="@{/category}" class="btn btn-outline-primary">
+                                <i class="bi bi-collection"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mb-3 form-group text-start" th:unless="${article.articleId == null}">
+                    <label for="articleBarcode" class="form-label">Barcode</label>
+                    <div class="row">
+                        <div class="col-xl-11">
+                            <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
+                                   id="articleBarcode" readonly/>
+                        </div>
+                        <div class="col-xl-1">
+                            <a th:href="@{${'/article/barcode/'+article.articleId}}" class="btn btn-outline-primary"
+                               target="_blank">
+                                <i class="bi bi-upc-scan"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion" id="accordionExample" th:unless="${article.articleId == null}">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                View barcode (Experimental feature)
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                             data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div>
+                                    <div class="bg-image hover-overlay ripple mb-3">
+                                        <img th:src="@{${'/article/barcode/'+article.articleId}}"
+                                             class="img-fluid rounded" id="barcodeImage"
+                                             style="object-fit:contain;"
+                                             alt="Not Found" onerror=this.src="https://via.placeholder.com/500/"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label for="articleSupplier" class="form-label">Chosen supplier</label>
+                    <div class="row">
+                        <div class="col-xl-11">
+                            <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier">
+                                <th:block th:each="articleSupplier: ${articleSuppliersList}">
+                                    <option th:text="${articleSupplier.supplier.supplierName}"
+                                            th:value="${articleSupplier.articleSupplierId}">
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="col-xl-1">
+                            <a th:href="@{/supplier}" class="btn btn-outline-primary">
+                                <i class="bi bi-truck"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 form-group text-start">
+                    <div th:unless="${article.articleSupplier == null}">
+                        <label for="articlePrice" class="form-label">Price</label>
+                        <h3 id="articlePrice" th:text="€+*{articleSupplier.price}"></h3>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!--            <div class="col-xl-2">-->
+            <!--                <div>-->
+            <!--                    <img th:src="@{${'/article/barcode/'+article.articleId}}"-->
+            <!--                         style="object-fit:contain; height:500px;-->
+            <!--                         border:solid 1px #CCC" alt="No barcode defined"/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <div class="col-xl-4">
+                <div class="bg-image hover-overlay ripple mb-3">
+                    <img th:src="@{${'/article/image/'+article.articleId}}"
+                         class="img-fluid rounded" id="articleImage"
+                         style="object-fit:contain;
+                         width:650px;
+                         height:650px;
+                         border: solid 1px #CCC"
+                         alt="Not Found"
+                         onerror=this.src="https://via.placeholder.com/500/?text=Please+add+the+product+image"
+                    />
+                </div>
+                <div class="p-2">
+                    <label for="articleImg">Select image:</label>
+                    <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-1">
+            </div>
+            <div class="col-xl-5">
+                <div class="row">
+                    <div align="center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div th:if="${article.articleId != null}">
+        <h1>Article provided by:</h1>
+        <div class="row">
+            <table class="table table-striped table-hover dataTable" id="articleSuppliersOverview">
+                <thead>
+                <!--                <th scope="col" class="sorting">Article Supplier Id</th>-->
+                <th scope="col" class="sorting">Supplier</th>
+                <th scope="col" class="sorting">Partnr.</th>
+                <th scope="col" class="sorting">Purchase price</th>
+                <th scope="col" class="sorting">Sales price</th>
+
+                </thead>
+                <tbody>
+                <tr th:each="articleSupplier: ${articleSuppliersList}">
+                    <!--                    <td th:text="${articleSupplier.articleSupplierId}" class="sorting_1"></td>-->
+                    <td th:text="${articleSupplier.supplier.supplierName}" class="sorting_1"></td>
+                    <td th:text="${articleSupplier.partnr}" class="sorting_1"></td>
+                    <td th:text="€+${articleSupplier.purchasePrice}" class="sorting_1"></td>
+                    <td th:text="€+${articleSupplier.salesPrice}" class="sorting_1"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>
