@@ -87,12 +87,20 @@ public class UserService {
 
         if (user.getUserId() == null) {
             user.addOneRole(roleRepository.findById(1).get());
+            if(user.getPassword()==null){
+                User user1=userRepository.findByUserName(user.getUserName());
+                user.setPassword(user1.getPassword());
+            }
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
         } else {
             user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
         }
-        userRepository.save(user);
+        //ToDo: make username unique, if a new user is added with existing user name we should block it.
+        if (!userRepository.existsUserByUserName(user.getUserName())){
+            userRepository.save(user);
+        }
+
     }
 
     /**
