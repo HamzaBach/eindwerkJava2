@@ -32,9 +32,6 @@
     <a th:href = "@{/new/mutation}" class="btn btn-primary btn-lg" style="margin:20px"
        sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">New mutation</a>
 
-    <div align="center" style="margin-bottom: -3px;">
-        <a th:href = "@{/showNewMutationForm}" class="btn btn-primary btn-lg" style="margin:20px">New mutation</a>
-    </div>
 
     <table class="table table-striped table-hover dataTable" id="mutationOverview">
         <thead>
