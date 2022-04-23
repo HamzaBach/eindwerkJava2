@@ -30,7 +30,7 @@ public class ArticleSupplierController {
     @GetMapping("/new/articleSupplier")
     public String showNewArticleSupplierForm(Model model){
         ArticleSupplier articleSupplier = new ArticleSupplier();
-        model.addAttribute("articleSupplier", new ArticleSupplier());
+        model.addAttribute("articleSupplier", articleSupplier);
         model.addAttribute("articleList", articleService.getActiveArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
         return "/forms/form_article_supplier";
