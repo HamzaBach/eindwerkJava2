@@ -10,9 +10,6 @@
     <div th:include="fragments/header::dataTableJquery"/>
     <script type="text/javascript" class="init">$(document).ready(function() {	$('#articleSuppliersOverview').DataTable();} );
 
-
-
-
     </script>
 
     <title>Article</title>
@@ -39,28 +36,29 @@
             <div class="col-xl-4">
                 <div class="mb-3 form-group text-start">
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
-                    <label for="articleName" class="form-label">Name</label>
+                    <label for="articleName" class="form-label fw-bold">Name</label>
                     <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control"
                            id="articleName" required>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label for="articleDescription" class="form-label">Description</label>
+                    <label for="articleDescription" class="form-label fw-bold">Description</label>
                     <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description"
                               class="form-control" id="articleDescription" required/>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label for="articleAbbreviation" class="form-label">Abbreviation</label>
+                    <label for="articleAbbreviation" class="form-label fw-bold">Abbreviation</label>
                     <input th:field="*{articleAbbreviation}" type="text" placeholder="Abbreviation"
                            class="form-control" id="articleAbbreviation" required/>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label for="articleCategory" class="form-label">Category</label>
+                    <label for="articleCategory" class="form-label fw-bold">Category</label>
                     <div class="row">
                         <div class="col-xl-11">
                             <select th:field="*{category}" class="form-select" id="articleCategory" required>
-                                <th:block th:each="category : ${categoriesList}">
-                                    <option th:text="${category.categoryName}" th:value="${category.categoryId}">
-                                </th:block>
+                                <option value="" selected="selected" hidden="hidden" >Select category...</option>
+                                <option th:each="category : ${categoriesList}"
+                                        th:text="${category.categoryName}"
+                                        th:value="${category.categoryId}">
                             </select>
                         </div>
                         <div class="col-xl-1">
@@ -71,7 +69,7 @@
 
                 </div>
                 <div class="mb-3 form-group text-start" th:unless="${article.articleId == null}">
-                    <label for="articleBarcode" class="form-label">Barcode</label>
+                    <label for="articleBarcode" class="form-label fw-bold">Barcode</label>
                     <div class="row">
                         <div class="col-xl-11">
                             <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
@@ -111,14 +109,14 @@
                     </div>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label for="articleSupplier" class="form-label">Chosen supplier</label>
+                    <label for="articleSupplier" class="form-label fw-bold">Chosen supplier</label>
                     <div class="row">
                         <div class="col-xl-11">
                             <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier">
-                                <th:block th:each="articleSupplier: ${articleSuppliersList}">
-                                    <option th:text="${articleSupplier.supplier.supplierName}"
-                                            th:value="${articleSupplier.articleSupplierId}">
-                                </th:block>
+                                <option value="" selected="selected" hidden="hidden" >Select supplier...</option>
+                                <option th:each="articleSupplier: ${articleSuppliersList}"
+                                        th:text="${articleSupplier.supplier.supplierName}"
+                                        th:value="${articleSupplier.articleSupplierId}">
                             </select>
                         </div>
                         <div class="col-xl-1">
@@ -132,11 +130,11 @@
                     <div th:unless="${article.articleSupplier == null}">
                         <div class="row">
                             <div class="col-xl-6">
-                                <label for="articlePurchasePrice" class="form-label">Purchase price</label>
+                                <label for="articlePurchasePrice" class="form-label fw-bold">Purchase price</label>
                                 <h3 id="articlePurchasePrice" th:text="€+*{articleSupplier.purchasePrice}"></h3>
                             </div>
                             <div class="col-xl-6">
-                                <label for="articleSalesPrice" class="form-label">Sales price</label>
+                                <label for="articleSalesPrice" class="form-label fw-bold">Sales price</label>
                                 <h3 id="articleSalesPrice" th:text="€+*{articleSupplier.salesPrice}"></h3>
                             </div>
                         </div>
@@ -145,14 +143,6 @@
 
             </div>
 
-
-            <!--            <div class="col-xl-2">-->
-            <!--                <div>-->
-            <!--                    <img th:src="@{${'/article/barcode/'+article.articleId}}"-->
-            <!--                         style="object-fit:contain; height:500px;-->
-            <!--                         border:solid 1px #CCC" alt="No barcode defined"/>-->
-            <!--                </div>-->
-            <!--            </div>-->
             <div class="col-xl-4">
                 <div class="bg-image hover-overlay ripple mb-3">
                     <img th:src="@{${'/article/image/'+article.articleId}}"
@@ -166,7 +156,7 @@
                     />
                 </div>
                 <div class="p-2">
-                    <label for="articleImg">Select image:</label>
+                    <label for="articleImg" class="fw-bold">Select image:</label>
                     <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
                 </div>
             </div>

@@ -56,7 +56,7 @@ public class OrderSupplierDetailController {
     public String deleteOrderLine(@PathVariable("orderSupplierDetailId") Long orderSupplierDetailId, Model model){
         OrderSupplierDetail orderSupplierDetail = orderSupplierDetailService.getById(orderSupplierDetailId).get();
         this.orderSupplierDetailService.deleteOrderLine(orderSupplierDetail);
-        return "redirect:/orderdetail/"+1;
+        return "redirect:/orderdetail/"+orderSupplierDetail.getOrderSupplierHeader().getOrderSupplierId();
     }
 
 
