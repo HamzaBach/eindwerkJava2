@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#articlesOverview").dataTable({
+           "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 4,5 ] }
+           ]
+        });
+    });
+
+    </script>
+</head>
+<body>
+<div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px;">
+    <div align="left">
+        <a th:href="@{/orderSupplier}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
+    <h1>Order</h1>
+    <div>
+
+        <form method="GET" style="margin:20px">
+            <div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <label>Supplier</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input th:value="${order.supplier.supplierName}" disabled type="text"
+                               placeholder="Supplier" class="form-control">
+                    </div>
+
+                    <div class="col-md-1">
+                        <label>Order Number</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input th:value="${orderheader.orderNumber}" type="text" disabled placeholder="Order number"
+                               class="form-control">
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+        <!--view orderlines-->
+
+        <table class="table table-striped table-hover dataTable" style="margin:20px" id="articlesOverview">
+            <thead>
+            <tr>
+                <th class="col-md-1">Line</th>
+                <th class="col-md-2">Article</th>
+                <th class="col-md-3">Quantity</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="orderdetail : ${order}">
+                <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
+                <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
+                <td class="col-md-3" th:text="${orderdetail.quantity}"></td>
+                </td>
+                <div th:unless="${orderheader.dateOrderClosed}" aria-disabled="true">
+                    <td class="col-md-1">
+                        <a th:href="@{'/delete/orderdetail/' + ${orderdetail.orderSupplierDetailId}}"
+                           class="btn-close"></a>
+                    </td>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/Orders.js}"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>

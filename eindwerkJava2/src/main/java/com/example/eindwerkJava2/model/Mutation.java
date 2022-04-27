@@ -16,10 +16,10 @@ public class Mutation {
     private Double amount;
 
     @ManyToOne
-    @JoinColumn(name="locationId")
+    @JoinColumn(name="locationIdFrom")
     private Location locationFrom;
     @ManyToOne
-    @JoinColumn(name="locationId")
+    @JoinColumn(name="locationIdTo")
     private Location locationTO;
 
 //     2 nieuw properties -> warehouse -> From & TO
