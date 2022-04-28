@@ -45,4 +45,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select MAX(article_id) AS Max_Id from article",nativeQuery = true)
     Long getMaxId();
 
+    /**
+     * Method to find an article in the repository via the article name.
+     * @param articleName
+     * @return
+     */
+    Article findByArticleName(String articleName);
+
 }

@@ -8,9 +8,17 @@
 
     <!--    Datatable -->
     <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" th:src="@{js/article.js}"></script>
     <script type="text/javascript" class="init">$(document).ready(function() {	$('#articleSuppliersOverview').DataTable();} );
-
     </script>
+<!--    <script type="text/javascript">-->
+<!--    function togglerequire(id){-->
+<!--    $(id).children("textarea, input, select").each(function(){-->
+<!--        var re = $(this).prop('readonly');-->
+<!--        $(this).prop('readonly', !re);-->
+<!--    });-->
+<!--}-->
+<!--    </script>-->
 
     <title>Article</title>
 </head>
@@ -26,26 +34,34 @@
     <div th:unless="${article.articleId == null}">
         <h1>Edit Article</h1>
     </div>
+<!--    <div th:unless="${article.articleId == null}">-->
+<!--        <button type="button" id="editButton" ></button>-->
+<!--    </div>-->
+<!--    <div th:unless="${article.articleId == null}">-->
+<!--        <button type="button" id="editButton" onclick="togglerequire('#name'); togglerequire('#description');-->
+<!--        togglerequire('#abbreviation'); togglerequire('#abbreviation'); togglerequire('#category'); togglerequire('#supplier');"></button>-->
+<!--    </div>-->
+
 
     <form th:action="@{/saveArticle}"
           th:object="${article}" , method="POST"
           enctype="multipart/form-data">
-        <div class="row">
+        <div class="row" >
             <div class="col-xl-2">
             </div>
             <div class="col-xl-4">
-                <div class="mb-3 form-group text-start">
+                <div class="mb-3 form-group text-start" id="name">
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label fw-bold">Name</label>
                     <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control"
                            id="articleName" required>
                 </div>
-                <div class="mb-3 form-group text-start">
+                <div class="mb-3 form-group text-start" id="description">
                     <label for="articleDescription" class="form-label fw-bold">Description</label>
                     <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description"
                               class="form-control" id="articleDescription" required/>
                 </div>
-                <div class="mb-3 form-group text-start">
+                <div class="mb-3 form-group text-start" id="abbreviation">
                     <label for="articleAbbreviation" class="form-label fw-bold">Abbreviation</label>
                     <input th:field="*{articleAbbreviation}" type="text" placeholder="Abbreviation"
                            class="form-control" id="articleAbbreviation" required/>
@@ -53,7 +69,7 @@
                 <div class="mb-3 form-group text-start">
                     <label for="articleCategory" class="form-label fw-bold">Category</label>
                     <div class="row">
-                        <div class="col-xl-11">
+                        <div class="col-xl-11" id="category">
                             <select th:field="*{category}" class="form-select" id="articleCategory" required>
                                 <option value="" selected="selected" hidden="hidden" >Select category...</option>
                                 <option th:each="category : ${categoriesList}"
@@ -73,7 +89,7 @@
                     <div class="row">
                         <div class="col-xl-11">
                             <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
-                                   id="articleBarcode" readonly/>
+                                   id="articleBarcode"/>
                         </div>
                         <div class="col-xl-1">
                             <a th:href="@{${'/article/barcode/'+article.articleId}}" class="btn btn-outline-primary"
@@ -111,7 +127,7 @@
                 <div class="mb-3 form-group text-start">
                     <label for="articleSupplier" class="form-label fw-bold">Chosen supplier</label>
                     <div class="row">
-                        <div class="col-xl-11">
+                        <div class="col-xl-11" id="supplier">
                             <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier">
                                 <option value="" selected="selected" hidden="hidden" >Select supplier...</option>
                                 <option th:each="articleSupplier: ${articleSuppliersList}"

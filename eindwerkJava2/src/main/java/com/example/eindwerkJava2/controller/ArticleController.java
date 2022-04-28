@@ -4,11 +4,14 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
+import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
@@ -61,16 +64,17 @@ public class ArticleController {
         return "articles";
     }
 
-    /**
-     * Endpoint (GET) to delete a particular article.
-     *
-     * @param articleId The article id is used to delete the particular article.
-     * @return An overview page of all articles is returned via the endpoint {@link com.example.eindwerkJava2.controller.ArticleController#getArticles(Model)}
-     */
+
     @GetMapping("delete/article/{articleId}")
-    public String deleteArticle(@PathVariable("articleId") Long articleId) {
-        Article article = articleService.findById(articleId).get();
-        this.articleService.deleteArticle(article);
+    public String deleteArticle(@PathVariable("articleId") Long articleId, RedirectAttributes redirAttrs) {
+        ArticleSuccess findArticle = articleService.findById(articleId);
+        if(findArticle.getIsSuccessfull()){
+            ArticleSuccess toBeDeletedArticle =this.articleService.deleteArticle(findArticle.getArticle());
+            redirAttrs.addFlashAttribute("success",toBeDeletedArticle.getMessage());
+            findArticle.extendMessage(toBeDeletedArticle.getMessage());
+        } else{
+            redirAttrs.addFlashAttribute("error",findArticle.getMessage());
+        }
         return "redirect:/articles";
     }
 
@@ -101,9 +105,10 @@ public class ArticleController {
      */
     @PostMapping("/saveArticle")
     public String saveArticle(@ModelAttribute("article") Article article,
-                              @RequestParam("image") MultipartFile multipartFile) throws IOException {
+                              @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs) throws IOException {
         byte[] addedImage = multipartFile.getBytes();
-        this.articleService.saveArticle(article, addedImage);
+        ArticleSuccess success = this.articleService.saveArticle(article, addedImage);
+        redirAttrs.addFlashAttribute("success",success.getMessage());
         return "redirect:/articles";
     }
 
@@ -118,7 +123,7 @@ public class ArticleController {
     @ResponseBody
     void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response)
             throws IOException {
-        Article article = articleService.findById(articleId).get();
+        Article article = articleService.findById(articleId).getArticle();
         if (article.getArticleImage() != null) {
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
             response.getOutputStream().write(article.getArticleImage());
@@ -136,7 +141,7 @@ public class ArticleController {
      */
     @GetMapping("edit/article/{articleId}")
     public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) {
-        Article article = articleService.findById(articleId).get();
+        Article article = articleService.findById(articleId).getArticle();
         model.addAttribute("article", article);
         model.addAttribute("categoriesList", categoryService.getCategories());
         model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));

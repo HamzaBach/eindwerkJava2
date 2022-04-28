@@ -1,5 +1,7 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 
-
+@EqualsAndHashCode
 @Entity
 @Table
 public class Article {
