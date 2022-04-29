@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The data-access layer for interacting with the database of articles.
@@ -50,6 +51,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * @param articleName
      * @return
      */
-    Article findByArticleName(String articleName);
+    Optional<Article> findByArticleName(String articleName);
 
 }

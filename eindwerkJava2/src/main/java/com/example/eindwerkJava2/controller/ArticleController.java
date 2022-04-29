@@ -5,6 +5,8 @@ import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
+import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,9 +60,13 @@ public class ArticleController {
      */
     @GetMapping("/articles")
     public String getArticles(Model model) {
+        ArticlesSuccess retrievedArticles = articleService.getActiveArticles();
         model.addAttribute("article", new Article());
-        List<Article> articles = articleService.getActiveArticles();
+        List<Article> articles = retrievedArticles.getArticles();
         model.addAttribute("articlesList", articles);
+        if (!retrievedArticles.getIsSuccessfull()) {
+            model.addAttribute("error", retrievedArticles.getMessage());
+        }
         return "articles";
     }
 
@@ -68,12 +74,12 @@ public class ArticleController {
     @GetMapping("delete/article/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId, RedirectAttributes redirAttrs) {
         ArticleSuccess findArticle = articleService.findById(articleId);
-        if(findArticle.getIsSuccessfull()){
-            ArticleSuccess toBeDeletedArticle =this.articleService.deleteArticle(findArticle.getArticle());
-            redirAttrs.addFlashAttribute("success",toBeDeletedArticle.getMessage());
-            findArticle.extendMessage(toBeDeletedArticle.getMessage());
-        } else{
-            redirAttrs.addFlashAttribute("error",findArticle.getMessage());
+        if (findArticle.getIsSuccessfull()) {
+            SuccessObject toBeDeletedArticle = this.articleService.deleteArticle(findArticle.getArticle());
+            redirAttrs.addFlashAttribute("success", toBeDeletedArticle.getMessage());
+            findArticle.setMessage(toBeDeletedArticle.getMessage());
+        } else {
+            redirAttrs.addFlashAttribute("error", findArticle.getMessage());
         }
         return "redirect:/articles";
     }
@@ -90,7 +96,7 @@ public class ArticleController {
         model.addAttribute("article", new Article());
         model.addAttribute("categoriesList", categoryService.getCategories());
 //        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
-        List<Article> articles = articleService.getActiveArticles();
+        List<Article> articles = articleService.getActiveArticles().getArticles();
         model.addAttribute("articlesList", articles);
         return "/forms/form_article";
     }
@@ -100,6 +106,7 @@ public class ArticleController {
      *
      * @param article       The newly defined article is stored in an {@link com.example.eindwerkJava2.model.Article} object.
      * @param multipartFile The uploaded article picture is retrieved via a multipartfile from the front-end before being stored as a blob in the back-end.
+     * @param redirAttrs    The redirect attribute is used for the error/success message handling.
      * @return An overview page of all articles is returned via the endpoint {@link com.example.eindwerkJava2.controller.ArticleController#getArticles(Model)}.
      * @throws IOException
      */
@@ -107,8 +114,12 @@ public class ArticleController {
     public String saveArticle(@ModelAttribute("article") Article article,
                               @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs) throws IOException {
         byte[] addedImage = multipartFile.getBytes();
-        ArticleSuccess success = this.articleService.saveArticle(article, addedImage);
-        redirAttrs.addFlashAttribute("success",success.getMessage());
+        SuccessObject success = this.articleService.saveArticle(article, addedImage);
+        if (success.getIsSuccessfull()) {
+            redirAttrs.addFlashAttribute("success", success.getMessage());
+        } else {
+            redirAttrs.addFlashAttribute("error", success.getMessage());
+        }
         return "redirect:/articles";
     }
 
