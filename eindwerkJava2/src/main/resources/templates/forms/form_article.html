@@ -42,7 +42,7 @@
 <!--        togglerequire('#abbreviation'); togglerequire('#abbreviation'); togglerequire('#category'); togglerequire('#supplier');"></button>-->
 <!--    </div>-->
 
-
+    <div th:include="fragments/header::errorMessaging"/>
     <form th:action="@{/saveArticle}"
           th:object="${article}" , method="POST"
           enctype="multipart/form-data">

@@ -31,8 +31,7 @@
 
 <div align="center" style="margin: 100px">
     <h1>Articles</h1>
-    <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
-    <div class="alert alert-primary" role="alert" th:text="${error}" th:if="${error}"></div>
+    <div th:inlude="fragments/header::errorMessaging"/>
     <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
         <a th:href="@{/new/article}" class="btn btn-primary btn-lg" style="margin:20px">New Article</a>
     </div>

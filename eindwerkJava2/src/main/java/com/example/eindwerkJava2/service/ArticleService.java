@@ -3,6 +3,8 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
+import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -30,23 +32,37 @@ public class ArticleService {
      * Method for obtaining all active articles from the data-access layer.
      * @return A list of all active articles retrieved from {@link com.example.eindwerkJava2.repositories.ArticleRepository#findByActiveArticle(int)}.
      */
-    public List<Article> getActiveArticles() {
-        return this.articleRepository.findByActiveArticle(1);
+    public ArticlesSuccess getActiveArticles() {
+        ArticlesSuccess retrievedArticles = new ArticlesSuccess();
+        List<Article> activeArticles=this.articleRepository.findByActiveArticle(1);
+        if(activeArticles.size()>0){
+           retrievedArticles.setArticles(activeArticles);
+           retrievedArticles.setIsSuccessfull(true);
+        } else{
+            retrievedArticles.setIsSuccessfull(false);
+            retrievedArticles.setMessage("No articles found within the database.");
+        }
+        return retrievedArticles;
     }
 
 
-    public ArticleSuccess saveArticle(Article article, byte[] articleImage){
-        ArticleSuccess success = new ArticleSuccess();
+    public SuccessObject saveArticle(Article article, byte[] articleImage){
+        SuccessObject success = new ArticleSuccess();
         if(article.getArticleId()==null
                 && articleRepository.existsArticleByArticleName(article.getArticleName())
-                && articleRepository.findByArticleName(article.getArticleName()).getActiveArticle()==1){
+                && articleRepository.findByArticleName(article.getArticleName()).get().getActiveArticle()==1){
             success.setIsSuccessfull(false);
             success.setMessage("New article cannot be added because this article name "+article.getArticleName()+" already exists! ");
+            return success;
         }
         // use case if an existing article gets renamed to the name of an already present article name -> block!
-        if(article.getArticleId()!=null && articleRepository.findByArticleName(article.getArticleName()).getArticleId()!=article.getArticleId()){
+        //TODO Fix this later
+        Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
+        if(article.getArticleId()!=null && articleWithSameName.getArticleId()!=article.getArticleId()
+        && articleWithSameName.getArticleName()==article.getArticleName()){
             success.setIsSuccessfull(false);
             success.setMessage("Cannot modify this article because the article name "+article.getArticleName()+" is already used!");
+            return success;
         }
         else{
             if(articleImage.length==0)
@@ -68,8 +84,9 @@ public class ArticleService {
             articleRepository.save(article);
             success.setIsSuccessfull(true);
             success.setMessage("Article "+article.getArticleName()+" is succesfully saved!");
+            return success;
         }
-        return success;
+
     }
 
 
@@ -77,7 +94,7 @@ public class ArticleService {
         ArticleSuccess success = new ArticleSuccess();
         if(articleRepository.findById(id).isEmpty()){
             success.setIsSuccessfull(false);
-            success.extendMessage("Article not found!");
+            success.setMessage("Article not found!");
         } else {
             Article article=articleRepository.findById(id).get();
             success.setArticle(article);
@@ -87,16 +104,16 @@ public class ArticleService {
     }
 
 
-    public ArticleSuccess deleteArticle(Article article){
-        ArticleSuccess success = new ArticleSuccess();
+    public SuccessObject deleteArticle(Article article){
+        SuccessObject success = new ArticleSuccess();
         article.setActiveArticle(0);
         this.articleRepository.save(article);
         if(articleRepository.findById(article.getArticleId()).get().getActiveArticle()==0){
             success.setIsSuccessfull(true);
-            success.setMessage("Article "+article.getArticleName()+" ("+article.getArticleId()+")"+" was successfully removed.");
+            success.setMessage("Article "+article.getArticleName()+" (ID: "+article.getArticleId()+")"+" was successfully removed.");
         } else{
             success.setIsSuccessfull(false);
-            success.setMessage("Article "+article.getArticleName()+" ("+article.getArticleId()+")"+" could not be removed.");
+            success.setMessage("Article "+article.getArticleName()+" (ID: "+article.getArticleId()+")"+" could not be removed.");
         }
         return success;
     }
