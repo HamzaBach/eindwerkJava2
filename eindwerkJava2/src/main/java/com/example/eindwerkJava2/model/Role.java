@@ -1,5 +1,9 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -8,6 +12,9 @@ import javax.persistence.*;
  * @author Hamza Bachiri
  * @version 1.0
  */
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -32,39 +39,4 @@ public class Role {
         this.name = name;
     }
 
-    /**
-     * Getter method for obtaining the id of the role.
-     *
-     * @return The role id is returned.
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * Setter method for setting the id of the role.
-     *
-     * @param id The to be set id for the role object.
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * Getter method for getting the name of the role.
-     *
-     * @return The name of the role is returned.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Setter method for setting the name of the role.
-     *
-     * @param name The to be set name of the role.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
 }

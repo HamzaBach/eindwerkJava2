@@ -1,5 +1,10 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,8 +13,12 @@ import java.util.List;
  *
  * @author Sebastiaan
  */
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
-@Table(name="Location")
+@Table(name = "Location")
 public class Location {
 
 
@@ -20,25 +29,18 @@ public class Location {
     @OneToMany(mappedBy = "location")
     private List<Stock> stocks;
 
-    @Column(name="locationName")
+    @Column(name = "locationName")
     private String locationName;
 
     @ManyToOne
-    @JoinColumn(name="warehouse_Id")
+    @JoinColumn(name = "warehouse_Id")
     private Warehouse warehouse;
 
-    @Column(name="singleStorage")
+    @Column(name = "singleStorage")
     private boolean singleStorage;
 
     @Column(name = "active")
     private int activeLocation = 1;
-
-
-    /**
-     * Instantiates a new Location.
-     */
-    public Location() {
-    }
 
 
     /**
@@ -61,111 +63,4 @@ public class Location {
         this.activeLocation = activeLocation;
     }
 
-    /**
-     * Gets active location.
-     *
-     * @return activeLocation where the location is active(1) or not (0)
-     */
-    public int getActiveLocation() {
-        return activeLocation;
-    }
-
-    /**
-     * Sets active location.
-     *
-     * @param activeLocation sets the location to active or inactive
-     */
-    public void setActiveLocation(int activeLocation) {
-        this.activeLocation = activeLocation;
-    }
-
-    /**
-     * Get location id long.
-     *
-     * @return the locationId
-     */
-    public Long getLocationId(){
-        return locationId;
-    }
-
-    /**
-     * Sets location id.
-     *
-     * @param locationId the location id
-     */
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
-    }
-
-    /**
-     * Gets location name.
-     *
-     * @return the location name
-     */
-    public String getLocationName() {
-        return locationName;
-    }
-
-    /**
-     * Sets location name.
-     *
-     * @param locationName the location name
-     */
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-    /**
-     * Gets warehouse.
-     *
-     * @return the warehouse
-     */
-    public Warehouse getWarehouse() {
-        return warehouse;
-    }
-
-    /**
-     * Sets warehouse.
-     *
-     * @param warehouse the warehouse
-     */
-    public void setWarehouse(Warehouse warehouse) {
-        this.warehouse = warehouse;
-    }
-
-    /**
-     * Is single storage boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isSingleStorage() {
-        return singleStorage;
-    }
-
-    /**
-     * Sets single storage.
-     *
-     * @param singleStorage the single storage
-     */
-    public void setSingleStorage(boolean singleStorage) {
-        this.singleStorage = singleStorage;
-    }
-
-    /**
-     * Gets stocks.
-     *
-     * @return the stocks
-     */
-    public List<Stock> getStocks() {
-        return stocks;
-    }
-
-    /**
-     * Sets stocks.
-     *
-     * @param stocks the stocks
-     */
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
-    }
 }

@@ -1,7 +1,13 @@
 package com.example.eindwerkJava2.model;
 
-import javax.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "order_receive")
 public class OrderReceive {
@@ -15,36 +21,5 @@ public class OrderReceive {
     @Column(name="order_number")
     private String orderNumber;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getAmountExpected() {
-        return amountExpected;
-    }
-
-    public void setAmountExpected(int amountExpected) {
-        this.amountExpected = amountExpected;
-    }
-
-    public int getAmountReceived() {
-        return amountReceived;
-    }
-
-    public void setAmountReceived(int amountReceived) {
-        this.amountReceived = amountReceived;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
 
 }

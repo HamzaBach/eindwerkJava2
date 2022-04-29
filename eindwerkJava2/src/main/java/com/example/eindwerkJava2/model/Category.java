@@ -1,8 +1,15 @@
 package com.example.eindwerkJava2.model;
 
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table
 public class Category {
@@ -17,43 +24,11 @@ public class Category {
 
     }
 
-    public Category(String categoryName, String categoryAbbreviation)
-    {
+    public Category(String categoryName, String categoryAbbreviation) {
         this.categoryName = categoryName;
-        this.categoryAbbreviation=categoryAbbreviation;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public String getCategoryAbbreviation() {
-        return categoryAbbreviation;
-    }
-
-    public void setCategoryAbbreviation(String categoryAbbreviation) {
         this.categoryAbbreviation = categoryAbbreviation;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
 
     @Override
     public String toString() {

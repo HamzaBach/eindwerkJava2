@@ -1,9 +1,16 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
-@Table(name="Countries")
+@Table(name = "Countries")
 public class Countries {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,41 +19,16 @@ public class Countries {
     @Column(name = "country_name")
     private String countryName;
 
-    @Column(name="iso")
+    @Column(name = "iso")
     private String iso;
 
-    public Countries(){}
-    public Countries(String countryName, String iso){
-        this.countryName=countryName;
-        this.iso=iso;
+    public Countries() {
     }
 
-
-
-    public long getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(int countryId) {
-        this.countryId = countryId;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
+    public Countries(String countryName, String iso) {
         this.countryName = countryName;
-    }
-
-    public String getIso() {
-        return iso;
-    }
-
-    public void setIso(String iso) {
         this.iso = iso;
     }
-
 
 
 }

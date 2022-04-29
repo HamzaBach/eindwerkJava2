@@ -1,5 +1,9 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +14,9 @@ import java.util.Set;
  * @author Hamza Bachiri
  * @version 1.0
  */
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "users")
 public class User {
@@ -61,114 +68,6 @@ public class User {
     public User(String userName, String password, Set<Role> roles) {
         this.userName = userName;
         this.password = password;
-        this.roles = roles;
-    }
-
-    /**
-     * Getter method for obtaining the user id.
-     *
-     * @return The user id of the object is returned.
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * Setter method for setting the user id.
-     *
-     * @param userId The to be set user id.
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * Getter method for obtaining the user name.
-     *
-     * @return The user name of the object is returned.
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * Setter method for setting the user name.
-     *
-     * @param userName The to be set user name.
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * Getter method for obtaining the password.
-     *
-     * @return The password of the object is returned.
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Setter method for setting the password.
-     *
-     * @param password The to be set password.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Getter method for obtaining whether the user is active (1) or not (0).
-     *
-     * @return The value of active user is returned.
-     */
-    public int getActiveUser() {
-        return activeUser;
-    }
-
-    /**
-     * Setter method for setting the active user value.
-     *
-     * @param activeUser The to be set active user value.
-     */
-    public void setActiveUser(int activeUser) {
-        this.activeUser = activeUser;
-    }
-
-    /**
-     * Getter method for obtaining the user image.
-     *
-     * @return The user image of the object is returned.
-     */
-    public byte[] getUserImage() {
-        return userImage;
-    }
-
-    /**
-     * Setter method for setting the user's image.
-     *
-     * @param userImage The to be set user image.
-     */
-    public void setUserImage(byte[] userImage) {
-        this.userImage = userImage;
-    }
-
-    /**
-     * Getter method for obtaining the assigned roles of the user.
-     *
-     * @return The set of roles of the user is returned.
-     */
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    /**
-     * Setter method for setting the roles for the user object.
-     *
-     * @param roles The set of roles to be attributed to the user.
-     */
-    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
