@@ -31,7 +31,7 @@ public class ArticleSupplierController {
     public String showNewArticleSupplierForm(Model model){
         ArticleSupplier articleSupplier = new ArticleSupplier();
         model.addAttribute("articleSupplier", articleSupplier);
-        model.addAttribute("articleList", articleService.getActiveArticles());
+        model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
         return "/forms/form_article_supplier";
     }
@@ -46,7 +46,7 @@ public class ArticleSupplierController {
     public String editArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
         ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
         model.addAttribute("articleSupplier", articleSupplier);
-        model.addAttribute("articleList", articleService.getActiveArticles());
+        model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
         model.addAttribute("supplierList", supplierService.getAllSuppliers());
         return "/forms/form_article_supplier";
     }
