@@ -1,13 +1,18 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
-@Table(name="orderSupplierDetail")
+@Table(name = "orderSupplierDetail")
 public class OrderSupplierDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +27,13 @@ public class OrderSupplierDetail {
     private Article article;
 
 
-    @Column(name="quantity")
+    @Column(name = "quantity")
     private int quantity;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expectedDayOfDelivery;
 
-    @Column(name="orderline_number")
+    @Column(name = "orderline_number")
     private String orderlineNumber;
 
     public OrderSupplierDetail() {
@@ -38,57 +43,6 @@ public class OrderSupplierDetail {
         this.article = article;
         this.quantity = quantity;
         this.expectedDayOfDelivery = expectedDayOfDelivery;
-        this.orderlineNumber = orderlineNumber;
-    }
-
-    public LocalDate getExpectedDayOfDelivery() {
-        return expectedDayOfDelivery;
-    }
-
-    public void setExpectedDayOfDelivery(LocalDate expectedDayOfDelivery) {
-        this.expectedDayOfDelivery = expectedDayOfDelivery;
-    }
-
-    public Long getOrderSupplierDetailId() {
-        return orderSupplierDetailId;
-    }
-
-    public OrderSupplierHeader getOrderSupplierHeader() {
-        return orderSupplierHeader;
-    }
-
-    public Article getArticle() {
-        return article;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-
-
-    public void setOrderSupplierHeader(OrderSupplierHeader orderSupplierHeader) {
-        this.orderSupplierHeader = orderSupplierHeader;
-    }
-
-    public void setOrderSupplierDetailId(Long orderSupplierDetailId) {
-        this.orderSupplierDetailId = orderSupplierDetailId;
-    }
-
-    public String getOrderlineNumber() {
-        return orderlineNumber;
-    }
-
-    public void setOrderlineNumber(String orderlineNumber) {
         this.orderlineNumber = orderlineNumber;
     }
 

@@ -1,5 +1,8 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -7,8 +10,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name="OrderSupplierHeader")
+@Table(name = "OrderSupplierHeader")
 public class OrderSupplierHeader {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,56 +35,12 @@ public class OrderSupplierHeader {
     private LocalDate dateOrderClosed;
 
 
-    public OrderSupplierHeader() {
-    }
-
     public OrderSupplierHeader(Supplier supplier, LocalDate dateOfOrder) {
         this.supplier = supplier;
         this.dateOfOrder = dateOfOrder;
 
     }
 
-
-
-    public LocalDate getDateOrderClosed() {
-        return dateOrderClosed;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public Long getOrderSupplierId() {
-        return orderSupplierId;
-    }
-
-    public LocalDate getDateOfOrder() {
-        return dateOfOrder;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderSupplierId(Long orderSupplierId) {
-        this.orderSupplierId = orderSupplierId;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public void setDateOfOrder(LocalDate dateOfOrder) {
-        this.dateOfOrder = dateOfOrder;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public void setDateOrderClosed(LocalDate dateOrderClosed) {
-        this.dateOrderClosed = dateOrderClosed;
-    }
 
     @Override
     public boolean equals(Object o) {

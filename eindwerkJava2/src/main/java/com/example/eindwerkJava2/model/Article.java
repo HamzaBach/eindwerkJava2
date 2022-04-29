@@ -18,7 +18,6 @@ import java.util.List;
  * @version 1.0
  */
 
-@EqualsAndHashCode
 @Entity
 @Table
 public class Article {

@@ -1,7 +1,14 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table
 public class TransactionType {
@@ -12,36 +19,13 @@ public class TransactionType {
     private String transactionTypeName;
     private Double transactionTypeFactor;
 
-    public TransactionType(){}
+    public TransactionType() {
+    }
 
     public TransactionType(String transactionTypeName, Double transactionTypeFactor) {
         this.transactionTypeName = transactionTypeName;
         this.transactionTypeFactor = transactionTypeFactor;
     }
 
-    //Getters & Setters:
 
-    public Long getTransactionTypeId() {
-        return transactionTypeId;
-    }
-
-    public void setTransactionTypeId(Long transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
-    }
-
-    public String getTransactionTypeName() {
-        return transactionTypeName;
-    }
-
-    public void setTransactionTypeName(String transactionTypeName) {
-        this.transactionTypeName = transactionTypeName;
-    }
-
-    public Double getTransactionTypeFactor() {
-        return transactionTypeFactor;
-    }
-
-    public void setTransactionTypeFactor(Double transactionTypeFactor) {
-        this.transactionTypeFactor = transactionTypeFactor;
-    }
 }

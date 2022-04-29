@@ -1,10 +1,16 @@
 package com.example.eindwerkJava2.model;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
-@Table(name="supplier")
+@Table(name = "supplier")
 public class Supplier {
 
     @Id
@@ -30,64 +36,16 @@ public class Supplier {
 
     public Supplier() {
     }
+
     public Supplier(String supplierName, String adress,
-                    Cities city, Countries country, int activeSupplier){
-        this.supplierName=supplierName;
-        this.adress=adress;
-        this.city=city;
-        this.country=country;
-        this.activeSupplier=activeSupplier;
-    }
-
-
-
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
+                    Cities city, Countries country, int activeSupplier) {
         this.supplierName = supplierName;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
         this.adress = adress;
-    }
-
-    public Cities getCity() {
-        return city;
-    }
-
-    public void setCity(Cities city) {
         this.city = city;
-    }
-
-    public Countries getCountry() {
-        return country;
-    }
-
-    public void setCountry(Countries country) {
         this.country = country;
-    }
-
-    public int getActiveSupplier() {
-        return activeSupplier;
-    }
-
-    public void setActiveSupplier(int activeSupplier) {
         this.activeSupplier = activeSupplier;
     }
+
 
     @Override
     public boolean equals(Object o) {

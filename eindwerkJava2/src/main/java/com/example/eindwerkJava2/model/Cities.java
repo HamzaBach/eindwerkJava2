@@ -1,10 +1,16 @@
 package com.example.eindwerkJava2.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
-@Table(name="Cities")
+@Table(name = "Cities")
 public class Cities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,45 +26,16 @@ public class Cities {
     private String cityProvince;
 
     /**
-     * 
+     *
      */
-    public Cities(){};
-    public Cities(int cityZipcode, String cityName, String cityProvince){
-        this.cityZipcode=cityZipcode;
-        this.cityName=cityName;
-        this.cityProvince=cityProvince;
+    public Cities() {
     }
 
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
 
-    public String getCityProvince() {
-        return cityProvince;
-    }
-
-    public void setCityProvince(String cityProvince) {
-        this.cityProvince = cityProvince;
-    }
-
-    public long getCityId() {
-        return cityId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public int getCityZipcode() {
-        return cityZipcode ;
-    }
-
-    public void setCityZipcode(int cityZipcode) {
+    public Cities(int cityZipcode, String cityName, String cityProvince) {
         this.cityZipcode = cityZipcode;
+        this.cityName = cityName;
+        this.cityProvince = cityProvince;
     }
 
     @Override
