@@ -24,6 +24,8 @@
 
 <section>
     <div align="center" style="margin: 100px">
+        <h1>Users</h1>
+        <div th:include="fragments/header::errorMessaging"/>
         <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
             <a th:href="@{/new/user}" class="btn btn-primary btn-lg" style="margin:20px">New User</a>
         </div>
