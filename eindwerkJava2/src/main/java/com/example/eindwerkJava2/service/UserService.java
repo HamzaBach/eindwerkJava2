@@ -4,6 +4,8 @@ import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
+import com.example.eindwerkJava2.wrappers.UserSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,20 +77,28 @@ public class UserService {
      * @param user      The to be saved user.
      * @param userImage The image of the user that is saved within the user object.
      */
-    public void saveUser(User user, byte[] userImage) {
-        if (userImage.length == 0) {
-            if (userRepository.existsUserByUserId(user.getUserId())) {
-                User currentUser = userRepository.getById(user.getUserId());
-                user.setUserImage(currentUser.getUserImage());
-            }
+    public SuccessObject saveUser(User user, byte[] userImage) {
+        SuccessObject success = new UserSuccess();
+        Boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
+        Boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
+        if (existsUserName && user.getActiveUser() == 1) {
+            success.setIsSuccessfull(false);
+            success.setMessage("Cannot save this user because a user with user name " + user.getUserName() + " already exists!");
         } else {
-            user.setUserImage(userImage);
+            userImageHandler(user, userImage, existsUserId);
+            passwordAndRolesHandler(user);
+            userRepository.save(user);
+            success.setIsSuccessfull(true);
+            success.setMessage("User " + user.getUserName() + " was successfully saved!");
         }
+        return success;
+    }
 
+    private void passwordAndRolesHandler(User user) {
         if (user.getUserId() == null) {
             user.addOneRole(roleRepository.findById(1).get());
-            if(user.getPassword()==null){
-                User user1=userRepository.findByUserName(user.getUserName());
+            if (user.getPassword() == null) {
+                User user1 = userRepository.findByUserName(user.getUserName());
                 user.setPassword(user1.getPassword());
             }
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
@@ -96,11 +106,17 @@ public class UserService {
         } else {
             user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
         }
-        //ToDo: make username unique, if a new user is added with existing user name we should block it.
-        if (!userRepository.existsUserByUserName(user.getUserName())){
-            userRepository.save(user);
-        }
+    }
 
+    private void userImageHandler(User user, byte[] userImage, Boolean existsUserId) {
+        if (userImage.length == 0) {
+            if (existsUserId) {
+                User currentUser = userRepository.getById(user.getUserId());
+                user.setUserImage(currentUser.getUserImage());
+            }
+        } else {
+            user.setUserImage(userImage);
+        }
     }
 
     /**
