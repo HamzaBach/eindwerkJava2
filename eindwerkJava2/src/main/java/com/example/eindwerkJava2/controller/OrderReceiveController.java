@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class OrderReceiveController {
@@ -27,7 +28,10 @@ public class OrderReceiveController {
 
     @GetMapping(path = "orderReceived")
     public String getAllOrders(Model model) {
-        model.addAttribute("orderList", orderSupplierHeaderService.getAllClosedOrders());
+        List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderService.getAllClosedOrders();
+        List<OrderSupplierHeader> resultList =  orderSupplierHeaderList.stream().filter(orderSupplierDetailService::checkIfOrderIsCompleted).collect(Collectors.toList());
+
+        model.addAttribute("orderList", resultList);
         return "orders_received";
     }
 

@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderSupplierHeaderService {
     @Autowired
-    OrderSupplierHeaderRepository orderSupplierHeaderRepository;
+    final OrderSupplierHeaderRepository orderSupplierHeaderRepository;
     @Autowired
     ImageService imageService;
-
 
     public OrderSupplierHeaderService(OrderSupplierHeaderRepository orderSupplierHeaderRepository) {
         this.orderSupplierHeaderRepository = orderSupplierHeaderRepository;

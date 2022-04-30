@@ -69,6 +69,17 @@ public class OrderSupplierDetailService {
 
     }
 
+    public boolean checkIfOrderIsCompleted(OrderSupplierHeader orderSupplierHeader){
+        List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
+        int count = 0;
+        for(OrderSupplierDetail orderLine: detailList){
+            count+=orderLine.getDeltaQuantity();
+        }
+        return count != 0;
+
+
+    }
+
     public List<OrderSupplierDetail> getCombinedDetailLineList(OrderSupplierHeader orderSupplierHeader){
 
         List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
