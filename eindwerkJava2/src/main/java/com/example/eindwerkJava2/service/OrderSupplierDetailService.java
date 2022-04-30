@@ -7,6 +7,7 @@ import com.example.eindwerkJava2.repositories.OrderSupplierDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,9 @@ public class OrderSupplierDetailService {
                 OrderSupplierDetail existingArticleOrderLine = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
                 existingArticleOrderLine.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
                 existingArticleOrderLine.setDeltaQuantity(existingArticleOrderLine.getExpectedQuantity());
-
+                if (checkLatestDate(existingArticleOrderLine.getExpectedDayOfDelivery(),orderSupplierDetail.getExpectedDayOfDelivery())){
+                    existingArticleOrderLine.setExpectedDayOfDelivery(orderSupplierDetail.getExpectedDayOfDelivery());
+                }
                 orderSupplierDetailRepository.save(existingArticleOrderLine);
                 check = true;
             }
@@ -43,6 +46,9 @@ public class OrderSupplierDetailService {
             orderSupplierDetail.setDeltaQuantity(orderSupplierDetail.getExpectedQuantity());
             orderSupplierDetailRepository.save(orderSupplierDetail);
         }
+    }
+    private boolean checkLatestDate(LocalDate first, LocalDate second){
+        return second.isAfter(first);
     }
 
 
