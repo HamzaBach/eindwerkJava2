@@ -61,12 +61,14 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(Model model) {
         ArticlesSuccess retrievedArticles = articleService.getActiveArticles();
-        model.addAttribute("article", new Article());
-        List<Article> articles = retrievedArticles.getArticles();
-        model.addAttribute("articlesList", articles);
-        if (!retrievedArticles.getIsSuccessfull()) {
-            model.addAttribute("error", retrievedArticles.getMessage());
+        if(!retrievedArticles.getIsSuccessfull()){
+            model.addAttribute("error",retrievedArticles.getMessage());
+        } else {
+            model.addAttribute("article", new Article());
+            List<Article> articles = retrievedArticles.getArticles();
+            model.addAttribute("articlesList", articles);
         }
+
         return "articles";
     }
 
@@ -112,15 +114,17 @@ public class ArticleController {
      */
     @PostMapping("/saveArticle")
     public String saveArticle(@ModelAttribute("article") Article article,
-                              @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs) throws IOException {
+                              @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs, Model model) throws IOException {
         byte[] addedImage = multipartFile.getBytes();
         SuccessObject success = this.articleService.saveArticle(article, addedImage);
         if (success.getIsSuccessfull()) {
             redirAttrs.addFlashAttribute("success", success.getMessage());
+            return "redirect:/articles";
         } else {
-            redirAttrs.addFlashAttribute("error", success.getMessage());
+            model.addAttribute("error", success.getMessage());
+            return "/forms/form_article";
         }
-        return "redirect:/articles";
+
     }
 
     /**

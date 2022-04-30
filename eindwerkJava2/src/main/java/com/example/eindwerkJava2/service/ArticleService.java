@@ -58,42 +58,53 @@ public class ArticleService {
 
     public SuccessObject saveArticle(Article article, byte[] articleImage) {
         SuccessObject success = new ArticleSuccess();
-        if (article.getArticleId() == null
-                && articleRepository.existsArticleByArticleName(article.getArticleName())
-                && articleRepository.findByArticleName(article.getArticleName()).get().getActiveArticle() == 1) {
-            success.setIsSuccessfull(false);
-            success.setMessage("New article cannot be added because this article name " + article.getArticleName() + " already exists! ");
-            return success;
-        }
-        // use case if an existing article gets renamed to the name of an already present article name -> block!
-        Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
-        if (article.getArticleId() != null && articleWithSameName.getArticleId() != article.getArticleId()
-                && articleWithSameName.getArticleName().equals(article.getArticleName())) {
-            success.setIsSuccessfull(false);
-            success.setMessage("Cannot modify this article because the article name " + article.getArticleName() + " is already used!");
-            return success;
-        } else {
-            if (articleImage.length == 0) {
-                if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
-                    Article currentArticle = articleRepository.getById(article.getArticleId());
-                    article.setArticleImage(currentArticle.getArticleImage());
-                }
-            } else {
-                article.setArticleImage(articleImage);
+        Boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
+        if (existsArticleByName) {
+            Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
+            // use case if a new article gets named to the name of an already present article name -> block!
+            if (article.getArticleId() == null
+                    && articleWithSameName.getActiveArticle() == 1) {
+                success.setIsSuccessfull(false);
+                success.setMessage("New article cannot be added because this article name " + article.getArticleName() + " already exists!");
+                return success;
             }
-            //Generate unique barcode:
-            if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
-                article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + article.getArticleId());
-            } else {
-                article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + String.valueOf(articleRepository.getMaxId() + 1));
+            // use case if an existing article gets renamed to the name of an already present article name -> block!
+            if (article.getArticleId() != null
+                    && articleWithSameName.getArticleId() != article.getArticleId()
+                    && articleWithSameName.getActiveArticle() == 1) {
+                success.setIsSuccessfull(false);
+                success.setMessage("Cannot modify this article because the article name " + article.getArticleName() + " already exists!");
+                return success;
             }
-            //Save article
-            articleRepository.save(article);
-            success.setIsSuccessfull(true);
-            success.setMessage("Article " + article.getArticleName() + " is succesfully saved!");
-            return success;
         }
+        articleImageHandler(article, articleImage);
+        //Generate unique barcode:
+        articleBarcodeHandler(article);
+        //Save article
+        articleRepository.save(article);
+        success.setIsSuccessfull(true);
+        success.setMessage("Article " + article.getArticleName() + " is succesfully saved!");
+        return success;
 
+    }
+
+    private void articleBarcodeHandler(Article article) {
+        if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
+            article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + article.getArticleId());
+        } else {
+            article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + String.valueOf(articleRepository.getMaxId() + 1));
+        }
+    }
+
+    private void articleImageHandler(Article article, byte[] articleImage) {
+        if (articleImage.length == 0) {
+            if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
+                Article currentArticle = articleRepository.getById(article.getArticleId());
+                article.setArticleImage(currentArticle.getArticleImage());
+            }
+        } else {
+            article.setArticleImage(articleImage);
+        }
     }
 
     /**
