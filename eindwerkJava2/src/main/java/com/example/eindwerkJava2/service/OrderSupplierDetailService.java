@@ -1,15 +1,12 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
 import com.example.eindwerkJava2.repositories.OrderSupplierDetailRepository;
-import org.apache.tools.ant.types.resources.selectors.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,9 +26,26 @@ public class OrderSupplierDetailService {
         return orderSupplierDetailRepository.findAll();
     }
 
+    public void updateExpectedQuantity(OrderSupplierDetail orderSupplierDetail){
+        List<OrderSupplierDetail> orderSupplierDetailList = getOrderDetailsFromHeader(orderSupplierDetail.getOrderSupplierHeader());
+        boolean check = false;
+        for(OrderSupplierDetail order: orderSupplierDetailList){
+            if(order.getArticle().equals(orderSupplierDetail.getArticle())){
+                OrderSupplierDetail existingArticleInOrder = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
+                existingArticleInOrder.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
+                orderSupplierDetailRepository.save(existingArticleInOrder);
+                check = true;
+            }
+        }
+        if(!check){
+            orderSupplierDetailRepository.save(orderSupplierDetail);
+        }
+    }
+
 
     public void save(OrderSupplierDetail orderSupplierDetail) {
-        orderSupplierDetailRepository.save(orderSupplierDetail);
+            orderSupplierDetailRepository.save(orderSupplierDetail);
+
     }
 
     public List<OrderSupplierDetail> getOrderDetailsFromHeader(OrderSupplierHeader orderSupplierHeader) {
@@ -50,7 +64,7 @@ public class OrderSupplierDetailService {
 
         List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
         Map<Article, Integer> quantityPerArticle = detailList.stream()
-                .collect(groupingBy(OrderSupplierDetail::getArticle, summingInt(OrderSupplierDetail::getQuantity)));
+                .collect(groupingBy(OrderSupplierDetail::getArticle, summingInt(OrderSupplierDetail::getExpectedQuantity)));
 
         List<OrderSupplierDetail> checkDate = getOrderDetailsFromHeader(orderSupplierHeader);
         Map<Article, Optional<OrderSupplierDetail>> maxDate = checkDate.stream()

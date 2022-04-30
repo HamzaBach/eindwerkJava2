@@ -2,39 +2,56 @@ package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
-import com.example.eindwerkJava2.service.OrderReceiveService;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
 @Controller
 public class OrderReceiveController {
-    private final OrderReceiveService orderReceiveService;
     private final OrderSupplierHeaderService orderSupplierHeaderService;
     private final OrderSupplierDetailService orderSupplierDetailService;
 
-    public OrderReceiveController(OrderReceiveService orderReceiveService, OrderSupplierHeaderService orderSupplierHeaderService, OrderSupplierDetailService orderSupplierDetailService) {
-        this.orderReceiveService = orderReceiveService;
+    public OrderReceiveController(OrderSupplierHeaderService orderSupplierHeaderService, OrderSupplierDetailService orderSupplierDetailService) {
+
         this.orderSupplierHeaderService = orderSupplierHeaderService;
         this.orderSupplierDetailService = orderSupplierDetailService;
     }
 
-    @GetMapping(path="orderReceived")
-    public String getAllOrders(Model model){
-        model.addAttribute("orderList", orderSupplierHeaderService.getOrderSupplierHeaders());
+    @GetMapping(path = "orderReceived")
+    public String getAllOrders(Model model) {
+        model.addAttribute("orderList", orderSupplierHeaderService.getAllClosedOrders());
         return "orders_received";
     }
 
-    @GetMapping(path="/view/orderReceived/{orderId}")
-    public String viewOrder(@PathVariable("orderId") Long orderId, Model model){
+    @GetMapping(path = "/view/orderReceived/{orderId}")
+    public String viewOrder(@PathVariable("orderId") Long orderId, Model model) {
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).get();
-        List<OrderSupplierDetail> orderSupplierDetail = orderSupplierDetailService.getCombinedDetailLineList(orderSupplierHeader);
-        model.addAttribute("order", orderSupplierDetail);
+        List<OrderSupplierDetail> orderSupplierDetailList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader);
+        model.addAttribute("orderheader", orderSupplierHeader);
+        model.addAttribute("orderLines", orderSupplierDetailList);
+        for (OrderSupplierDetail orderLine : orderSupplierDetailList) {
+            model.addAttribute("orderSupplierDetail", orderLine);
+        }
         return "forms/form_order_received";
     }
+
+    @PostMapping("/saveReceive/{orderLineId}")
+    public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderSupplierDetail orderSupplierDetail,
+                             @PathVariable("orderLineId") Long orderLineId) {
+        OrderSupplierDetail orderLine = orderSupplierDetailService.getById(orderLineId).get();
+        orderLine.setReceivedQuantity(orderSupplierDetail.getReceivedQuantity()+orderLine.getReceivedQuantity());
+        orderLine.setDeltaQuantity(orderLine.getExpectedQuantity()-orderLine.getReceivedQuantity());
+        this.orderSupplierDetailService.save(orderLine);
+        return "redirect:/view/orderReceived/" + orderLine.getOrderSupplierHeader().getOrderSupplierId();
+    }
+
+
 }
