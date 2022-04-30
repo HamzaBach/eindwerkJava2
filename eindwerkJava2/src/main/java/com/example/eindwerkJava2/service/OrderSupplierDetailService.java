@@ -31,13 +31,16 @@ public class OrderSupplierDetailService {
         boolean check = false;
         for(OrderSupplierDetail order: orderSupplierDetailList){
             if(order.getArticle().equals(orderSupplierDetail.getArticle())){
-                OrderSupplierDetail existingArticleInOrder = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
-                existingArticleInOrder.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
-                orderSupplierDetailRepository.save(existingArticleInOrder);
+                OrderSupplierDetail existingArticleOrderLine = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
+                existingArticleOrderLine.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
+                existingArticleOrderLine.setDeltaQuantity(existingArticleOrderLine.getExpectedQuantity());
+
+                orderSupplierDetailRepository.save(existingArticleOrderLine);
                 check = true;
             }
         }
         if(!check){
+            orderSupplierDetail.setDeltaQuantity(orderSupplierDetail.getExpectedQuantity());
             orderSupplierDetailRepository.save(orderSupplierDetail);
         }
     }
