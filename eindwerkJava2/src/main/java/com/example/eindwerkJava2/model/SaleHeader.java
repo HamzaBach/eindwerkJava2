@@ -23,9 +23,13 @@ public class SaleHeader {
     private LocalDateTime dateOfOrder;
     @Column(name = "name_sales_person")
     private String nameSalesPerson;
+    @Column(name = "total_price")
+    private double totalPrice;
+
 
     public SaleHeader(String nameSalesPerson) {
         this.nameSalesPerson = nameSalesPerson;
+        this.totalPrice = 0;
     }
 
 }

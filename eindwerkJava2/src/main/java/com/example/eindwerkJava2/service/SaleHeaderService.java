@@ -23,4 +23,8 @@ public class SaleHeaderService {
     public List<SaleHeader> getAllSaleHeaders(){
         return saleHeaderRepository.findAll();
     }
+
+    public SaleHeader getSaleHeaderById(Long saleHeaderId) {
+        return saleHeaderRepository.findById(saleHeaderId).get();
+    }
 }

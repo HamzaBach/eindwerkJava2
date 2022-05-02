@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleDto;
 import com.example.eindwerkJava2.service.ArticleService;
 
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class ArticleRestController {
     }
 
     @GetMapping("{barcode}")
-    public Article getArticleById(@PathVariable String barcode) {
-        return articleService.findByBarcode(barcode).getArticle();
+    public ArticleDto getArticleById(@PathVariable String barcode) {
+        return articleService.getDtoOfBarcode(barcode);
     }
 
 }

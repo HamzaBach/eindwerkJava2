@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
@@ -165,5 +166,19 @@ public class ArticleService {
         return success;
     }
 
+
+    public ArticleDto getDtoOfBarcode(String barcode){
+        Article article = articleRepository.findByArticleBarcode(barcode).get();
+        return toArticleDto(article);
+    }
+
+    public ArticleDto toArticleDto(Article article){
+        return new ArticleDto(
+                article.getArticleName(),
+                article.getCategory().getCategoryName(),
+                article.getArticleSupplier().getSalesPrice()
+        );
+
+    }
 
 }
