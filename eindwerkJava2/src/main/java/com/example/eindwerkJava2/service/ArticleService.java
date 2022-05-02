@@ -125,6 +125,24 @@ public class ArticleService {
         }
         return success;
     }
+    /**
+     * Method to retrieve an article from the database based on its barcode.
+     *
+     * @param barcode The barcode of the to be retrieved article from the database.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
+     */
+    public ArticleSuccess findByBarcode(String barcode) {
+        ArticleSuccess success = new ArticleSuccess();
+        if (articleRepository.findByArticleBarcode(barcode).isEmpty()) {
+            success.setIsSuccessfull(false);
+            success.setMessage("Article not found!");
+        } else {
+            Article article = articleRepository.findByArticleBarcode(barcode).get();
+            success.setArticle(article);
+            success.setIsSuccessfull(true);
+        }
+        return success;
+    }
 
     /**
      * Method to delete an article from the database.

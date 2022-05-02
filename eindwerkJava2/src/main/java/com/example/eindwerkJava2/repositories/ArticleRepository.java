@@ -53,4 +53,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      */
     Optional<Article> findByArticleName(String articleName);
 
+    /**
+     * Method to find an article in the repository via the barcode.
+     * @param barcode
+     * @return
+     */
+    Optional<Article> findByArticleBarcode(String barcode);
+
 }

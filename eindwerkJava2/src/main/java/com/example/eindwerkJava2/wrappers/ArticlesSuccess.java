@@ -21,5 +21,4 @@ import java.util.List;
 @EqualsAndHashCode
 public class ArticlesSuccess extends SuccessObject {
     private List<Article> articles = new ArrayList<>();
-
 }

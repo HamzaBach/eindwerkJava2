@@ -16,9 +16,6 @@
         });
     });
 
-
-
-
     </script>
 </head>
 <body>
@@ -83,15 +80,13 @@
                         <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
                         <td class="col-md-3" th:text="${orderdetail.deltaQuantity}"></td>
                         <td class="col-md-3">
-                            <input th:field="*{receivedQuantity}"  type="number" placeholder="Qty"
+                            <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
                                    class="form-control" required>
                         </td>
                         <td class="col-md-1">
                             <button type="submit" class="btn btn-success btn-sm">Save</button>
                         </td>
-
                     </form>
-
                 </tr>
                 </tbody>
             </table>
