@@ -1,9 +1,10 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.CreateSaleLineDto;
+import com.example.eindwerkJava2.model.dto.CreateSaleLineDto;
 import com.example.eindwerkJava2.model.SaleHeader;
 import com.example.eindwerkJava2.model.SaleLine;
+import com.example.eindwerkJava2.model.dto.SaleLineDto;
 import com.example.eindwerkJava2.repositories.SaleLineRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,19 @@ public class SaleLineService {
         return saleLines
                 .stream()
                 .filter(saleLine -> saleLine.getSaleHeader().equals(saleHeaderService.getSaleHeaderById(saleHeaderId)))
+                .collect(Collectors.toList());
+    }
+
+    public SaleLineDto toSaleLineDto(SaleLine saleLine){
+        return  new SaleLineDto(
+                saleLine.getArticle().getArticleName(),
+                saleLine.getQuantity(),
+                saleLine.getUnitPrice());
+    }
+
+    public List<SaleLineDto> saleLineDtos(List<SaleLine> saleLines){
+        return saleLines.stream()
+                .map(this::toSaleLineDto)
                 .collect(Collectors.toList());
     }
 }

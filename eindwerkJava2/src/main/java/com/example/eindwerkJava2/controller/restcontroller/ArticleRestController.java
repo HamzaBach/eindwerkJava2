@@ -1,7 +1,7 @@
-package com.example.eindwerkJava2.controller;
+package com.example.eindwerkJava2.controller.restcontroller;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.ArticleDto;
+import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.service.ArticleService;
 
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +20,8 @@ public class ArticleRestController {
     }
 
     @GetMapping
-    public List<Article> getAllArticles() {
-        return articleService.getActiveArticles().getArticles();
+    public List<ArticleDto> getAllArticles() {
+        return articleService.articleDtos(articleService.getActiveArticles().getArticles());
     }
 
     @GetMapping("{barcode}")

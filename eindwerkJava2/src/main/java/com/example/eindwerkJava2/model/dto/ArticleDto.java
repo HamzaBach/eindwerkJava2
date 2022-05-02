@@ -1,4 +1,4 @@
-package com.example.eindwerkJava2.model;
+package com.example.eindwerkJava2.model.dto;
 
 import lombok.Getter;
 

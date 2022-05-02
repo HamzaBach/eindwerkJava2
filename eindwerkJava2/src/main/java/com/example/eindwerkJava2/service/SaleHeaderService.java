@@ -11,16 +11,16 @@ import java.util.List;
 public class SaleHeaderService {
     private final SaleHeaderRepository saleHeaderRepository;
 
-    public SaleHeaderService(SaleHeaderRepository saleHeaderRepository) {
+    public SaleHeaderService(SaleHeaderRepository saleHeaderRepository ) {
         this.saleHeaderRepository = saleHeaderRepository;
     }
 
-    public void createHeader(SaleHeader saleHeader){
+    public void createHeader(SaleHeader saleHeader) {
         saleHeader.setDateOfOrder(LocalDateTime.now());
         saleHeaderRepository.save(saleHeader);
     }
 
-    public List<SaleHeader> getAllSaleHeaders(){
+    public List<SaleHeader> getAllSaleHeaders() {
         return saleHeaderRepository.findAll();
     }
 
@@ -28,3 +28,5 @@ public class SaleHeaderService {
         return saleHeaderRepository.findById(saleHeaderId).get();
     }
 }
+
+

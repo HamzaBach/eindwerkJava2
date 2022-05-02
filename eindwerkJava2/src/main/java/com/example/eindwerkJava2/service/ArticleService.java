@@ -1,7 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.ArticleDto;
+import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The service layer which hosts the business logic for articles.
@@ -179,6 +180,11 @@ public class ArticleService {
                 article.getArticleSupplier().getSalesPrice()
         );
 
+    }
+    public List<ArticleDto> articleDtos(List<Article> articles){
+        return articles.stream()
+                .map(this::toArticleDto)
+                .collect(Collectors.toList());
     }
 
 }
