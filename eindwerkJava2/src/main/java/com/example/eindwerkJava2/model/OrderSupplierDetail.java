@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity
 @Table(name = "orderSupplierDetail")
 public class OrderSupplierDetail {
@@ -27,8 +26,12 @@ public class OrderSupplierDetail {
     private Article article;
 
 
-    @Column(name = "quantity")
-    private int quantity;
+    @Column(name="expected_quantity")
+    private int expectedQuantity;
+    @Column(name="delta_quantity")
+    private int deltaQuantity;
+    @Column(name="received_quantity")
+    private int receivedQuantity;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expectedDayOfDelivery;
@@ -41,7 +44,7 @@ public class OrderSupplierDetail {
 
     public OrderSupplierDetail(Article article, int quantity, LocalDate expectedDayOfDelivery, String orderlineNumber) {
         this.article = article;
-        this.quantity = quantity;
+        this.expectedQuantity = quantity;
         this.expectedDayOfDelivery = expectedDayOfDelivery;
         this.orderlineNumber = orderlineNumber;
     }
