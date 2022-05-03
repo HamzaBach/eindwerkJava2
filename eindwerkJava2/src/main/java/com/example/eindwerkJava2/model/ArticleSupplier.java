@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ArticleSupplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long articleSupplierId;
+    private Long articleSupplierId;
 
     @ManyToOne
     @JoinColumn(name = "article")
