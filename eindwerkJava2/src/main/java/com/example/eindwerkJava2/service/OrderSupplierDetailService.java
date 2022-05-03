@@ -1,9 +1,11 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
 import com.example.eindwerkJava2.repositories.OrderSupplierDetailRepository;
+import org.apache.tools.ant.types.resources.selectors.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,34 +29,9 @@ public class OrderSupplierDetailService {
         return orderSupplierDetailRepository.findAll();
     }
 
-    public void updateExpectedQuantity(OrderSupplierDetail orderSupplierDetail){
-        List<OrderSupplierDetail> orderSupplierDetailList = getOrderDetailsFromHeader(orderSupplierDetail.getOrderSupplierHeader());
-        boolean check = false;
-        for(OrderSupplierDetail order: orderSupplierDetailList){
-            if(order.getArticle().equals(orderSupplierDetail.getArticle())){
-                OrderSupplierDetail existingArticleOrderLine = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
-                existingArticleOrderLine.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
-                existingArticleOrderLine.setDeltaQuantity(existingArticleOrderLine.getExpectedQuantity());
-                if (checkLatestDate(existingArticleOrderLine.getExpectedDayOfDelivery(),orderSupplierDetail.getExpectedDayOfDelivery())){
-                    existingArticleOrderLine.setExpectedDayOfDelivery(orderSupplierDetail.getExpectedDayOfDelivery());
-                }
-                orderSupplierDetailRepository.save(existingArticleOrderLine);
-                check = true;
-            }
-        }
-        if(!check){
-            orderSupplierDetail.setDeltaQuantity(orderSupplierDetail.getExpectedQuantity());
-            orderSupplierDetailRepository.save(orderSupplierDetail);
-        }
-    }
-    private boolean checkLatestDate(LocalDate first, LocalDate second){
-        return second.isAfter(first);
-    }
-
 
     public void save(OrderSupplierDetail orderSupplierDetail) {
-            orderSupplierDetailRepository.save(orderSupplierDetail);
-
+        orderSupplierDetailRepository.save(orderSupplierDetail);
     }
 
     public List<OrderSupplierDetail> getOrderDetailsFromHeader(OrderSupplierHeader orderSupplierHeader) {
@@ -69,22 +46,11 @@ public class OrderSupplierDetailService {
 
     }
 
-    public boolean checkIfOrderIsCompleted(OrderSupplierHeader orderSupplierHeader){
-        List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
-        int count = 0;
-        for(OrderSupplierDetail orderLine: detailList){
-            count+=orderLine.getDeltaQuantity();
-        }
-        return count != 0;
-
-
-    }
-
     public List<OrderSupplierDetail> getCombinedDetailLineList(OrderSupplierHeader orderSupplierHeader){
 
         List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
         Map<Article, Integer> quantityPerArticle = detailList.stream()
-                .collect(groupingBy(OrderSupplierDetail::getArticle, summingInt(OrderSupplierDetail::getExpectedQuantity)));
+                .collect(groupingBy(OrderSupplierDetail::getArticle, summingInt(OrderSupplierDetail::getQuantity)));
 
         List<OrderSupplierDetail> checkDate = getOrderDetailsFromHeader(orderSupplierHeader);
         Map<Article, Optional<OrderSupplierDetail>> maxDate = checkDate.stream()

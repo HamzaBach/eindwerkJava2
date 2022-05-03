@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.OrderSupplierHeaderRepository;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderSupplierHeaderService {
     @Autowired
-    final OrderSupplierHeaderRepository orderSupplierHeaderRepository;
+    OrderSupplierHeaderRepository orderSupplierHeaderRepository;
     @Autowired
     ImageService imageService;
+
 
     public OrderSupplierHeaderService(OrderSupplierHeaderRepository orderSupplierHeaderRepository) {
         this.orderSupplierHeaderRepository = orderSupplierHeaderRepository;
@@ -49,10 +50,6 @@ public class OrderSupplierHeaderService {
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(orderHeaderId).get();
         orderSupplierHeader.setDateOrderClosed(LocalDate.now());
         save(orderSupplierHeader);
-    }
-
-    public List<OrderSupplierHeader> getAllClosedOrders(){
-        return orderSupplierHeaderRepository.getAllClosedOrders();
     }
 
 
@@ -116,7 +113,7 @@ public class OrderSupplierHeaderService {
             for(OrderSupplierDetail orderdetail: orderDetailList){
                 table.addCell(orderdetail.getOrderlineNumber());
                 table.addCell(orderdetail.getArticle().getArticleName());
-                table.addCell(String.valueOf(orderdetail.getExpectedQuantity()));
+                table.addCell(String.valueOf(orderdetail.getQuantity()));
                 table.addCell(orderdetail.getExpectedDayOfDelivery().toString());
             }
 

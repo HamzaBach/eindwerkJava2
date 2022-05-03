@@ -35,8 +35,9 @@ public class OrderSupplierDetailController {
 
     @GetMapping("orderdetail/{orderSupplierId}")
     public String fillHeader(@PathVariable("orderSupplierId") Long orderHeaderId, Model model) {
+        Supplier supplier = new Supplier();//retrieve from header
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderHeaderId).get();
-        Supplier supplier = orderSupplierHeader.getSupplier();
+        supplier = orderSupplierHeader.getSupplier();
         model.addAttribute("orderSupplierDetail", new OrderSupplierDetail());
         model.addAttribute("orderheader", orderSupplierHeaderService.findById(orderHeaderId).get());
         model.addAttribute("articles", articleSupplierService.getArticlesFromSupplier(supplier));
@@ -47,7 +48,7 @@ public class OrderSupplierDetailController {
 
     @PostMapping("/saveOrderDetail")
     public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderSupplierDetail orderSupplierDetail){
-        this.orderSupplierDetailService.updateExpectedQuantity(orderSupplierDetail);
+        this.orderSupplierDetailService.save(orderSupplierDetail);
         return "redirect:/orderdetail/"+orderSupplierDetail.getOrderSupplierHeader().getOrderSupplierId();
     }
 

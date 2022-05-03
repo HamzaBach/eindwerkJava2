@@ -31,36 +31,17 @@ public class MutationServiceImpl implements MutationService {
         return mutationRepository.findAll();
     }
 
+    @Override
+    @Transactional(rollbackOn = NegativeInventoryException.class)
+    public void addMutation(Mutation mutation) throws NegativeInventoryException {
+        mutationRepository.save(mutation);
+        Stock stock = stockService.findStockByArticleId(mutation.getArticle());
 
-
-    public void addStock(Mutation mutation) {
-        Stock stockTo = stockService.findStockByLocation(mutation.getLocationTo());
-        stockTo.setAmount(stockTo.getAmount() + mutation.getAmount());
-        stockService.saveStock(stockTo);
-    }
-
-    public String removeStock(Mutation mutation) {
-        Stock stockFrom = stockService.findStockByLocation(mutation.getLocationFrom());
-        stockFrom.setAmount(stockFrom.getAmount() - mutation.getAmount() );
-
-        if(stockFrom.getAmount() < 0){
-            return "Failure";
-        } else{
-            stockService.saveStock(stockFrom);
-            mutationRepository.save(mutation);
-            return "Success";
+        if (mutation.getTransactionType().getTransactionTypeFactor() == -1D && stock.getAmount() - mutation.getAmount() < 0){
+            throw new NegativeInventoryException("De stock mag niet negatief zijn");
         }
-
-
-    }
-
-
-    public void moveStock(Mutation mutation) {
-
-        if( removeStock(mutation) == "Success"){
-            addStock(mutation);
-        }
-
+        stock.setAmount(updateArticleAmount(mutation));
+        stockService.saveStock(stock);
     }
 
     public Optional<Mutation> findById(Long id) {
@@ -71,12 +52,12 @@ public class MutationServiceImpl implements MutationService {
         this.mutationRepository.delete(mutation);
     }
 
-    public Double getArticleAmount(Mutation mutation) {
-        Double totalamount = 0.0;
+    public Double updateArticleAmount(Mutation mutation) {
+        Double totalamount =0.0;
         List<Mutation> mutationList = mutationRepository.findByArticle(mutation.getArticle());
 
         for (Mutation mutation1 : mutationList) {
-            totalamount += mutation1.getAmount() * mutation1.getTransactionType().getTransactionTypeFactor();
+            totalamount+= mutation1.getAmount() * mutation1.getTransactionType().getTransactionTypeFactor();
         }
 
         return totalamount;

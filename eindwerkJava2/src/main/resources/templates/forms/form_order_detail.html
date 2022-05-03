@@ -94,7 +94,7 @@
                                 </select>
                             </td>
                             <td class="col-md-3">
-                                <input th:field="*{expectedQuantity}" type="text" placeholder="Qty" class="form-control" required>
+                                <input th:field="*{quantity}" type="text" placeholder="Qty" class="form-control" required>
                             </td>
 
                             <td class="col-md-3">
@@ -110,7 +110,7 @@
                                 <input hidden type="text" th:value="${orderheader.orderSupplierId}"
                                        th:name="orderSupplierHeader" th:id="orderSupplierHeader"
                                        th:errorclass="fieldError"/>
-                              </td>
+                            </td>
 
                             <td class="col-md-1">
                                 <button type="submit" class="btn btn-success btn-sm">Save</button>
@@ -142,7 +142,7 @@
             <tr th:each="orderdetail : ${orderDetails}">
                 <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
                 <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
-                <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
+                <td class="col-md-3" th:text="${orderdetail.quantity}"></td>
                 <td class="col-md-3" th:text="${orderdetail.expectedDayOfDelivery}"></td>
                 <td class="col-md-1">
                 </td>

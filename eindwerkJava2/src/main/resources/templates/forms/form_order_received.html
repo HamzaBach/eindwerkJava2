@@ -23,10 +23,11 @@
 
 <div align="center" style="margin: 100px;">
     <div align="left">
-        <a th:href="@{/orderReceived}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+        <a th:href="@{/orderSupplier}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
     </div>
     <h1>Order</h1>
     <div>
+
         <form method="GET" style="margin:20px">
             <div>
                 <div class="row">
@@ -34,15 +35,8 @@
                         <label>Supplier</label>
                     </div>
                     <div class="col-md-5">
-                        <input th:value="${orderheader.supplier.supplierName}" disabled type="text"
+                        <input th:value="${order.supplier.supplierName}" disabled type="text"
                                placeholder="Supplier" class="form-control">
-                    </div>
-                    <div class="col-md-1">
-                        <label>Date of order</label>
-                    </div>
-                    <div class="col-md-5">
-                        <input th:value="${orderheader.dateOfOrder}" type="text" disabled placeholder="Order date"
-                               class="form-control">
                     </div>
 
                     <div class="col-md-1">
@@ -53,43 +47,39 @@
                                class="form-control">
                     </div>
 
-
                 </div>
             </div>
         </form>
 
-            <table class="table table-striped table-hover dataTable" style="margin:20px" id="articlesOverview">
-                <thead>
-                <tr>
-                    <th class="col-md-1">Line</th>
-                    <th class="col-md-2">Article</th>
-                    <th class="col-md-3">Expected Quantity</th>
-                    <th class="col-md-3">Delta Quantity</th>
-                    <th class="col-md-3">Received Quantity</th>
-                    <th class="col-md-1"></th>
+        <!--view orderlines-->
 
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="orderdetail : ${orderLines}">
-                    <form action="#" th:action="@{'/saveReceive/'+${orderdetail.orderSupplierDetailId}}" th:object="${orderSupplierDetail}" , method="POST">
-                        <input type="hidden" th:field="*{orderSupplierDetailId}" th:value="${orderdetail.orderSupplierDetailId}"
-                               class="form-control"/>
-                        <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
-                        <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
-                        <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
-                        <td class="col-md-3" th:text="${orderdetail.deltaQuantity}"></td>
-                        <td class="col-md-3">
-                            <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
-                                   class="form-control" required>
-                        </td>
-                        <td class="col-md-1">
-                            <button type="submit" class="btn btn-success btn-sm">Save</button>
-                        </td>
-                    </form>
-                </tr>
-                </tbody>
-            </table>
+        <table class="table table-striped table-hover dataTable" style="margin:20px" id="articlesOverview">
+            <thead>
+            <tr>
+                <th class="col-md-1">Line</th>
+                <th class="col-md-2">Article</th>
+                <th class="col-md-3">Quantity</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="orderdetail : ${order}">
+                <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
+                <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
+                <td class="col-md-3" th:text="${orderdetail.quantity}"></td>
+                </td>
+                <div th:unless="${orderheader.dateOrderClosed}" aria-disabled="true">
+                    <td class="col-md-1">
+                        <a th:href="@{'/delete/orderdetail/' + ${orderdetail.orderSupplierDetailId}}"
+                           class="btn-close"></a>
+                    </td>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

@@ -49,21 +49,6 @@
                         </option>
                     </select>
                 </div>
-
-
-                <div class="mb-3 form-group text-start">
-                    <label class="form-label fw-bold"> location</label>
-                    <select th:field="*{location}" type="text" placeholder="Locations" class="form-control">
-                        <option value="" selected="selected" hidden="hidden" >Select location...</option>
-                        <option th:each="location:${locationList}"
-                                th:text="${location.locationName}"
-                                th:value="${location.locationId}">
-                        </option>
-                    </select>
-                </div>
-
-
-
                 <div class="mb-3 form-group text-start">
                     <label class="form-label fw-bold"> User</label>
                 <select th:field="*{user}" type="text" placeholder="Users" class="form-control">
@@ -74,8 +59,6 @@
                     </option>
                 </select>
                 </div>
-
-
                 <div class="mb-3 form-group text-center" >
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-save"></i> Save

@@ -16,18 +16,13 @@ public class Mutation {
     private Double amount;
 
     @ManyToOne
-    @JoinColumn(name="locationFrom")
+    @JoinColumn(name="locationIdFrom")
     private Location locationFrom;
     @ManyToOne
-    @JoinColumn(name="locationTo")
-    private Location locationTo;
-    @ManyToOne
-    @JoinColumn(name="warehouseFrom")
-    private Location warehouseFrom;
-    @ManyToOne
-    @JoinColumn(name="warehouseTo")
-    private Location warehouseTo;
+    @JoinColumn(name="locationIdTo")
+    private Location locationTO;
 
+//     2 nieuw properties -> warehouse -> From & TO
 //     1 locatie mag maar 1 artikel bevatten
 //    artikel mag maar op 1 locatie staan in de fysieke winkel. In magazijn mogen er meerdere locaties zijn rekeninghoudnde met bovenstaande regel
 //     Laatste amount stock nemen en die dan meteen aanpassen, niet itereren door mutations
@@ -40,15 +35,11 @@ public class Mutation {
 
     public Mutation(){}
 
-    public Mutation(Article article, Double amount, TransactionType transactionType,Location locationTo, Location locationFrom,Location warehouseFrom,Location warehouseTo,User user) {
+    public Mutation(Article article, Double amount, TransactionType transactionType, User user) {
         this.article = article;
         this.amount = amount;
         this.transactionType = transactionType;
         this.user = user;
-        this.warehouseFrom = warehouseFrom;
-        this.warehouseTo=warehouseTo;
-        this.locationFrom= locationFrom;
-        this.locationTo=locationTo;
     }
 
     //Getters & Setters:
@@ -91,37 +82,5 @@ public class Mutation {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Location getLocationFrom() {
-        return locationFrom;
-    }
-
-    public void setLocationFrom(Location locationFrom) {
-        this.locationFrom = locationFrom;
-    }
-
-    public Location getLocationTo() {
-        return locationTo;
-    }
-
-    public void setLocationTo(Location locationTo) {
-        this.locationTo = locationTo;
-    }
-
-    public Location getWarehouseFrom() {
-        return warehouseFrom;
-    }
-
-    public void setWarehouseFrom(Location warehouseFrom) {
-        this.warehouseFrom = warehouseFrom;
-    }
-
-    public Location getWarehouseTo() {
-        return warehouseTo;
-    }
-
-    public void setWarehouseTo(Location warehouseTo) {
-        this.warehouseTo = warehouseTo;
     }
 }

@@ -10,13 +10,12 @@ import java.util.Optional;
 public interface MutationService {
 
 
-     List<Mutation> getMutations();
+    public List<Mutation> getMutations();
+    public void addMutation(Mutation mutation)
+            throws NegativeInventoryException;
 
-     void addStock(Mutation mutation);
-     String removeStock(Mutation mutation);
-     void moveStock(Mutation mutation);
 
-     Optional<Mutation> findById(Long id);
-     void deleteMutation(Mutation mutation);
-     Double getArticleAmount(Mutation mutation);
+    public Optional<Mutation> findById(Long id);
+    public void deleteMutation(Mutation mutation);
+    public Double updateArticleAmount(Mutation mutation);
 }

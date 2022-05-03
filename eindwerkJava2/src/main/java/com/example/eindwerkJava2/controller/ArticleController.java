@@ -5,7 +5,6 @@ import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
-import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,7 +59,7 @@ public class ArticleController {
      */
     @GetMapping("/articles")
     public String getArticles(Model model) {
-        ArticlesSuccess retrievedArticles = articleService.getActiveArticles();
+        ArticleSuccess retrievedArticles = articleService.getActiveArticles();
         if(!retrievedArticles.getIsSuccessfull()){
             model.addAttribute("error",retrievedArticles.getMessage());
         } else {
@@ -68,7 +67,6 @@ public class ArticleController {
             List<Article> articles = retrievedArticles.getArticles();
             model.addAttribute("articlesList", articles);
         }
-
         return "articles";
     }
 

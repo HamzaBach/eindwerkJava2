@@ -1,7 +1,6 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +38,6 @@ public class StockService {
     public Stock findStockById(Long Stockid){
         return this.stockRepository.findByStockId(Stockid);
     }
-
-    public Stock findStockByLocation(Location location){
-        return this.stockRepository.findByLocation(location);
-    };
 
     public Stock findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
     public void deleteStock(Stock stock)

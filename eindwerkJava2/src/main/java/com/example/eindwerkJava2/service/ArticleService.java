@@ -1,16 +1,13 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
-import com.example.eindwerkJava2.wrappers.ArticlesSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The service layer which hosts the business logic for articles.
@@ -37,8 +34,8 @@ public class ArticleService {
      *
      * @return A list of all active articles retrieved from {@link com.example.eindwerkJava2.repositories.ArticleRepository#findByActiveArticle(int)}.
      */
-    public ArticlesSuccess getActiveArticles() {
-        ArticlesSuccess retrievedArticles = new ArticlesSuccess();
+    public ArticleSuccess getActiveArticles() {
+        ArticleSuccess retrievedArticles = new ArticleSuccess();
         List<Article> activeArticles = this.articleRepository.findByActiveArticle(1);
         if (activeArticles.size() > 0) {
             retrievedArticles.setArticles(activeArticles);
@@ -55,28 +52,28 @@ public class ArticleService {
      *
      * @param article      The to be saved article.
      * @param articleImage The article image.
-     * @return The successObject (wrapper class around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) indicating whether the save action was successful or not.
+     * @return The successObject (wrapper class around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) indicating whether the save action was successful or not.
      */
 
     public SuccessObject saveArticle(Article article, byte[] articleImage) {
-        SuccessObject success = new ArticleSuccess();
+        SuccessObject isSaveSuccessful = new ArticleSuccess();
         Boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
         if (existsArticleByName) {
             Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
             // use case if a new article gets named to the name of an already present article name -> block!
             if (article.getArticleId() == null
                     && articleWithSameName.getActiveArticle() == 1) {
-                success.setIsSuccessfull(false);
-                success.setMessage("New article cannot be added because this article name " + article.getArticleName() + " already exists!");
-                return success;
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("New article cannot be added because this article name " + article.getArticleName() + " already exists!");
+                return isSaveSuccessful;
             }
             // use case if an existing article gets renamed to the name of an already present article name -> block!
             if (article.getArticleId() != null
                     && articleWithSameName.getArticleId() != article.getArticleId()
                     && articleWithSameName.getActiveArticle() == 1) {
-                success.setIsSuccessfull(false);
-                success.setMessage("Cannot modify this article because the article name " + article.getArticleName() + " already exists!");
-                return success;
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("Cannot modify this article because the article name " + article.getArticleName() + " already exists!");
+                return isSaveSuccessful;
             }
         }
         articleImageHandler(article, articleImage);
@@ -84,9 +81,9 @@ public class ArticleService {
         articleBarcodeHandler(article);
         //Save article
         articleRepository.save(article);
-        success.setIsSuccessfull(true);
-        success.setMessage("Article " + article.getArticleName() + " is succesfully saved!");
-        return success;
+        isSaveSuccessful.setIsSuccessfull(true);
+        isSaveSuccessful.setMessage("Article " + article.getArticleName() + " is succesfully saved!");
+        return isSaveSuccessful;
 
     }
 
@@ -113,7 +110,7 @@ public class ArticleService {
      * Method to retrieve an article from the database based on its articleId.
      *
      * @param id The id of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
      */
     public ArticleSuccess findById(Long id) {
         ArticleSuccess success = new ArticleSuccess();
@@ -127,30 +124,12 @@ public class ArticleService {
         }
         return success;
     }
-    /**
-     * Method to retrieve an article from the database based on its barcode.
-     *
-     * @param barcode The barcode of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
-     */
-    public ArticleSuccess findByBarcode(String barcode) {
-        ArticleSuccess success = new ArticleSuccess();
-        if (articleRepository.findByArticleBarcode(barcode).isEmpty()) {
-            success.setIsSuccessfull(false);
-            success.setMessage("Article not found!");
-        } else {
-            Article article = articleRepository.findByArticleBarcode(barcode).get();
-            success.setArticle(article);
-            success.setIsSuccessfull(true);
-        }
-        return success;
-    }
 
     /**
      * Method to delete an article from the database.
      *
      * @param article The to be deleted article.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the delete action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the delete action was successful or not.
      */
 
     public SuccessObject deleteArticle(Article article) {
@@ -167,24 +146,5 @@ public class ArticleService {
         return success;
     }
 
-
-    public ArticleDto getDtoOfBarcode(String barcode){
-        Article article = articleRepository.findByArticleBarcode(barcode).get();
-        return toArticleDto(article);
-    }
-
-    public ArticleDto toArticleDto(Article article){
-        return new ArticleDto(
-                article.getArticleName(),
-                article.getCategory().getCategoryName(),
-                article.getArticleSupplier().getSalesPrice()
-        );
-
-    }
-    public List<ArticleDto> articleDtos(List<Article> articles){
-        return articles.stream()
-                .map(this::toArticleDto)
-                .collect(Collectors.toList());
-    }
 
 }
