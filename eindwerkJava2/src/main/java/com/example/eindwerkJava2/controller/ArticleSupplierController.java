@@ -4,6 +4,7 @@ import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.SupplierService;
+import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.ArticleSupplierSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,15 @@ public class ArticleSupplierController {
     @GetMapping("/new/articleSupplier")
     public String showNewArticleSupplierForm(Model model){
         ArticleSupplier articleSupplier = new ArticleSupplier();
-        model.addAttribute("articleSupplier", articleSupplier);
-        model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
-        model.addAttribute("supplierList", supplierService.getAllSuppliers());
+        ArticleSuccess retrievedArticles = articleService.getActiveArticles();
+        if(retrievedArticles.getIsSuccessfull()){
+            model.addAttribute("articleSupplier", articleSupplier);
+            model.addAttribute("articleList", retrievedArticles.getArticles());
+            model.addAttribute("supplierList", supplierService.getAllSuppliers());
+        } else {
+            model.addAttribute("error", retrievedArticles.getMessage());
+        }
+
         return "/forms/form_article_supplier";
     }
 
@@ -63,16 +70,30 @@ public class ArticleSupplierController {
 
     @GetMapping("edit/articleSupplier/{articleSupplierId}")
     public String editArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
-        ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
-        model.addAttribute("articleSupplier", articleSupplier);
-        model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
-        model.addAttribute("supplierList", supplierService.getAllSuppliers());
+        ArticleSupplierSuccess success = articleSupplierService.findById(articleSupplierId);
+        if(success.getIsSuccessfull()){
+            ArticleSupplier articleSupplier = success.getArticleSupplier();
+            model.addAttribute("articleSupplier", articleSupplier);
+            model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
+            model.addAttribute("supplierList", supplierService.getAllSuppliers());
+        } else{
+            model.addAttribute("error",success.getMessage());
+        }
         return "/forms/form_article_supplier";
     }
     @GetMapping("delete/articleSupplier/{articleSupplierId}")
-    public String deleteArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
-        ArticleSupplier articleSupplier = articleSupplierService.findById(articleSupplierId).get();
-        this.articleSupplierService.deleteArticleSupplier(articleSupplier);
+    public String deleteArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, RedirectAttributes redirAttrs){
+        ArticleSupplierSuccess findArticleSupplier = articleSupplierService.findById(articleSupplierId);
+        if(findArticleSupplier.getIsSuccessfull()){
+            SuccessObject toBeDeletedArticleSupplier = articleSupplierService.deleteArticleSupplier(findArticleSupplier.getArticleSupplier());
+            if(toBeDeletedArticleSupplier.getIsSuccessfull()){
+                redirAttrs.addFlashAttribute("success",toBeDeletedArticleSupplier.getMessage());
+            }else{
+                redirAttrs.addFlashAttribute("error",toBeDeletedArticleSupplier.getMessage());
+            }
+        } else{
+            redirAttrs.addFlashAttribute("error",findArticleSupplier.getMessage());
+        }
         return "redirect:/article_supplier";
     }
 }
