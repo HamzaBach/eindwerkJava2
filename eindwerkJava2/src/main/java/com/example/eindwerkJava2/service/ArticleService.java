@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The service layer which hosts the business logic for articles.
@@ -124,6 +126,24 @@ public class ArticleService {
         }
         return success;
     }
+    /**
+     * Method to retrieve an article from the database based on its barcode.
+     *
+     * @param barcode The barcode of the to be retrieved article from the database.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
+     */
+    public ArticleSuccess findByBarcode(String barcode) {
+        ArticleSuccess success = new ArticleSuccess();
+        if (articleRepository.findByArticleBarcode(barcode).isEmpty()) {
+            success.setIsSuccessfull(false);
+            success.setMessage("Article not found!");
+        } else {
+            Article article = articleRepository.findByArticleBarcode(barcode).get();
+            success.setArticle(article);
+            success.setIsSuccessfull(true);
+        }
+        return success;
+    }
 
     /**
      * Method to delete an article from the database.
@@ -146,5 +166,24 @@ public class ArticleService {
         return success;
     }
 
+
+    public ArticleDto getDtoOfBarcode(String barcode){
+        Article article = articleRepository.findByArticleBarcode(barcode).get();
+        return toArticleDto(article);
+    }
+
+    public ArticleDto toArticleDto(Article article){
+        return new ArticleDto(
+                article.getArticleName(),
+                article.getCategory().getCategoryName(),
+                article.getArticleSupplier().getSalesPrice()
+        );
+
+    }
+    public List<ArticleDto> articleDtos(List<Article> articles){
+        return articles.stream()
+                .map(this::toArticleDto)
+                .collect(Collectors.toList());
+    }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +25,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Wrapping user service class that is recognized by Spring security.
+     *
      * @return The UserDetailsServiceImpl().
      * @see com.example.eindwerkJava2.service.UserDetailsServiceImpl
      */
@@ -34,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Encoder for storing the user's password encrypted in the database.
+     *
      * @return BCryptPasswordEncoder as the used encoder.
      */
     @Bean
@@ -43,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * The authenticationProvider that is used with Spring Security.
+     *
      * @return authProvider object which uses the userDetailsService and the BcryptPasswordEncoder.
      */
     @Bean
@@ -55,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Provider for the authentication to be used with Spring Security.
+     *
      * @param auth Is used for setting authenticationProvider as the to be user provider within the Spring Security framework.
      */
     @Override
@@ -64,11 +69,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Defines the login page, accessDeniedHandler as well as the needed authorities for specific endpoints;
+     *
      * @param http Uses the HttpSecurity class for defining the above.
      * @throws Exception An exception can be thrown in case an issue arises within the method.
      */
     @Override
-    protected void configure( HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN")
                 .antMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR")
@@ -78,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/home",true)
+                .loginPage("/login").defaultSuccessUrl("/home", true)
                 .permitAll()
                 .and()
                 .logout().permitAll()
@@ -87,8 +93,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers("/api/v1/**")
+                .antMatchers("/swagger-ui/**");
+//                .antMatchers("/api/v1/sale-headers")
+//                .antMatchers("/api/v1/sale-lines*");
+    }
+
     /**
      * This bean is used for setting up the CustomAccesDeniedHandler.
+     *
      * @return The CustomAccessDeniedHandler.
      * @see com.example.eindwerkJava2.security.CustomAccessDeniedHandler
      */
