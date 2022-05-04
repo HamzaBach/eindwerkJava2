@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller.restcontroller;
 import com.example.eindwerkJava2.model.SaleHeader;
 import com.example.eindwerkJava2.service.SaleHeaderService;
 import com.example.eindwerkJava2.service.SaleLineService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +22,9 @@ public class SaleHeaderRestController {
     }
 
     @PostMapping
-    public void createHeader(@RequestBody SaleHeader saleHeader){
+    public ResponseEntity<String> createHeader(@RequestBody SaleHeader saleHeader){
         saleHeaderService.createHeader(saleHeader);
+        return  ResponseEntity.ok(String.valueOf(saleHeader.getSaleHeaderId()));
     }
 
     @GetMapping
