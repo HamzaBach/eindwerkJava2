@@ -36,7 +36,7 @@ public class ArticleSupplierService {
         SuccessObject isSaveSuccessful = new ArticleSupplierSuccess();
         List<ArticleSupplier> articlesFromSupplier = articleSupplierRepository.getActiveArticlesFromSpecificSupplier(articleSupplier.getSupplier().getSupplierId());
         duplicateArticlesFromSupplierHandler(articleSupplier, isSaveSuccessful, articlesFromSupplier);
-        if(isSaveSuccessful.getIsSuccessfull()){
+        if (isSaveSuccessful.getIsSuccessfull()) {
             this.articleSupplierRepository.save(articleSupplier);
         }
         return isSaveSuccessful;
@@ -45,34 +45,52 @@ public class ArticleSupplierService {
     private void duplicateArticlesFromSupplierHandler(ArticleSupplier articleSupplier, SuccessObject isSaveSuccessful, List<ArticleSupplier> articlesFromSupplier) {
         //use case when a new article (id==null) of a supplier is added while the same one is already present in the repository -> block!
         //use case when an existing article (id!=null) gets modified to refer to an article which is already provided by the same supplier -> block!
-        int duplicatesCounter =0;
+        int duplicatesCounter = 0;
         Long duplicateArticleSupplierId = -1L;
         for (ArticleSupplier articleSupplier1 : articlesFromSupplier) {
             if (articleSupplier.getArticle().getArticleName().equals(articleSupplier1.getArticle().getArticleName()) && articleSupplier.getArticleSupplierId() == null ||
                     articleSupplier.getArticle().getArticleName().equals(articleSupplier1.getArticle().getArticleName()) && articleSupplier.getArticleSupplierId() != articleSupplier1.getArticleSupplierId()) {
-                duplicatesCounter+=1;
-                duplicateArticleSupplierId=articleSupplier1.getArticleSupplierId();
+                duplicatesCounter += 1;
+                duplicateArticleSupplierId = articleSupplier1.getArticleSupplierId();
             }
         }
-        if(duplicatesCounter>0){
+        if (duplicatesCounter > 0) {
             isSaveSuccessful.setIsSuccessfull(false);
             isSaveSuccessful.setMessage("Article " + articleSupplier.getArticle().getArticleName() + " from supplier "
                     + articleSupplier.getSupplier().getSupplierName() + " cannot be saved because this same article is already provided by supplier "
                     + articleSupplier.getSupplier().getSupplierName() + " with articleSupplierId: " + duplicateArticleSupplierId);
-        } else{
+        } else {
             isSaveSuccessful.setIsSuccessfull(true);
             isSaveSuccessful.setMessage("Article " + articleSupplier.getArticle().getArticleName() + " from supplier "
                     + articleSupplier.getSupplier().getSupplierName() + " is successfully saved.");
         }
     }
 
-    public Optional<ArticleSupplier> findById(long id) {
-        return articleSupplierRepository.findById(id);
+    public ArticleSupplierSuccess findById(long id) {
+        ArticleSupplierSuccess success = new ArticleSupplierSuccess();
+        if (articleSupplierRepository.findById(id).isEmpty()) {
+            success.setIsSuccessfull(false);
+            success.setMessage("Article from the given supplier was not found!");
+        } else {
+            ArticleSupplier articleSupplier = articleSupplierRepository.findById(id).get();
+            success.setArticleSupplier(articleSupplier);
+            success.setIsSuccessfull(true);
+        }
+        return success;
     }
 
-    public void deleteArticleSupplier(ArticleSupplier articleSupplier) {
+    public SuccessObject deleteArticleSupplier(ArticleSupplier articleSupplier) {
+        SuccessObject success = new ArticleSupplierSuccess();
         articleSupplier.setActiveArticleSupplier(0);
         this.articleSupplierRepository.save(articleSupplier);
+        if (articleSupplierRepository.findById(articleSupplier.getArticleSupplierId()).get().getActiveArticleSupplier() == 0) {
+            success.setIsSuccessfull(true);
+            success.setMessage("Article " + articleSupplier.getArticle().getArticleName() + " (articleSupplierId: " + articleSupplier.getArticleSupplierId() + ")" + " was successfully removed.");
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("Article " + articleSupplier.getArticle().getArticleName() + " (articleSupplierId: " + articleSupplier.getArticleSupplierId() + ")" + " could not be removed.");
+        }
+        return success;
     }
 
     public List<ArticleSupplier> getAllSuppliersPerArticle(Article article) {
