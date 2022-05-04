@@ -38,16 +38,16 @@ public class Stock {
     /**
      * Initiates a new Stock.
      *
-     * @param stockId         ID of the stock in the database.
-     * @param location        link to the location table.
-     * @param articleSupplier link to table article, column articleSupplier.
-     * @param amount          link to the amount table.
-     * @param activeStock     stock (active or  inactive (=deleted)).
+     * @param stockId     ID of the stock in the database.
+     * @param location    link to the location table.
+     * @param article     link to table article, column articleSupplier.
+     * @param amount      link to the amount table.
+     * @param activeStock stock (active or  inactive (=deleted)).
      */
-    public Stock(Long stockId, Location location, Article articleSupplier, double amount, int activeStock) {
+    public Stock(Long stockId, Location location, Article article, double amount, int activeStock) {
         this.stockId = stockId;
         this.location = location;
-        this.article = articleSupplier;
+        this.article = article;
         this.amount = amount;
         this.activeStock = activeStock;
     }
@@ -60,8 +60,4 @@ public class Stock {
     }
 
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

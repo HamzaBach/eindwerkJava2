@@ -27,11 +27,11 @@ public class OrderSupplierDetail {
 
 
     @Column(name="expected_quantity")
-    private int expectedQuantity;
+    private double expectedQuantity;
     @Column(name="delta_quantity")
-    private int deltaQuantity;
+    private double deltaQuantity;
     @Column(name="received_quantity")
-    private int receivedQuantity;
+    private double receivedQuantity;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expectedDayOfDelivery;
@@ -42,7 +42,7 @@ public class OrderSupplierDetail {
     public OrderSupplierDetail() {
     }
 
-    public OrderSupplierDetail(Article article, int quantity, LocalDate expectedDayOfDelivery, String orderlineNumber) {
+    public OrderSupplierDetail(Article article, double quantity, LocalDate expectedDayOfDelivery, String orderlineNumber) {
         this.article = article;
         this.expectedQuantity = quantity;
         this.expectedDayOfDelivery = expectedDayOfDelivery;

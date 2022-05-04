@@ -37,6 +37,7 @@ public class MutationServiceImpl implements MutationService {
         Stock stockTo = stockService.findStockByLocation(mutation.getLocationTo());
         stockTo.setAmount(stockTo.getAmount() + mutation.getAmount());
         stockService.saveStock(stockTo);
+        mutationRepository.save(mutation);
     }
 
     public String removeStock(Mutation mutation) {

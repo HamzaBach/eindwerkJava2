@@ -160,6 +160,26 @@ public class DummyDataConfig {
                     articleSupplierRepository.save(articleSupplier);
                 }
             }
+
+
+            if(warehouseRepository.count()<2){
+                Warehouse warehouse = new Warehouse();
+                warehouse.setWarehouseName("Magazijn");
+                Location location = new Location();
+                location.setActiveLocation(1);
+                location.setLocationName("LAADZONE");
+                location.setSingleStorage(false);
+                location.setWarehouse(warehouse);
+                Location location2 = new Location();
+                location.setActiveLocation(1);
+                location.setLocationName("SUPPLIER/ORDER");
+                location.setSingleStorage(false);
+                location.setWarehouse(warehouse);
+                warehouseRepository.save(warehouse);
+                locationRepository.save(location);
+                locationRepository.save(location2);
+            }
+
         };
     }
 }
