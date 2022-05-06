@@ -11,7 +11,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Table(name = "Cities")
-public class Cities {
+public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cityId;
@@ -28,11 +28,11 @@ public class Cities {
     /**
      *
      */
-    public Cities() {
+    public City() {
     }
 
 
-    public Cities(int cityZipcode, String cityName, String cityProvince) {
+    public City(int cityZipcode, String cityName, String cityProvince) {
         this.cityZipcode = cityZipcode;
         this.cityName = cityName;
         this.cityProvince = cityProvince;

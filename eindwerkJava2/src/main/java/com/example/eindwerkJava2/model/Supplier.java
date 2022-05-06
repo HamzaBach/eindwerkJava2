@@ -28,17 +28,17 @@ public class Supplier {
 
     @ManyToOne
     @JoinColumn(name = "city")
-    private Cities city;
+    private City city;
 
     @ManyToOne
     @JoinColumn(name = "country")
-    private Countries country;
+    private Country country;
 
     public Supplier() {
     }
 
     public Supplier(String supplierName, String adress,
-                    Cities city, Countries country, int activeSupplier) {
+                    City city, Country country, int activeSupplier) {
         this.supplierName = supplierName;
         this.adress = adress;
         this.city = city;

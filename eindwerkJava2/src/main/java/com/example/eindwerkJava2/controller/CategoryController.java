@@ -67,7 +67,7 @@ public class CategoryController {
     }
 
     @GetMapping("delete/category/{categoryId}")
-    public String deleteCategory(@PathVariable("categoryId") Long categoryId, Model model, RedirectAttributes redirAttrs){
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId, RedirectAttributes redirAttrs){
         CategorySuccess findCategory = categoryService.findById(categoryId);
         if(findCategory.getIsSuccessfull()){
             SuccessObject toBeDeletedCategory = this.categoryService.deleteCategory(findCategory.getCategory());

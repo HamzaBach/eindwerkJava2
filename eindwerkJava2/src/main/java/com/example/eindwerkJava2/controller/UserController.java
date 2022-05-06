@@ -1,8 +1,11 @@
 package com.example.eindwerkJava2.controller;
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
+import com.example.eindwerkJava2.wrappers.CategorySuccess;
+import com.example.eindwerkJava2.wrappers.RolesSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import com.example.eindwerkJava2.wrappers.UserSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +60,13 @@ public class UserController {
      */
     @GetMapping("/users")
     public String getUsers(Model model) {
-        List<User> users = userService.getActiveUsers();
-        model.addAttribute("UsersList", users);
+        UserSuccess retrievedUsers = userService.getActiveUsers();
+        if (!retrievedUsers.getIsSuccessfull()) {
+            model.addAttribute("error", retrievedUsers.getMessage());
+        } else {
+            List<User> users = retrievedUsers.getUsers();
+            model.addAttribute("UsersList", users);
+        }
         return "users";
     }
 
@@ -73,16 +81,17 @@ public class UserController {
      */
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user,
-                           @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs) throws IOException {
+                           @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs, Model model) throws IOException {
 
         byte[] addedImage = multipartFile.getBytes();
         SuccessObject savedUser = this.userService.saveUser(user, addedImage);
         if (savedUser.getIsSuccessfull()) {
             redirAttrs.addFlashAttribute("success", savedUser.getMessage());
+            return "redirect:/users";
         } else {
-            redirAttrs.addFlashAttribute("error", savedUser.getMessage());
+            model.addAttribute("error", savedUser.getMessage());
+            return "/forms/form_user";
         }
-        return "redirect:/users";
     }
 
     /**
@@ -95,13 +104,17 @@ public class UserController {
      */
     @GetMapping("/user/image/{userId}")
     @ResponseBody
-    void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, Optional<User> user)
+    void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, User user)
             throws IOException {
-        if (user.get().getUserImage() != null) {
-            user = userService.findById(userId);
-            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-            response.getOutputStream().write(user.get().getUserImage());
-            response.getOutputStream().close();
+        if (user.getUserImage() != null) {
+            UserSuccess success = userService.findById(userId);
+            if (success.getIsSuccessfull()) {
+                user = success.getUser();
+                response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+                response.getOutputStream().write(user.getUserImage());
+                response.getOutputStream().close();
+            }
+
         }
     }
 
@@ -114,11 +127,16 @@ public class UserController {
      */
     @GetMapping("edit/user/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
-        User user = userService.findById(userId).get();
-        model.addAttribute("rolesList", rolesService.getAllRoles());
-        model.addAttribute("userRoles", rolesService.getUserRoles(user));
-        model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
-        model.addAttribute("user", user);
+        UserSuccess success = userService.findById(userId);
+        if (success.getIsSuccessfull()) {
+            User user = success.getUser();
+            model.addAttribute("rolesList", rolesService.getAllRoles());
+            model.addAttribute("userRoles", rolesService.getUserRoles(user));
+            model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("error", success.getMessage());
+        }
         return "/forms/form_user";
     }
 
@@ -129,9 +147,18 @@ public class UserController {
      * @return After a successful delete the users overview is returned.
      */
     @GetMapping("delete/user/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userId) {
-        User user = userService.findById(userId).get();
-        this.userService.deleteUser(user);
+    public String deleteUser(@PathVariable("userId") Long userId, RedirectAttributes redirAttrs) {
+        UserSuccess findUser = userService.findById(userId);
+        if (findUser.getIsSuccessfull()) {
+            SuccessObject toBeDeletedUser = this.userService.deleteUser(findUser.getUser());
+            if (toBeDeletedUser.getIsSuccessfull()) {
+                redirAttrs.addFlashAttribute("success", toBeDeletedUser.getMessage());
+            } else {
+                redirAttrs.addFlashAttribute("error", toBeDeletedUser.getMessage());
+            }
+        } else {
+            redirAttrs.addFlashAttribute("error", findUser.getMessage());
+        }
         return "redirect:/users";
     }
 
@@ -142,9 +169,15 @@ public class UserController {
      * @return The form for adding a new user is returned.
      */
     @GetMapping("/new/user")
-    public String showNewUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("rolesList", rolesService.getAllRoles());
-        return "/forms/form_user";
+    public String showNewUserForm(Model model, RedirectAttributes redirAttrs) {
+        RolesSuccess rolesSuccess = rolesService.getAllRoles();
+        if (rolesSuccess.getIsSuccessfull()) {
+            model.addAttribute("user", new User());
+            model.addAttribute("rolesList", rolesSuccess.getRoles());
+            return "/forms/form_user";
+        } else {
+            redirAttrs.addAttribute("error", rolesSuccess.getMessage());
+            return "redirect:/users";
+        }
     }
 }

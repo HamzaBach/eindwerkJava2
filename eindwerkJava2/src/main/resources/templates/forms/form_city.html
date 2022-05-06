@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <!-- Bootstrap CSS & icons-->
+  <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+  <title>City</title>
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
+<div align="center" style="margin: 100px">
+
+
+  <div th:if="${city.cityId == null}">
+    <h1>New city</h1>
+  </div>
+  <div th:unless="${city.cityId == null}">
+    <h1>Edit city</h1>
+  </div>
+  <div th:include="fragments/header::errorMessaging"/>
+
+  <form action="#" th:action="@{/saveCity}" th:object="${city}", method="POST" >
+    <div class="row">
+      <div class="col-xl-4"></div>
+
+      <div class="col-xl-4">
+        <div class="mb-3 form-group text-start">
+          <input type="hidden" th:field="*{cityId}" th:value="${city.cityId}" class="form-control"/>
+          <label class="form-label fw-bold"> Name</label>
+          <input th:field="*{cityName}" type="text" placeholder="input the city name" class="form-control" required>
+        </div>
+        <div class="mb-3 form-group text-start">
+          <label class="form-label fw-bold"> ZIP code</label>
+          <input th:field="*{cityZipcode}" type="text" placeholder="input the city ZIP code" class="form-control" required>
+        </div>
+        <div class="mb-3 form-group text-start">
+          <label class="form-label fw-bold"> Province</label>
+          <input th:field="*{cityProvince}" type="text" placeholder="input the province name" class="form-control" required>
+        </div>
+        <div class="mb-3 form-group text-center" >
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="bi bi-save"></i> Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+  </form>
+
+
+
+
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>
