@@ -8,7 +8,7 @@ package com.example.eindwerkJava2.wrappers;
  */
 public abstract class SuccessObject {
     private String message;
-    private Boolean isSuccessfull;
+    private Boolean isSuccessfull=true;
 
     /**
      * Constructor for creating a SuccessObject.

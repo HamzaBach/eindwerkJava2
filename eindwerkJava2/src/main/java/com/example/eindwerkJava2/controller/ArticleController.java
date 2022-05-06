@@ -98,7 +98,6 @@ public class ArticleController {
     @GetMapping("/new/article")
     public String showNewArticleForm(Model model) {
         CategorySuccess categorySuccess = categoryService.getCategories();
-        ArticleSuccess articleSuccess = articleService.getActiveArticles();
         model.addAttribute("article", new Article());
         if (categorySuccess.getIsSuccessfull()) {
             model.addAttribute("categoriesList", categorySuccess.getCategories());
@@ -129,7 +128,6 @@ public class ArticleController {
             model.addAttribute("error", success.getMessage());
             return "/forms/form_article";
         }
-
     }
 
     /**
