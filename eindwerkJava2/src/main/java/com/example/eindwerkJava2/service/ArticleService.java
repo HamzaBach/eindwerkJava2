@@ -5,6 +5,7 @@ import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,7 +131,7 @@ public class ArticleService {
      * Method to retrieve an article from the database based on its barcode.
      *
      * @param barcode The barcode of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
      */
     public ArticleSuccess findByBarcode(String barcode) {
         ArticleSuccess success = new ArticleSuccess();
@@ -173,11 +174,12 @@ public class ArticleService {
     }
 
     public ArticleDto toArticleDto(Article article){
+           String articleImageAsBase64 = Base64.encodeBase64String(article.getArticleImage());
         return new ArticleDto(
                 article.getArticleName(),
                 article.getCategory().getCategoryName(),
-                article.getArticleSupplier().getSalesPrice()
-        );
+                article.getArticleSupplier().getSalesPrice(),
+                articleImageAsBase64);
 
     }
     public List<ArticleDto> articleDtos(List<Article> articles){
