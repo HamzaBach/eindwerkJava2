@@ -28,7 +28,7 @@ public class CategoryController {
     public String viewCategories(Model model){
         CategorySuccess success = categoryService.getCategories();
         if(success.getIsSuccessfull()){
-            model.addAttribute("categoriesList", categoryService.getCategories().getCategories());
+            model.addAttribute("categoriesList", success.getCategories());
         } else{
             model.addAttribute("error",success.getMessage());
         }
