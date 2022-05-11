@@ -130,7 +130,7 @@ public class ArticleService {
      * Method to retrieve an article from the database based on its barcode.
      *
      * @param barcode The barcode of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticlesSuccess}) to indicate whether the find action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
      */
     public ArticleSuccess findByBarcode(String barcode) {
         ArticleSuccess success = new ArticleSuccess();
