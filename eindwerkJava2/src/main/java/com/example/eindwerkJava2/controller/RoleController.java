@@ -34,7 +34,7 @@ public class RoleController {
     public String findAll(Model model) {
         RolesSuccess rolesSuccess = rolesService.getAllRoles();
         if (rolesSuccess.getIsSuccessfull()) {
-            model.addAttribute("roles", rolesService.getAllRoles().getRoles());
+            model.addAttribute("roles", rolesSuccess.getRoles());
         } else {
             model.addAttribute("error", rolesSuccess.getMessage());
         }
