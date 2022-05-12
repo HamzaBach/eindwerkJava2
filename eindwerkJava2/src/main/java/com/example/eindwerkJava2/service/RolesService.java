@@ -92,31 +92,67 @@ public class RolesService {
     }
 
     //Assign a role
-    public Boolean assignUserRole(Long userId, Integer roleId){
-        if(userId==null){
-            return false;
-        } else {
-            User user = userRepository.findById(userId).orElse(null);
-            Role role = roleRepository.findById(roleId).orElse(null);
-
-            Set<Role> userRoles = user.getRoles();
-            userRoles.add(role);
-            user.setRoles(userRoles);
-
-            userRepository.save(user);
-            return true;
+    public SuccessObject assignUserRole(Long userId, Integer roleId){
+        SuccessObject assignUserRoleSuccess = new RolesSuccess();
+        Boolean existsRoleById = roleRepository.existsById(roleId);
+        if(existsRoleById){
+            Role toBeAssignedRole = roleRepository.findById(roleId).get();
+            if(userId==null){
+                assignUserRoleSuccess.setIsSuccessfull(false);
+                assignUserRoleSuccess.setMessage("The role "+toBeAssignedRole.getName()+ " could not be added because the user id is null!");
+            } else {
+                Boolean existsUserById = userRepository.existsById(userId);
+                if(existsUserById){
+                    User user = userRepository.findById(userId).orElse(null);
+                    Role role = roleRepository.findById(roleId).orElse(null);
+                    Set<Role> userRoles = user.getRoles();
+                    userRoles.add(role);
+                    user.setRoles(userRoles);
+                    userRepository.save(user);
+                    assignUserRoleSuccess.setIsSuccessfull(true);
+                    assignUserRoleSuccess.setMessage("The role "+toBeAssignedRole.getName()+" has been successfully assigned to "+user.getUserName()+".");
+                } else {
+                    assignUserRoleSuccess.setIsSuccessfull(false);
+                    assignUserRoleSuccess.setMessage("The user with id "+userId+" could not be found in the database!");
+                }
+            }
+        }else {
+            assignUserRoleSuccess.setIsSuccessfull(false);
+            assignUserRoleSuccess.setMessage("No such role with role id "+roleId+" could be found in the database!");
         }
-
+        return assignUserRoleSuccess;
     }
 
     //Unassign a role
-    public void unassignUserRole(Long userId, Integer roleId){
-        User user = userRepository.findById(userId).orElse(null);
-        Set<Role> userRoles = user.getRoles();
+    public SuccessObject unassignUserRole(Long userId, Integer roleId){
+        SuccessObject unassignUserRoleSuccess = new RolesSuccess();
+        Boolean existsRoleById = roleRepository.existsById(roleId);
+        if(existsRoleById){
+            Role toBeUnassignedRole = roleRepository.findById(roleId).get();
+            if(userId==null){
+                unassignUserRoleSuccess.setIsSuccessfull(false);
+                unassignUserRoleSuccess.setMessage("The role "+toBeUnassignedRole.getName()+ " could not be removed because the user id is null!");
+            } else {
+                Boolean existsUserById = userRepository.existsById(userId);
+                if(existsUserById){
+                    User user = userRepository.findById(userId).orElse(null);
+                    Set<Role> userRoles = user.getRoles();
 
-        userRoles.removeIf(x -> x.getId()==roleId);
-        user.setRoles(userRoles);
-        userRepository.save(user);
+                    userRoles.removeIf(x -> x.getId()==roleId);
+                    user.setRoles(userRoles);
+                    userRepository.save(user);
+                    unassignUserRoleSuccess.setIsSuccessfull(true);
+                    unassignUserRoleSuccess.setMessage("The role "+toBeUnassignedRole.getName()+" has been successfully removed from "+user.getUserName()+".");
+                } else {
+                    unassignUserRoleSuccess.setIsSuccessfull(false);
+                    unassignUserRoleSuccess.setMessage("The user with id "+userId+" could not be found in the database!");
+                }
+            }
+        }else {
+            unassignUserRoleSuccess.setIsSuccessfull(false);
+            unassignUserRoleSuccess.setMessage("No such role with role id "+roleId+" could be found in the database!");
+        }
+        return unassignUserRoleSuccess;
     }
 
     //Get roles of a user

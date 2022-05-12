@@ -3,11 +3,13 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
 import com.example.eindwerkJava2.wrappers.RolesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * The controller layer for connecting the front-end with the back-end for roles.
@@ -43,15 +45,25 @@ public class RoleController {
 
     //Unassign a role
     @GetMapping("unassignRole/{userId}/{roleId}")
-    public String unassignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId) {
-        rolesService.unassignUserRole(userId, roleId);
+    public String unassignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId, RedirectAttributes redirAttr) {
+        SuccessObject unassignUserRole =rolesService.unassignUserRole(userId, roleId);
+        if(unassignUserRole.getIsSuccessfull()){
+            redirAttr.addFlashAttribute("success",unassignUserRole.getMessage());
+        } else {
+            redirAttr.addFlashAttribute("error", unassignUserRole.getMessage());
+        }
         return "redirect:/edit/user/{userId}";
     }
 
     //Unassign a role
     @GetMapping("assignRole/{userId}/{roleId}")
-    public String assignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId) {
-        rolesService.assignUserRole(userId, roleId);
+    public String assignRole(@PathVariable("userId") Long userId, @PathVariable Integer roleId, RedirectAttributes redirAttr) {
+        SuccessObject assignUserRole = rolesService.assignUserRole(userId,roleId);
+        if(assignUserRole.getIsSuccessfull()){
+            redirAttr.addFlashAttribute("success",assignUserRole.getMessage());
+        }else {
+            redirAttr.addFlashAttribute("error",assignUserRole.getMessage());
+        }
         return "redirect:/edit/user/{userId}";
     }
 

@@ -24,6 +24,7 @@
     <div th:unless="${user.userId == null}">
         <h1>Edit User</h1>
     </div>
+    <div th:include="fragments/header::errorMessaging"/>
 
     <form th:action="@{/saveUser}"
           th:object="${user}" , method="POST"
