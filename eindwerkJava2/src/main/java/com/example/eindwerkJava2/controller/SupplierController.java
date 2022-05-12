@@ -30,7 +30,7 @@ public class SupplierController {
     public String showNewSupplierForm(Model model){
         Supplier supplier = new Supplier();
         model.addAttribute("supplier", new Supplier());
-        model.addAttribute("citiesList", citiesService.getAllCities());
+        model.addAttribute("citiesList", citiesService.getAllCities().getCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
         return "/forms/form_supplier";
     }
@@ -52,7 +52,7 @@ public class SupplierController {
     public String showEditSupplierForm(@PathVariable("supplierId") Long supplierId, Model model){
         Supplier supplier = supplierService.findById(supplierId).get();
         model.addAttribute("supplier", supplier);
-        model.addAttribute("citiesList", citiesService.getAllCities());
+        model.addAttribute("citiesList", citiesService.getAllCities().getCities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
         return "/forms/form_supplier";
     }

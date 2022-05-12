@@ -7,6 +7,7 @@ import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.RolesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,18 +41,54 @@ public class RolesService {
     }
 
     //Get Role by Id
-    public Optional<Role> findRoleById(Integer id){
-        return roleRepository.findById(id);
+    public RolesSuccess findRoleById(Integer id){
+        RolesSuccess success = new RolesSuccess();
+        if(roleRepository.findById(id).isEmpty()){
+            success.setIsSuccessfull(false);
+            success.setMessage("Role not found!");
+        } else {
+            Role role = roleRepository.findById(id).get();
+            success.setRole(role);
+            success.setIsSuccessfull(true);
+        }
+        return success;
     }
 
     //Delete Role
-    public void deleteRole(Integer id){
-        roleRepository.deleteById(id);
+    public SuccessObject deleteRole(Integer id){
+        RolesSuccess findRoleSuccess = findRoleById(id);
+        SuccessObject deleteRoleSuccess = new RolesSuccess();
+        if(findRoleSuccess.getIsSuccessfull()){
+            Role toBeDeletedRole = roleRepository.findById(id).get();
+            roleRepository.deleteById(id);
+            deleteRoleSuccess.setIsSuccessfull(true);
+            deleteRoleSuccess.setMessage("Role "+toBeDeletedRole.getName()+" has been successfully removed!");
+        } else {
+            deleteRoleSuccess.setIsSuccessfull(false);
+            deleteRoleSuccess.setMessage("Role with id: "+id+ "could not been removed!");
+        }
+        return deleteRoleSuccess;
     }
 
     //Update Role
-    public void save (Role role){
+    public SuccessObject save (Role role){
+        SuccessObject isSaveSuccessfull = new RolesSuccess();
+        Boolean existsRoleByName = roleRepository.existsRoleByName(role.getName());
+        if(existsRoleByName){
+            Role roleWithSameName = roleRepository.findByName(role.getName());
+            if(role.getId()==null){
+                isSaveSuccessfull.setIsSuccessfull(false);
+                isSaveSuccessfull.setMessage("New role cannot be added because this role name "+role.getName()+" already exists!");
+                return isSaveSuccessfull;
+            }
+            if(role.getId()!=null && roleWithSameName.getId()!=role.getId()){
+                isSaveSuccessfull.setIsSuccessfull(false);
+                isSaveSuccessfull.setMessage("Cannot modify this role because the role name "+role.getName()+" already exists!");
+                return isSaveSuccessfull;
+            }
+        }
         roleRepository.save(role);
+        return isSaveSuccessfull;
     }
 
     //Assign a role
