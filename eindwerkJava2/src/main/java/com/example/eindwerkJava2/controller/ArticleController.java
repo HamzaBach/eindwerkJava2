@@ -64,7 +64,7 @@ public class ArticleController {
         if (!retrievedArticles.getIsSuccessfull()) {
             model.addAttribute("error", retrievedArticles.getMessage());
         } else {
-            model.addAttribute("article", new Article());
+            //model.addAttribute("article", new Article());
             List<Article> articles = retrievedArticles.getArticles();
             model.addAttribute("articlesList", articles);
         }
@@ -140,7 +140,7 @@ public class ArticleController {
     @GetMapping("/article/image/{articleId}")
     @ResponseBody
     void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response)
-            throws IOException {
+            throws IOException { //TODO: add message for IOException
         ArticleSuccess success = articleService.findById(articleId);
         if (success.getArticle().getArticleImage() != null && success.getIsSuccessfull()) {
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
