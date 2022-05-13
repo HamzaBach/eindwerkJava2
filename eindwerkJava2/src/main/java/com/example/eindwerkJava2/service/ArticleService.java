@@ -116,14 +116,16 @@ public class ArticleService {
      */
     public ArticleSuccess findById(Long id) {
         ArticleSuccess success = new ArticleSuccess();
-        if (articleRepository.findById(id).isEmpty()) {
-            success.setIsSuccessfull(false);
-            success.setMessage("Article not found!");
-        } else {
+        Boolean existsArticle = articleRepository.existsArticleByArticleId(id);
+        if(existsArticle){
             Article article = articleRepository.findById(id).get();
             success.setArticle(article);
             success.setIsSuccessfull(true);
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("Article not found!");
         }
+
         return success;
     }
     /**

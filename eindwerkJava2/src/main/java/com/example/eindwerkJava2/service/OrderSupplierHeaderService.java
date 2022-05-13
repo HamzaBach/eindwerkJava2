@@ -2,6 +2,8 @@ package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.OrderSupplierHeaderRepository;
+import com.example.eindwerkJava2.wrappers.OrderSupplierHeaderSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,38 +27,87 @@ public class OrderSupplierHeaderService {
         this.orderSupplierHeaderRepository = orderSupplierHeaderRepository;
     }
 
-    public List<OrderSupplierHeader> getOrderSupplierHeaders(){
-        return orderSupplierHeaderRepository.findAll();
+    public OrderSupplierHeaderSuccess getOrderSupplierHeaders() {
+        OrderSupplierHeaderSuccess orderSupplierHeaderSuccess = new OrderSupplierHeaderSuccess();
+        List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderRepository.findAll();
+        if (orderSupplierHeaderList.size() > 0) {
+            orderSupplierHeaderSuccess.setIsSuccessfull(true);
+            orderSupplierHeaderSuccess.setOrderSupplierHeaders(orderSupplierHeaderList);
+        } else {
+            orderSupplierHeaderSuccess.setIsSuccessfull(false);
+            orderSupplierHeaderSuccess.setMessage("No order supplier headers found within the database.");
+        }
+        return orderSupplierHeaderSuccess;
     }
 
-    public Optional<OrderSupplierHeader> findById(long id){
-        return orderSupplierHeaderRepository.findById(id);
+    public OrderSupplierHeaderSuccess findById(Long id) {
+        OrderSupplierHeaderSuccess success = new OrderSupplierHeaderSuccess();
+        Boolean existsOrderSupplierHeader = orderSupplierHeaderRepository.existsById(id);
+        if (existsOrderSupplierHeader) {
+            OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(id).orElse(null);
+            success.setOrderSupplierHeader(orderSupplierHeader);
+            success.setIsSuccessfull(true);
+        } else {
+            success.setMessage("Order not found!");
+            success.setIsSuccessfull(false);
+        }
+        return success;
     }
 
-    public Long getMaxId(){return orderSupplierHeaderRepository.getMaxId();}
+    public Long getMaxId() {
+        return orderSupplierHeaderRepository.getMaxId();
+    }
 
 
-
-    public void save(OrderSupplierHeader orderSupplierHeader) {
+    public SuccessObject save(OrderSupplierHeader orderSupplierHeader) {
+        SuccessObject isSaveSuccessful = new OrderSupplierHeaderSuccess();
         orderSupplierHeaderRepository.save(orderSupplierHeader);
-        Optional<OrderSupplierHeader> orderSupplierHeader1= orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
-        String supplierName=orderSupplierHeader1.get().getSupplier().getSupplierName();
-        orderSupplierHeader1.get().setOrderNumber(supplierName+"-"+orderSupplierHeader1.get().getOrderSupplierId());
+        Optional<OrderSupplierHeader> orderSupplierHeader1 = orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
+        String supplierName = orderSupplierHeader1.get().getSupplier().getSupplierName();
+        orderSupplierHeader1.get().setOrderNumber(supplierName + "-" + orderSupplierHeader1.get().getOrderSupplierId());
         orderSupplierHeaderRepository.save(orderSupplierHeader1.get());
+
+        Boolean existsOrderNumber = orderSupplierHeaderRepository.existsByOrderNumber(orderSupplierHeader1.get().getOrderNumber());
+        if (existsOrderNumber) {
+            isSaveSuccessful.setIsSuccessfull(true);
+        } else {
+            isSaveSuccessful.setIsSuccessfull(false);
+            isSaveSuccessful.setMessage("Unable to save/retrieve the order within the database!");
+        }
+        return isSaveSuccessful;
     }
 
-    public void closeOrder(Long orderHeaderId){
+    public SuccessObject closeOrder(Long orderHeaderId) {
+        SuccessObject isCloseOrderSuccessful = new OrderSupplierHeaderSuccess();
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(orderHeaderId).get();
         orderSupplierHeader.setDateOrderClosed(LocalDate.now());
         save(orderSupplierHeader);
+        if(orderSupplierHeaderRepository.findByOrderNumber(orderSupplierHeader.getOrderNumber()).getDateOrderClosed()!=null){
+            isCloseOrderSuccessful.setIsSuccessfull(true);
+            isCloseOrderSuccessful.setMessage("Order "+orderSupplierHeader.getOrderNumber()+" was successfully closed");
+        }else{
+            isCloseOrderSuccessful.setIsSuccessfull(false);
+            isCloseOrderSuccessful.setMessage("Unable to close the order!");
+        }
+        return isCloseOrderSuccessful;
     }
 
-    public List<OrderSupplierHeader> getAllClosedOrders(){
-        return orderSupplierHeaderRepository.getAllClosedOrders();
+    public OrderSupplierHeaderSuccess getAllClosedOrders() {
+        OrderSupplierHeaderSuccess success = new OrderSupplierHeaderSuccess();
+        List<OrderSupplierHeader> orderSupplierHeaderList=orderSupplierHeaderRepository.getAllClosedOrders();
+
+        if(orderSupplierHeaderList.size()>0){
+            success.setOrderSupplierHeaders(orderSupplierHeaderList);
+            success.setIsSuccessfull(true);
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("No closed orders found within the database");
+        }
+        return success;
     }
 
 
-    public  void makePdf(Long orderHeaderId,List<OrderSupplierDetail> orderDetailList ) {
+    public void makePdf(Long orderHeaderId, List<OrderSupplierDetail> orderDetailList) {
         OrderSupplierHeader header = orderSupplierHeaderRepository.findById(orderHeaderId).get();
 
         // step 1: creation of a document-object
@@ -66,21 +117,21 @@ public class OrderSupplierHeaderService {
             // we create a writer that listens to the document
             // and directs a PDF-stream to a file
             PdfWriter writer = PdfWriter.getInstance(document,
-                    new FileOutputStream("order-"+LocalDate.now()+"-"+header.getOrderNumber()+".pdf"));
+                    new FileOutputStream("order-" + LocalDate.now() + "-" + header.getOrderNumber() + ".pdf"));
             // step 3: we open the document
             document.open();
             // step 4: we add a paragraph to the document
 
             document.add(new Paragraph(header.getSupplier().getSupplierName().toUpperCase()));
             document.add(new Paragraph(header.getSupplier().getAdress()));
-            document.add(new Paragraph(header.getSupplier().getCity().getCityZipcode() + " " + header.getSupplier().getCity().getCityName().toUpperCase() ));
-            document.add(new Paragraph(header.getSupplier().getCountry().getCountryName().toUpperCase()+"\n"+"\n"));
+            document.add(new Paragraph(header.getSupplier().getCity().getCityZipcode() + " " + header.getSupplier().getCity().getCityName().toUpperCase()));
+            document.add(new Paragraph(header.getSupplier().getCountry().getCountryName().toUpperCase() + "\n" + "\n"));
             document.add(new Paragraph("SYNTRAPXL"));
             document.add(new Paragraph("Thor Park 8040"));
             document.add(new Paragraph("3600 Genk"));
             document.add(new Paragraph("BELGIË"));
 
-            document.add(new Paragraph("\n"+"\n"+"Ordernumber: "+header.getOrderNumber()));
+            document.add(new Paragraph("\n" + "\n" + "Ordernumber: " + header.getOrderNumber()));
 
 
 //            byte[] byteArrayImage = imageService.getImages().get(0).getImageLob();
@@ -113,7 +164,7 @@ public class OrderSupplierHeaderService {
 
             //body
 
-            for(OrderSupplierDetail orderdetail: orderDetailList){
+            for (OrderSupplierDetail orderdetail : orderDetailList) {
                 table.addCell(orderdetail.getOrderlineNumber());
                 table.addCell(orderdetail.getArticle().getArticleName());
                 table.addCell(String.valueOf(orderdetail.getExpectedQuantity()));

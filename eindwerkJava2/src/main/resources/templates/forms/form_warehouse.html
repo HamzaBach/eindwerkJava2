@@ -21,7 +21,7 @@
         <div th:unless="${warehouse.warehouseId == null}">
             <h1>Edit warehouse</h1>
         </div>
-
+        <div th:include="fragments/header::errorMessaging"/>
 
         <form th:action="@{/warehouse/save}" th:object="${warehouse}" method="post">
             <div class="row">

@@ -160,11 +160,17 @@ public class ArticleController {
     @GetMapping("edit/article/{articleId}")
     public String showEditArticleForm(@PathVariable("articleId") Long articleId, Model model) {
         ArticleSuccess success = articleService.findById(articleId);
+        CategorySuccess categorySuccess = categoryService.getCategories();
         if(success.getIsSuccessfull()){
             Article article = success.getArticle();
             model.addAttribute("article", article);
             model.addAttribute("categoriesList", categoryService.getCategories());
             model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
+            if(categorySuccess.getIsSuccessfull()){
+                model.addAttribute("categoriesList", categorySuccess.getCategories());
+            } else {
+                model.addAttribute("error",categorySuccess.getMessage());
+            }
         } else {
             model.addAttribute("error",success.getMessage());
         }

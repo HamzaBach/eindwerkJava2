@@ -28,7 +28,7 @@ public class CitiesController {
     public String viewCities(Model model){
         CitySuccess retrievedCities = citiesService.getAllCities();
         if(retrievedCities.getIsSuccessfull()){
-            model.addAttribute("citiesList", citiesService.getAllCities().getCities());
+            model.addAttribute("citiesList", retrievedCities.getCities());
         } else {
             model.addAttribute("error",retrievedCities.getMessage());
         }
