@@ -7,6 +7,7 @@ import com.example.eindwerkJava2.service.SupplierService;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.ArticleSupplierSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
+import com.example.eindwerkJava2.wrappers.SupplierSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,12 +39,13 @@ public class ArticleSupplierController {
 
     @GetMapping("/new/articleSupplier")
     public String showNewArticleSupplierForm(Model model){
+        SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
         ArticleSupplier articleSupplier = new ArticleSupplier();
         ArticleSuccess retrievedArticles = articleService.getActiveArticles();
         if(retrievedArticles.getIsSuccessfull()){
             model.addAttribute("articleSupplier", articleSupplier);
             model.addAttribute("articleList", retrievedArticles.getArticles());
-            model.addAttribute("supplierList", supplierService.getAllSuppliers());
+            model.addAttribute("supplierList", supplierSuccess.getSuppliers());
         } else {
             model.addAttribute("error", retrievedArticles.getMessage());
         }
@@ -70,12 +72,13 @@ public class ArticleSupplierController {
 
     @GetMapping("edit/articleSupplier/{articleSupplierId}")
     public String editArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
+        SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
         ArticleSupplierSuccess success = articleSupplierService.findById(articleSupplierId);
         if(success.getIsSuccessfull()){
             ArticleSupplier articleSupplier = success.getArticleSupplier();
             model.addAttribute("articleSupplier", articleSupplier);
             model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
-            model.addAttribute("supplierList", supplierService.getAllSuppliers());
+            model.addAttribute("supplierList", supplierSuccess.getSuppliers());
         } else{
             model.addAttribute("error",success.getMessage());
         }

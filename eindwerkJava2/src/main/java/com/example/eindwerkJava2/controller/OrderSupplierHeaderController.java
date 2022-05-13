@@ -6,6 +6,7 @@ import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
 import com.example.eindwerkJava2.service.SupplierService;
+import com.example.eindwerkJava2.wrappers.SupplierSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,21 +45,24 @@ public class OrderSupplierHeaderController {
 
     @GetMapping("/new/order")
     public String AddOrderSupplierForm(Model model){
+        SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
         model.addAttribute("OrderSupplierHeader",new OrderSupplierHeader());
-        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        model.addAttribute("suppliersList", supplierSuccess.getSuppliers());
         return "/forms/form_order_detail";
     }
 
     @GetMapping("/new/orderSupplier")
     public String chooseSupplierForm(Model model) {
+        SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
         model.addAttribute("OrderSupplierHeader", new OrderSupplierHeader());
-        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
+        model.addAttribute("suppliersList", supplierSuccess.getSuppliers());
         return "new_order_supplier_header";
     }
 
     @GetMapping("save/orderHeader/{supplierId}")
     public String createOrderHeadder(@PathVariable("supplierId") Long supplierId, Model model){
-        orderSupplierHeaderService.save(new OrderSupplierHeader(supplierService.findById(supplierId).get(),LocalDate.now()));
+        SupplierSuccess findSupplierSuccess = supplierService.findById(supplierId);
+        orderSupplierHeaderService.save(new OrderSupplierHeader(findSupplierSuccess.getSupplier(),LocalDate.now()));
         viewOrderSupplier(model);
         return "orderSupplier";
     }

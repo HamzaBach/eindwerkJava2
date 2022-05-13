@@ -84,7 +84,7 @@ public class ArticleService {
         //Save article
         articleRepository.save(article);
         isSaveSuccessful.setIsSuccessfull(true);
-        isSaveSuccessful.setMessage("Article " + article.getArticleName() + " is succesfully saved!");
+        isSaveSuccessful.setMessage("Article " + article.getArticleName() + " is successfully saved!");
         return isSaveSuccessful;
 
     }
