@@ -3,6 +3,8 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.ImageBlob;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.SupplierRepository;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
+import com.example.eindwerkJava2.wrappers.SupplierSuccess;
 import com.lowagie.text.*;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfWriter;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -27,31 +28,94 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<Supplier> getAllSuppliers(){
-        return supplierRepository.findAllActiveUsers();
+    public SupplierSuccess getAllSuppliers() {
+        SupplierSuccess success = new SupplierSuccess();
+        List<Supplier> suppliersList = supplierRepository.findAllActiveUsers();
+        if (suppliersList.size() > 0) {
+            success.setSuppliers(suppliersList);
+            success.setIsSuccessfull(true);
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("No suppliers have been found within the database!");
+        }
+        return success;
     }
 
-    public Supplier getSupplierById(long id){
-        return supplierRepository.findById(id).get();
+    public SupplierSuccess getSupplierById(Long id) {
+        SupplierSuccess success = new SupplierSuccess();
+        Boolean existsSupplierById = supplierRepository.existsById(id);
+        if (existsSupplierById) {
+            Supplier supplier = supplierRepository.getById(id);
+            success.setSupplier(supplier);
+            success.setIsSuccessfull(true);
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("No supplier has been found with id: " + id);
+        }
+        return success;
     }
 
     @Override
-    public void saveSupplier(Supplier supplier){
+    public SuccessObject saveSupplier(Supplier supplier) {
+        SuccessObject isSaveSuccessful=new SupplierSuccess();
+        Boolean existsSupplierByName = supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName());
+        if(existsSupplierByName){
+            Supplier supplierWithSameName = supplierRepository.findById(supplier.getSupplierId()).orElse(null);
+            // use case if a new supplier gets named to the name of an already present supplier name -> block!
+            if(supplier.getSupplierId()==null && supplierWithSameName.getActiveSupplier()==1){
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("New supplier cannot be added because this supplier name " + supplier.getSupplierName() + " already exists!");
+                return isSaveSuccessful;
+            }
+            // use case if an existing supplier gets renamed to the name of an already present supplier name -> block!
+            if (supplier.getSupplierId() != null
+                    && supplierWithSameName.getSupplierId() != supplier.getSupplierId()
+                    && supplierWithSameName.getActiveSupplier() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("Cannot modify this supplier because the supplier name " + supplier.getSupplierName() + " already exists!");
+                return isSaveSuccessful;
+            }
+        }
         this.supplierRepository.save(supplier);
+        isSaveSuccessful.setIsSuccessfull(true);
+        isSaveSuccessful.setMessage("Supplier "+supplier.getSupplierName()+" is successfully saved");
+        return isSaveSuccessful;
     }
+
     @Override
-    public Optional<Supplier> findById(long id){
-        return supplierRepository.findById(id);
+    public SupplierSuccess findById(Long id) {
+        SupplierSuccess success = new SupplierSuccess();
+        Boolean existsSupplierById = supplierRepository.existsById(id);
+        if (existsSupplierById) {
+            Supplier supplier = supplierRepository.findById(id).orElse(null);
+            success.setSupplier(supplier);
+            success.setIsSuccessfull(true);
+        } else {
+            success.setIsSuccessfull(false);
+            success.setMessage("No supplier has been found with id: " + id);
+        }
+        return success;
     }
+
     @Override
-    public void deleteSupplier(Supplier supplier){
+    public SuccessObject deleteSupplier(Supplier supplier) {
+        SuccessObject deleteSuccess = new SupplierSuccess();
         supplier.setActiveSupplier(0);
         this.supplierRepository.save(supplier);
+        if(supplierRepository.findById(supplier.getSupplierId()).get().getActiveSupplier()==0){
+            //TODO add logic if a supplier has articleSuppliers attached to it, should we delete them as well???
+            deleteSuccess.setIsSuccessfull(true);
+            deleteSuccess.setMessage("Supplier " + supplier.getSupplierName() + " (ID: " + supplier.getSupplierId() + ")" + " was successfully removed.");
+        } else {
+            deleteSuccess.setIsSuccessfull(false);
+            deleteSuccess.setMessage("Supplier " + supplier.getSupplierName() + " (ID: " + supplier.getSupplierId() + ")" + " could not been removed.");
+        }
+       return deleteSuccess;
     }
 
     @Override
-    public  void makePdf() {
-        List<Supplier> suppliers = getAllSuppliers();
+    public void makePdf() {
+        List<Supplier> suppliers = getAllSuppliers().getSuppliers();
         List<ImageBlob> images = imageService.getImages();
 
         // step 1: creation of a document-object
@@ -68,8 +132,8 @@ public class SupplierServiceImpl implements SupplierService {
 
             document.add(new Paragraph(suppliers.get(0).getSupplierName().toUpperCase()));
             document.add(new Paragraph(suppliers.get(0).getAdress()));
-            document.add(new Paragraph(suppliers.get(0).getCity().getCityZipcode()+ " "  + suppliers.get(0).getCity().getCityName()));
-            document.add(new Paragraph(suppliers.get(0).getCountry().getCountryName()+"\n"+"\n"));
+            document.add(new Paragraph(suppliers.get(0).getCity().getCityZipcode() + " " + suppliers.get(0).getCity().getCityName()));
+            document.add(new Paragraph(suppliers.get(0).getCountry().getCountryName() + "\n" + "\n"));
             document.add(new Paragraph("SYNTRAPXL"));
             document.add(new Paragraph("Thor Park 8040"));
             document.add(new Paragraph("3600 Genk"));
@@ -78,7 +142,7 @@ public class SupplierServiceImpl implements SupplierService {
 
             byte[] byteArrayImage = imageService.getImages().get(0).getImageLob();
             Image image = Image.getInstance(byteArrayImage);
-            image.setAbsolutePosition(350,650);
+            image.setAbsolutePosition(350, 650);
             document.add(image);
 
             Table table = new Table(4);
@@ -105,7 +169,7 @@ public class SupplierServiceImpl implements SupplierService {
 
             //body
 
-            for(Supplier supplier: suppliers){
+            for (Supplier supplier : suppliers) {
                 table.addCell(supplier.getSupplierName());
                 table.addCell(supplier.getAdress());
                 table.addCell(supplier.getCity().getCityName());
