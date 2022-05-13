@@ -18,6 +18,7 @@
     <div th:unless="${location.locationId == null}">
         <h1>Edit Location</h1>
     </div>
+    <div th:include="fragments/header::errorMessaging"/>
 
     <form th:action="@{/location/save}" th:object="${location}" method="post">
         <div class="row">

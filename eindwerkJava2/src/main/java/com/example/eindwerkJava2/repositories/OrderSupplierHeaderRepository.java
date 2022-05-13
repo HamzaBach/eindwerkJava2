@@ -15,5 +15,8 @@ public interface OrderSupplierHeaderRepository extends JpaRepository<OrderSuppli
     @Query(value = "select *  from order_supplier_header where date_order_closed is not null;",nativeQuery = true)
     List<OrderSupplierHeader> getAllClosedOrders();
 
+    OrderSupplierHeader findByOrderNumber(String orderNumber);
+    Boolean existsByOrderNumber(String orderNumber);
+
 
 }

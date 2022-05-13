@@ -26,6 +26,7 @@
         <a th:href="@{/orderReceived}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
     </div>
     <h1>Order</h1>
+    <div th:include="fragments/header::errorMessaging"/>
     <div>
         <form method="GET" style="margin:20px">
             <div>

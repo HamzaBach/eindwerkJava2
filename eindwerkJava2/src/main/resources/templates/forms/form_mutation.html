@@ -17,6 +17,7 @@
     <div th:unless="${mutation.mutationId == null}">
         <h1>Edit mutation</h1>
     </div>
+    <div th:include="fragments/header::errorMessaging"/>
 
     <form action="#" th:action="@{/saveMutation}" th:object="${mutation}" , method="POST">
         <div class="row">
