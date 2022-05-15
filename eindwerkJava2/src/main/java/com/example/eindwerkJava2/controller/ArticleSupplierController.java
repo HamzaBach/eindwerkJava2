@@ -4,10 +4,7 @@ import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.SupplierService;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
-import com.example.eindwerkJava2.wrappers.ArticleSupplierSuccess;
-import com.example.eindwerkJava2.wrappers.SuccessObject;
-import com.example.eindwerkJava2.wrappers.SupplierSuccess;
+import com.example.eindwerkJava2.wrappers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +25,9 @@ public class ArticleSupplierController {
 
     @GetMapping("/article_supplier")
     public String viewSuppliers(Model model){
-        ArticleSupplierSuccess retrievedArticlesSuppliers = articleSupplierService.getAllArticleSuppliers();
+        SuccessEvaluator retrievedArticlesSuppliers = articleSupplierService.getAllArticleSuppliers();
         if(retrievedArticlesSuppliers.getIsSuccessfull()){
-            model.addAttribute("articleSupplierList", retrievedArticlesSuppliers.getArticlesSuppliers());
+            model.addAttribute("articleSupplierList", retrievedArticlesSuppliers.getEntities());
         } else{
             model.addAttribute("error", retrievedArticlesSuppliers.getMessage());
         }
@@ -41,10 +38,10 @@ public class ArticleSupplierController {
     public String showNewArticleSupplierForm(Model model){
         SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
         ArticleSupplier articleSupplier = new ArticleSupplier();
-        ArticleSuccess retrievedArticles = articleService.getActiveArticles();
+        SuccessEvaluator retrievedArticles = articleService.getActiveArticles();
         if(retrievedArticles.getIsSuccessfull()){
             model.addAttribute("articleSupplier", articleSupplier);
-            model.addAttribute("articleList", retrievedArticles.getArticles());
+            model.addAttribute("articleList", retrievedArticles.getEntities());
             model.addAttribute("supplierList", supplierSuccess.getSuppliers());
         } else {
             model.addAttribute("error", retrievedArticles.getMessage());
@@ -73,11 +70,11 @@ public class ArticleSupplierController {
     @GetMapping("edit/articleSupplier/{articleSupplierId}")
     public String editArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, Model model){
         SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
-        ArticleSupplierSuccess success = articleSupplierService.findById(articleSupplierId);
+        SuccessEvaluator success = articleSupplierService.findById(articleSupplierId);
         if(success.getIsSuccessfull()){
-            ArticleSupplier articleSupplier = success.getArticleSupplier();
+            ArticleSupplier articleSupplier = (ArticleSupplier) success.getEntity();
             model.addAttribute("articleSupplier", articleSupplier);
-            model.addAttribute("articleList", articleService.getActiveArticles().getArticles());
+            model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
             model.addAttribute("supplierList", supplierSuccess.getSuppliers());
         } else{
             model.addAttribute("error",success.getMessage());
@@ -86,9 +83,9 @@ public class ArticleSupplierController {
     }
     @GetMapping("delete/articleSupplier/{articleSupplierId}")
     public String deleteArticleSupplier(@PathVariable("articleSupplierId") Long articleSupplierId, RedirectAttributes redirAttrs){
-        ArticleSupplierSuccess findArticleSupplier = articleSupplierService.findById(articleSupplierId);
+        SuccessEvaluator findArticleSupplier = articleSupplierService.findById(articleSupplierId);
         if(findArticleSupplier.getIsSuccessfull()){
-            SuccessObject toBeDeletedArticleSupplier = articleSupplierService.deleteArticleSupplier(findArticleSupplier.getArticleSupplier());
+            SuccessObject toBeDeletedArticleSupplier = articleSupplierService.deleteArticleSupplier((ArticleSupplier) findArticleSupplier.getEntity());
             if(toBeDeletedArticleSupplier.getIsSuccessfull()){
                 redirAttrs.addFlashAttribute("success",toBeDeletedArticleSupplier.getMessage());
             }else{

@@ -4,6 +4,7 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,11 @@ public class ArticleService {
      *
      * @return A list of all active articles retrieved from {@link com.example.eindwerkJava2.repositories.ArticleRepository#findByActiveArticle(int)}.
      */
-    public ArticleSuccess getActiveArticles() {
-        ArticleSuccess retrievedArticles = new ArticleSuccess();
+    public SuccessEvaluator getActiveArticles() {
+        SuccessEvaluator retrievedArticles = new SuccessEvaluator();
         List<Article> activeArticles = this.articleRepository.findByActiveArticle(1);
         if (activeArticles.size() > 0) {
-            retrievedArticles.setArticles(activeArticles);
+            retrievedArticles.setEntities(activeArticles);
             retrievedArticles.setIsSuccessfull(true);
         } else {
             retrievedArticles.setIsSuccessfull(false);
@@ -57,8 +58,8 @@ public class ArticleService {
      * @return The successObject (wrapper class around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) indicating whether the save action was successful or not.
      */
 
-    public SuccessObject saveArticle(Article article, byte[] articleImage) {
-        SuccessObject isSaveSuccessful = new ArticleSuccess();
+    public SuccessEvaluator saveArticle(Article article, byte[] articleImage) {
+        SuccessEvaluator isSaveSuccessful = new SuccessEvaluator();
         Boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
         if (existsArticleByName) {
             Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
@@ -114,12 +115,12 @@ public class ArticleService {
      * @param id The id of the to be retrieved article from the database.
      * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
      */
-    public ArticleSuccess findById(Long id) {
-        ArticleSuccess success = new ArticleSuccess();
+    public SuccessEvaluator findById(Long id) {
+        SuccessEvaluator success = new SuccessEvaluator();
         Boolean existsArticle = articleRepository.existsArticleByArticleId(id);
         if(existsArticle){
             Article article = articleRepository.findById(id).get();
-            success.setArticle(article);
+            success.setEntity(article);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);
@@ -134,14 +135,14 @@ public class ArticleService {
      * @param barcode The barcode of the to be retrieved article from the database.
      * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
      */
-    public ArticleSuccess findByBarcode(String barcode) {
-        ArticleSuccess success = new ArticleSuccess();
+    public SuccessEvaluator findByBarcode(String barcode) {
+        SuccessEvaluator success = new SuccessEvaluator();
         if (articleRepository.findByArticleBarcode(barcode).isEmpty()) {
             success.setIsSuccessfull(false);
             success.setMessage("Article not found!");
         } else {
             Article article = articleRepository.findByArticleBarcode(barcode).get();
-            success.setArticle(article);
+            success.setEntity(article);
             success.setIsSuccessfull(true);
         }
         return success;
@@ -155,7 +156,7 @@ public class ArticleService {
      */
 
     public SuccessObject deleteArticle(Article article) {
-        SuccessObject success = new ArticleSuccess();
+        SuccessObject success = new SuccessEvaluator<>();
         article.setActiveArticle(0);
         this.articleRepository.save(article);
         if (articleRepository.findById(article.getArticleId()).get().getActiveArticle() == 0) {

@@ -6,6 +6,7 @@ import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
 import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.CategorySuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,12 +61,12 @@ public class ArticleController {
      */
     @GetMapping("/articles")
     public String getArticles(Model model) {
-        ArticleSuccess retrievedArticles = articleService.getActiveArticles();
+        SuccessEvaluator retrievedArticles = articleService.getActiveArticles();
         if (!retrievedArticles.getIsSuccessfull()) {
             model.addAttribute("error", retrievedArticles.getMessage());
         } else {
             //model.addAttribute("article", new Article());
-            List<Article> articles = retrievedArticles.getArticles();
+            List<Article> articles = retrievedArticles.getEntities();
             model.addAttribute("articlesList", articles);
         }
         return "articles";
@@ -74,9 +75,9 @@ public class ArticleController {
 
     @GetMapping("delete/article/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId, RedirectAttributes redirAttrs) {
-        ArticleSuccess findArticle = articleService.findById(articleId);
+        SuccessEvaluator findArticle = articleService.findById(articleId);
         if(findArticle.getIsSuccessfull()){
-            SuccessObject toBeDeletedArticle = this.articleService.deleteArticle(findArticle.getArticle());
+            SuccessObject toBeDeletedArticle = this.articleService.deleteArticle((Article) findArticle.getEntity());
             if (toBeDeletedArticle.getIsSuccessfull()) {
                 redirAttrs.addFlashAttribute("success", toBeDeletedArticle.getMessage());
             } else {
@@ -141,10 +142,11 @@ public class ArticleController {
     @ResponseBody
     void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response)
             throws IOException { //TODO: add message for IOException
-        ArticleSuccess success = articleService.findById(articleId);
-        if (success.getArticle().getArticleImage() != null && success.getIsSuccessfull()) {
+        SuccessEvaluator success = articleService.findById(articleId);
+        Article article = (Article) success.getEntity();
+        if (article.getArticleImage() != null && success.getIsSuccessfull()) {
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-            response.getOutputStream().write(success.getArticle().getArticleImage());
+            response.getOutputStream().write(article.getArticleImage());
             response.getOutputStream().close();
         }
     }
@@ -159,10 +161,10 @@ public class ArticleController {
      */
     @GetMapping("edit/article/{articleId}")
     public String showEditArticleForm(@PathVariable("articleId") Long articleId, Model model) {
-        ArticleSuccess success = articleService.findById(articleId);
+        SuccessEvaluator success = articleService.findById(articleId);
         CategorySuccess categorySuccess = categoryService.getCategories();
         if(success.getIsSuccessfull()){
-            Article article = success.getArticle();
+            Article article = (Article) success.getEntity();
             model.addAttribute("article", article);
             model.addAttribute("categoriesList", categoryService.getCategories());
             model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
