@@ -1,13 +1,11 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
-import com.example.eindwerkJava2.wrappers.CategorySuccess;
-import com.example.eindwerkJava2.wrappers.RolesSuccess;
-import com.example.eindwerkJava2.wrappers.SuccessObject;
-import com.example.eindwerkJava2.wrappers.UserSuccess;
+import com.example.eindwerkJava2.wrappers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,11 +58,11 @@ public class UserController {
      */
     @GetMapping("/users")
     public String getUsers(Model model) {
-        UserSuccess retrievedUsers = userService.getActiveUsers();
+        SuccessEvaluator<User> retrievedUsers = userService.getActiveUsers();
         if (!retrievedUsers.getIsSuccessfull()) {
             model.addAttribute("error", retrievedUsers.getMessage());
         } else {
-            List<User> users = retrievedUsers.getUsers();
+            List<User> users = retrievedUsers.getEntities();
             model.addAttribute("UsersList", users);
         }
         return "users";
@@ -107,9 +105,9 @@ public class UserController {
     void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, User user)
             throws IOException {
         if (user.getUserImage() != null) {
-            UserSuccess success = userService.findById(userId);
+            SuccessEvaluator<User> success = userService.findById(userId);
             if (success.getIsSuccessfull()) {
-                user = success.getUser();
+                user = success.getEntity();
                 response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
                 response.getOutputStream().write(user.getUserImage());
                 response.getOutputStream().close();
@@ -127,15 +125,16 @@ public class UserController {
      */
     @GetMapping("edit/user/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
-        UserSuccess success = userService.findById(userId);
-        if (success.getIsSuccessfull()) {
-            User user = success.getUser();
-            model.addAttribute("rolesList", rolesService.getAllRoles());
+        SuccessEvaluator<User> userSuccess = userService.findById(userId);
+        SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
+        if (userSuccess.getIsSuccessfull()) {
+            User user = userSuccess.getEntity();
+            model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));
             model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
             model.addAttribute("user", user);
         } else {
-            model.addAttribute("error", success.getMessage());
+            model.addAttribute("error", userSuccess.getMessage());
         }
         return "/forms/form_user";
     }
@@ -148,9 +147,9 @@ public class UserController {
      */
     @GetMapping("delete/user/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId, RedirectAttributes redirAttrs) {
-        UserSuccess findUser = userService.findById(userId);
+        SuccessEvaluator<User> findUser = userService.findById(userId);
         if (findUser.getIsSuccessfull()) {
-            SuccessObject toBeDeletedUser = this.userService.deleteUser(findUser.getUser());
+            SuccessObject toBeDeletedUser = this.userService.deleteUser(findUser.getEntity());
             if (toBeDeletedUser.getIsSuccessfull()) {
                 redirAttrs.addFlashAttribute("success", toBeDeletedUser.getMessage());
             } else {
@@ -170,10 +169,10 @@ public class UserController {
      */
     @GetMapping("/new/user")
     public String showNewUserForm(Model model, RedirectAttributes redirAttrs) {
-        RolesSuccess rolesSuccess = rolesService.getAllRoles();
+        SuccessEvaluator<Role> rolesSuccess = rolesService.getAllRoles();
         if (rolesSuccess.getIsSuccessfull()) {
             model.addAttribute("user", new User());
-            model.addAttribute("rolesList", rolesSuccess.getRoles());
+            model.addAttribute("rolesList", rolesSuccess.getEntities());
             return "/forms/form_user";
         } else {
             redirAttrs.addAttribute("error", rolesSuccess.getMessage());

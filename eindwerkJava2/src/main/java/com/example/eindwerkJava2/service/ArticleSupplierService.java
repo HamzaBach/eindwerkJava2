@@ -4,7 +4,6 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.ArticleSupplierRepository;
-import com.example.eindwerkJava2.wrappers.ArticleSupplierSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ public class ArticleSupplierService {
     @Autowired
     private ArticleSupplierRepository articleSupplierRepository;
 
-    public SuccessEvaluator getAllArticleSuppliers() {
-        SuccessEvaluator retrievedSuppliersArticles = new SuccessEvaluator<ArticleSupplier>();
+    public SuccessEvaluator<ArticleSupplier> getAllArticleSuppliers() {
+        SuccessEvaluator<ArticleSupplier> retrievedSuppliersArticles = new SuccessEvaluator<ArticleSupplier>();
         List<ArticleSupplier> activeArticlesSuppliers = this.articleSupplierRepository.getAllArticleSuppliers();
         if (activeArticlesSuppliers.size() > 0) {
             retrievedSuppliersArticles.setIsSuccessfull(true);
@@ -34,6 +33,7 @@ public class ArticleSupplierService {
     }
 
     public SuccessObject saveArticleSupplier(ArticleSupplier articleSupplier) {
+        //TODO Success logic makes no sense here...
         SuccessObject isSaveSuccessful = new SuccessEvaluator<ArticleSupplier>();
         List<ArticleSupplier> articlesFromSupplier = articleSupplierRepository.getActiveArticlesFromSpecificSupplier(articleSupplier.getSupplier().getSupplierId());
         duplicateArticlesFromSupplierHandler(articleSupplier, isSaveSuccessful, articlesFromSupplier);
@@ -67,8 +67,8 @@ public class ArticleSupplierService {
         }
     }
 
-    public SuccessEvaluator findById(Long id) {
-        SuccessEvaluator success = new SuccessEvaluator();
+    public SuccessEvaluator<ArticleSupplier> findById(Long id) {
+        SuccessEvaluator<ArticleSupplier> success = new SuccessEvaluator<>();
         if (articleSupplierRepository.findById(id).isEmpty()) {
             success.setIsSuccessfull(false);
             success.setMessage("Article from the given supplier was not found!");
@@ -80,8 +80,8 @@ public class ArticleSupplierService {
         return success;
     }
 
-    public SuccessEvaluator deleteArticleSupplier(ArticleSupplier articleSupplier) {
-        SuccessEvaluator success = new SuccessEvaluator<ArticleSupplier>();
+    public SuccessEvaluator<ArticleSupplier> deleteArticleSupplier(ArticleSupplier articleSupplier) {
+        SuccessEvaluator<ArticleSupplier> success = new SuccessEvaluator<>();
         articleSupplier.setActiveArticleSupplier(0);
         this.articleSupplierRepository.save(articleSupplier);
         if (articleSupplierRepository.findById(articleSupplier.getArticleSupplierId()).get().getActiveArticleSupplier() == 0) {

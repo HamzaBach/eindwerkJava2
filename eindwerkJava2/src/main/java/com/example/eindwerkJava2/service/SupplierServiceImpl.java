@@ -3,8 +3,8 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.ImageBlob;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.SupplierRepository;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
-import com.example.eindwerkJava2.wrappers.SupplierSuccess;
 import com.lowagie.text.*;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfWriter;
@@ -28,11 +28,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierSuccess getAllSuppliers() {
-        SupplierSuccess success = new SupplierSuccess();
+    public SuccessEvaluator<Supplier> getAllSuppliers() {
+        SuccessEvaluator<Supplier> success = new SuccessEvaluator<>();
         List<Supplier> suppliersList = supplierRepository.findAllActiveUsers();
         if (suppliersList.size() > 0) {
-            success.setSuppliers(suppliersList);
+            success.setEntities(suppliersList);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);
@@ -41,12 +41,12 @@ public class SupplierServiceImpl implements SupplierService {
         return success;
     }
 
-    public SupplierSuccess getSupplierById(Long id) {
-        SupplierSuccess success = new SupplierSuccess();
-        Boolean existsSupplierById = supplierRepository.existsById(id);
+    public SuccessEvaluator<Supplier> getSupplierById(Long id) {
+        SuccessEvaluator<Supplier> success = new SuccessEvaluator<>();
+        boolean existsSupplierById = supplierRepository.existsById(id);
         if (existsSupplierById) {
             Supplier supplier = supplierRepository.getById(id);
-            success.setSupplier(supplier);
+            success.setEntity(supplier);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);
@@ -57,8 +57,8 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SuccessObject saveSupplier(Supplier supplier) {
-        SuccessObject isSaveSuccessful=new SupplierSuccess();
-        Boolean existsSupplierByName = supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName());
+        SuccessObject isSaveSuccessful=new SuccessEvaluator<>();
+        boolean existsSupplierByName = supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName());
         if(existsSupplierByName){
             Supplier supplierWithSameName = supplierRepository.findById(supplier.getSupplierId()).orElse(null);
             // use case if a new supplier gets named to the name of an already present supplier name -> block!
@@ -83,12 +83,12 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierSuccess findById(Long id) {
-        SupplierSuccess success = new SupplierSuccess();
-        Boolean existsSupplierById = supplierRepository.existsById(id);
+    public SuccessEvaluator<Supplier> findById(Long id) {
+        SuccessEvaluator<Supplier> success = new SuccessEvaluator<>();
+        boolean existsSupplierById = supplierRepository.existsById(id);
         if (existsSupplierById) {
             Supplier supplier = supplierRepository.findById(id).orElse(null);
-            success.setSupplier(supplier);
+            success.setEntity(supplier);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);
@@ -99,7 +99,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SuccessObject deleteSupplier(Supplier supplier) {
-        SuccessObject deleteSuccess = new SupplierSuccess();
+        SuccessObject deleteSuccess = new SuccessEvaluator<>();
         supplier.setActiveSupplier(0);
         this.supplierRepository.save(supplier);
         if(supplierRepository.findById(supplier.getSupplierId()).get().getActiveSupplier()==0){
@@ -115,7 +115,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public void makePdf() {
-        List<Supplier> suppliers = getAllSuppliers().getSuppliers();
+        List<Supplier> suppliers = getAllSuppliers().getEntities();
         List<ImageBlob> images = imageService.getImages();
 
         // step 1: creation of a document-object

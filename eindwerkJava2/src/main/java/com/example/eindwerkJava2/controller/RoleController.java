@@ -1,8 +1,9 @@
 package com.example.eindwerkJava2.controller;
 
+import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
-import com.example.eindwerkJava2.wrappers.RolesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,9 +35,9 @@ public class RoleController {
     //TODO: CREATE HTML FOR IT!
     @GetMapping("roles")
     public String findAll(Model model) {
-        RolesSuccess rolesSuccess = rolesService.getAllRoles();
+        SuccessEvaluator<Role> rolesSuccess = rolesService.getAllRoles();
         if (rolesSuccess.getIsSuccessfull()) {
-            model.addAttribute("roles", rolesSuccess.getRoles());
+            model.addAttribute("roles", rolesSuccess.getEntities());
         } else {
             model.addAttribute("error", rolesSuccess.getMessage());
         }

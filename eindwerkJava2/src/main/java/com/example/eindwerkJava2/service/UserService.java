@@ -1,19 +1,16 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
-import com.example.eindwerkJava2.wrappers.UserSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class represents the service layer for users.
@@ -56,11 +53,11 @@ public class UserService {
      *
      * @return The active user value is returned.
      */
-    public UserSuccess getActiveUsers() {
-        UserSuccess retrievedUsers = new UserSuccess();
+    public SuccessEvaluator<User> getActiveUsers() {
+        SuccessEvaluator<User> retrievedUsers = new SuccessEvaluator<>();
         List<User> activeUsers = this.userRepository.findByActiveUser(1);
         if (activeUsers.size() > 0) {
-            retrievedUsers.setUsers(activeUsers);
+            retrievedUsers.setEntities(activeUsers);
             retrievedUsers.setIsSuccessfull(true);
         } else {
             retrievedUsers.setIsSuccessfull(false);
@@ -89,7 +86,7 @@ public class UserService {
      * @param userImage The image of the user that is saved within the user object.
      */
     public SuccessObject saveUser(User user, byte[] userImage) {
-        SuccessObject success = new UserSuccess();
+        SuccessObject success = new SuccessEvaluator<User>();
         Boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
         Boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
         if (existsUserName) {
@@ -117,7 +114,7 @@ public class UserService {
     }
 
     private SuccessObject passwordAndRolesHandler(User user) {
-        SuccessObject passwordSuccess = new UserSuccess();
+        SuccessObject passwordSuccess = new SuccessEvaluator<>();
         if (user.getPassword().isEmpty()) {
             passwordSuccess.setMessage("Please input a password!");
             passwordSuccess.setIsSuccessfull(false);
@@ -157,11 +154,11 @@ public class UserService {
      * @param id The user id for obtaining the user object.
      * @return The user object is returned.
      */
-    public UserSuccess findById(Long id) {
-        UserSuccess success = new UserSuccess();
+    public SuccessEvaluator<User> findById(Long id) {
+        SuccessEvaluator<User> success = new SuccessEvaluator<>();
         if (userRepository.existsUserByUserId(id)) {
             User user = userRepository.findById(id).get();
-            success.setUser(user);
+            success.setEntity(user);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);
@@ -176,7 +173,7 @@ public class UserService {
      * @param user The to be deleted user object.
      */
     public SuccessObject deleteUser(User user) {
-        SuccessObject success = new UserSuccess();
+        SuccessObject success = new SuccessEvaluator<>();
         user.setActiveUser(0);
         this.userRepository.save(user);
         if (userRepository.findById(user.getUserId()).get().getActiveUser() == 0) {

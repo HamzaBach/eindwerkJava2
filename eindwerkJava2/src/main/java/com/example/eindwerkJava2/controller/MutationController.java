@@ -46,7 +46,7 @@ public class MutationController {
 
         model.addAttribute("mutation",new Mutation());
         model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
-        model.addAttribute("userList",userService.getActiveUsers().getUsers());
+        model.addAttribute("userList",userService.getActiveUsers().getEntities());
         model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
         model.addAttribute("locationList", locationService.getAllLocations());
         return "/forms/form_mutation";
@@ -71,7 +71,7 @@ public class MutationController {
         Mutation mutation = mutationServiceImp.findById(mutationId).get();
         model.addAttribute("mutation",mutation);
         model.addAttribute("transactiontypeList", transactionService.getTransactiontypes());
-        model.addAttribute("userList",userService.getActiveUsers().getUsers());
+        model.addAttribute("userList",userService.getActiveUsers().getEntities());
         model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
         return "/forms/form_mutation";
     }

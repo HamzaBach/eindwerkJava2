@@ -5,8 +5,7 @@ import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
-import com.example.eindwerkJava2.wrappers.RolesSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +26,11 @@ public class RolesService {
         this.userRepository=userRepository;
     }
 
-    public RolesSuccess getAllRoles() {
-        RolesSuccess retrievedRoles = new RolesSuccess();
+    public SuccessEvaluator<Role> getAllRoles() {
+        SuccessEvaluator<Role> retrievedRoles = new SuccessEvaluator<>();
         List<Role> activeRoles = this.roleRepository.findAll();
         if (activeRoles.size() > 0) {
-            retrievedRoles.setRoles(activeRoles);
+            retrievedRoles.setEntities(activeRoles);
             retrievedRoles.setIsSuccessfull(true);
         } else {
             retrievedRoles.setIsSuccessfull(false);
@@ -41,14 +40,14 @@ public class RolesService {
     }
 
     //Get Role by Id
-    public RolesSuccess findRoleById(Integer id){
-        RolesSuccess success = new RolesSuccess();
+    public SuccessEvaluator<Role> findRoleById(Integer id){
+        SuccessEvaluator<Role> success = new SuccessEvaluator<>();
         if(roleRepository.findById(id).isEmpty()){
             success.setIsSuccessfull(false);
             success.setMessage("Role not found!");
         } else {
             Role role = roleRepository.findById(id).get();
-            success.setRole(role);
+            success.setEntity(role);
             success.setIsSuccessfull(true);
         }
         return success;
@@ -56,8 +55,8 @@ public class RolesService {
 
     //Delete Role
     public SuccessObject deleteRole(Integer id){
-        RolesSuccess findRoleSuccess = findRoleById(id);
-        SuccessObject deleteRoleSuccess = new RolesSuccess();
+        SuccessEvaluator<Role> findRoleSuccess = findRoleById(id);
+        SuccessObject deleteRoleSuccess = new SuccessEvaluator<>();
         if(findRoleSuccess.getIsSuccessfull()){
             Role toBeDeletedRole = roleRepository.findById(id).get();
             roleRepository.deleteById(id);
@@ -72,8 +71,8 @@ public class RolesService {
 
     //Update Role
     public SuccessObject save (Role role){
-        SuccessObject isSaveSuccessfull = new RolesSuccess();
-        Boolean existsRoleByName = roleRepository.existsRoleByName(role.getName());
+        SuccessObject isSaveSuccessfull = new SuccessEvaluator<Role>();
+        boolean existsRoleByName = roleRepository.existsRoleByName(role.getName());
         if(existsRoleByName){
             Role roleWithSameName = roleRepository.findByName(role.getName());
             if(role.getId()==null){
@@ -93,15 +92,15 @@ public class RolesService {
 
     //Assign a role
     public SuccessObject assignUserRole(Long userId, Integer roleId){
-        SuccessObject assignUserRoleSuccess = new RolesSuccess();
-        Boolean existsRoleById = roleRepository.existsById(roleId);
+        SuccessObject assignUserRoleSuccess = new SuccessEvaluator<Role>();
+        boolean existsRoleById = roleRepository.existsById(roleId);
         if(existsRoleById){
             Role toBeAssignedRole = roleRepository.findById(roleId).get();
             if(userId==null){
                 assignUserRoleSuccess.setIsSuccessfull(false);
                 assignUserRoleSuccess.setMessage("The role "+toBeAssignedRole.getName()+ " could not be added because the user id is null!");
             } else {
-                Boolean existsUserById = userRepository.existsById(userId);
+                boolean existsUserById = userRepository.existsById(userId);
                 if(existsUserById){
                     User user = userRepository.findById(userId).orElse(null);
                     Role role = roleRepository.findById(roleId).orElse(null);
@@ -125,15 +124,15 @@ public class RolesService {
 
     //Unassign a role
     public SuccessObject unassignUserRole(Long userId, Integer roleId){
-        SuccessObject unassignUserRoleSuccess = new RolesSuccess();
-        Boolean existsRoleById = roleRepository.existsById(roleId);
+        SuccessObject unassignUserRoleSuccess = new SuccessEvaluator<>();
+        boolean existsRoleById = roleRepository.existsById(roleId);
         if(existsRoleById){
             Role toBeUnassignedRole = roleRepository.findById(roleId).get();
             if(userId==null){
                 unassignUserRoleSuccess.setIsSuccessfull(false);
                 unassignUserRoleSuccess.setMessage("The role "+toBeUnassignedRole.getName()+ " could not be removed because the user id is null!");
             } else {
-                Boolean existsUserById = userRepository.existsById(userId);
+                boolean existsUserById = userRepository.existsById(userId);
                 if(existsUserById){
                     User user = userRepository.findById(userId).orElse(null);
                     Set<Role> userRoles = user.getRoles();

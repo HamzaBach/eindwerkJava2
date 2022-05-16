@@ -2,7 +2,7 @@ package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.OrderSupplierHeaderRepository;
-import com.example.eindwerkJava2.wrappers.OrderSupplierHeaderSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderSupplierHeaderService {
@@ -27,12 +26,12 @@ public class OrderSupplierHeaderService {
         this.orderSupplierHeaderRepository = orderSupplierHeaderRepository;
     }
 
-    public OrderSupplierHeaderSuccess getOrderSupplierHeaders() {
-        OrderSupplierHeaderSuccess orderSupplierHeaderSuccess = new OrderSupplierHeaderSuccess();
+    public SuccessEvaluator<OrderSupplierHeader> getOrderSupplierHeaders() {
+        SuccessEvaluator<OrderSupplierHeader> orderSupplierHeaderSuccess = new SuccessEvaluator<>();
         List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderRepository.findAll();
         if (orderSupplierHeaderList.size() > 0) {
             orderSupplierHeaderSuccess.setIsSuccessfull(true);
-            orderSupplierHeaderSuccess.setOrderSupplierHeaders(orderSupplierHeaderList);
+            orderSupplierHeaderSuccess.setEntities(orderSupplierHeaderList);
         } else {
             orderSupplierHeaderSuccess.setIsSuccessfull(false);
             orderSupplierHeaderSuccess.setMessage("No order supplier headers found within the database.");
@@ -40,12 +39,12 @@ public class OrderSupplierHeaderService {
         return orderSupplierHeaderSuccess;
     }
 
-    public OrderSupplierHeaderSuccess findById(Long id) {
-        OrderSupplierHeaderSuccess success = new OrderSupplierHeaderSuccess();
-        Boolean existsOrderSupplierHeader = orderSupplierHeaderRepository.existsById(id);
+    public SuccessEvaluator<OrderSupplierHeader> findById(Long id) {
+        SuccessEvaluator<OrderSupplierHeader> success = new SuccessEvaluator<>();
+        boolean existsOrderSupplierHeader = orderSupplierHeaderRepository.existsById(id);
         if (existsOrderSupplierHeader) {
             OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(id).orElse(null);
-            success.setOrderSupplierHeader(orderSupplierHeader);
+            success.setEntity(orderSupplierHeader);
             success.setIsSuccessfull(true);
         } else {
             success.setMessage("Order not found!");
@@ -59,8 +58,8 @@ public class OrderSupplierHeaderService {
     }
 
 
-    public SuccessObject save(OrderSupplierHeader orderSupplierHeader) {
-        SuccessObject isSaveSuccessful = new OrderSupplierHeaderSuccess();
+    public SuccessEvaluator<OrderSupplierHeader> save(OrderSupplierHeader orderSupplierHeader) {
+        SuccessEvaluator<OrderSupplierHeader> isSaveSuccessful = new SuccessEvaluator<>();
         orderSupplierHeaderRepository.save(orderSupplierHeader);
         Optional<OrderSupplierHeader> orderSupplierHeader1 = orderSupplierHeaderRepository.findById(orderSupplierHeaderRepository.getMaxId());
         String supplierName = orderSupplierHeader1.get().getSupplier().getSupplierName();
@@ -72,17 +71,17 @@ public class OrderSupplierHeaderService {
             isSaveSuccessful.setIsSuccessfull(true);
         } else {
             isSaveSuccessful.setIsSuccessfull(false);
-            isSaveSuccessful.setMessage("Unable to save/retrieve the order within the database!");
+            isSaveSuccessful.setMessage("Unable to save/retrieve the order number ("+orderSupplierHeader1.get().getOrderNumber()+") within the database!");
         }
         return isSaveSuccessful;
     }
 
     public SuccessObject closeOrder(Long orderHeaderId) {
-        SuccessObject isCloseOrderSuccessful = new OrderSupplierHeaderSuccess();
+        SuccessObject isCloseOrderSuccessful = new SuccessEvaluator<>();
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderRepository.findById(orderHeaderId).get();
         orderSupplierHeader.setDateOrderClosed(LocalDate.now());
-        save(orderSupplierHeader);
-        if(orderSupplierHeaderRepository.findByOrderNumber(orderSupplierHeader.getOrderNumber()).getDateOrderClosed()!=null){
+        SuccessEvaluator<OrderSupplierHeader> isSaveSuccessful = save(orderSupplierHeader);
+        if(orderSupplierHeaderRepository.findByOrderNumber(orderSupplierHeader.getOrderNumber()).getDateOrderClosed()!=null && isSaveSuccessful.getIsSuccessfull()){
             isCloseOrderSuccessful.setIsSuccessfull(true);
             isCloseOrderSuccessful.setMessage("Order "+orderSupplierHeader.getOrderNumber()+" was successfully closed");
         }else{
@@ -92,12 +91,12 @@ public class OrderSupplierHeaderService {
         return isCloseOrderSuccessful;
     }
 
-    public OrderSupplierHeaderSuccess getAllClosedOrders() {
-        OrderSupplierHeaderSuccess success = new OrderSupplierHeaderSuccess();
+    public SuccessEvaluator<OrderSupplierHeader> getAllClosedOrders() {
+        SuccessEvaluator<OrderSupplierHeader> success = new SuccessEvaluator<>();
         List<OrderSupplierHeader> orderSupplierHeaderList=orderSupplierHeaderRepository.getAllClosedOrders();
 
         if(orderSupplierHeaderList.size()>0){
-            success.setOrderSupplierHeaders(orderSupplierHeaderList);
+            success.setEntities(orderSupplierHeaderList);
             success.setIsSuccessfull(true);
         } else {
             success.setIsSuccessfull(false);

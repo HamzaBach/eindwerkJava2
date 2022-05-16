@@ -3,7 +3,6 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class ArticleService {
      *
      * @return A list of all active articles retrieved from {@link com.example.eindwerkJava2.repositories.ArticleRepository#findByActiveArticle(int)}.
      */
-    public SuccessEvaluator getActiveArticles() {
-        SuccessEvaluator retrievedArticles = new SuccessEvaluator();
+    public SuccessEvaluator<Article> getActiveArticles() {
+        SuccessEvaluator<Article> retrievedArticles = new SuccessEvaluator<>();
         List<Article> activeArticles = this.articleRepository.findByActiveArticle(1);
         if (activeArticles.size() > 0) {
             retrievedArticles.setEntities(activeArticles);
@@ -55,12 +54,12 @@ public class ArticleService {
      *
      * @param article      The to be saved article.
      * @param articleImage The article image.
-     * @return The successObject (wrapper class around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) indicating whether the save action was successful or not.
+     * @return The successObject (wrapper class around article {@link com.example.eindwerkJava2.wrappers.SuccessEvaluator}) indicating whether the save action was successful or not.
      */
 
-    public SuccessEvaluator saveArticle(Article article, byte[] articleImage) {
-        SuccessEvaluator isSaveSuccessful = new SuccessEvaluator();
-        Boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
+    public SuccessEvaluator<Article> saveArticle(Article article, byte[] articleImage) {
+        SuccessEvaluator<Article> isSaveSuccessful = new SuccessEvaluator<>();
+        boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
         if (existsArticleByName) {
             Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
             // use case if a new article gets named to the name of an already present article name -> block!
@@ -113,12 +112,12 @@ public class ArticleService {
      * Method to retrieve an article from the database based on its articleId.
      *
      * @param id The id of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.SuccessEvaluator}) to indicate whether the find action was successful or not.
      */
-    public SuccessEvaluator findById(Long id) {
-        SuccessEvaluator success = new SuccessEvaluator();
-        Boolean existsArticle = articleRepository.existsArticleByArticleId(id);
-        if(existsArticle){
+    public SuccessEvaluator<Article> findById(Long id) {
+        SuccessEvaluator<Article> success = new SuccessEvaluator<>();
+        boolean existsArticle = articleRepository.existsArticleByArticleId(id);
+        if (existsArticle) {
             Article article = articleRepository.findById(id).get();
             success.setEntity(article);
             success.setIsSuccessfull(true);
@@ -129,14 +128,15 @@ public class ArticleService {
 
         return success;
     }
+
     /**
      * Method to retrieve an article from the database based on its barcode.
      *
      * @param barcode The barcode of the to be retrieved article from the database.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the find action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.SuccessEvaluator}) to indicate whether the find action was successful or not.
      */
-    public SuccessEvaluator findByBarcode(String barcode) {
-        SuccessEvaluator success = new SuccessEvaluator();
+    public SuccessEvaluator<Article> findByBarcode(String barcode) {
+        SuccessEvaluator<Article> success = new SuccessEvaluator<>();
         if (articleRepository.findByArticleBarcode(barcode).isEmpty()) {
             success.setIsSuccessfull(false);
             success.setMessage("Article not found!");
@@ -152,7 +152,7 @@ public class ArticleService {
      * Method to delete an article from the database.
      *
      * @param article The to be deleted article.
-     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.ArticleSuccess}) to indicate whether the delete action was successful or not.
+     * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.SuccessEvaluator}) to indicate whether the delete action was successful or not.
      */
 
     public SuccessObject deleteArticle(Article article) {
@@ -170,12 +170,12 @@ public class ArticleService {
     }
 
 
-    public ArticleDto getDtoOfBarcode(String barcode){
+    public ArticleDto getDtoOfBarcode(String barcode) {
         Article article = articleRepository.findByArticleBarcode(barcode).get();
         return toArticleDto(article);
     }
 
-    public ArticleDto toArticleDto(Article article){
+    public ArticleDto toArticleDto(Article article) {
         return new ArticleDto(
                 article.getArticleName(),
                 article.getCategory().getCategoryName(),
@@ -183,7 +183,8 @@ public class ArticleService {
         );
 
     }
-    public List<ArticleDto> articleDtos(List<Article> articles){
+
+    public List<ArticleDto> articleDtos(List<Article> articles) {
         return articles.stream()
                 .map(this::toArticleDto)
                 .collect(Collectors.toList());
