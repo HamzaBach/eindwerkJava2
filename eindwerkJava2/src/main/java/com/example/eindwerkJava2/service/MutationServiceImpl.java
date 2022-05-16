@@ -1,9 +1,9 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.Exceptions.NegativeInventoryException;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.MutationRepository;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +33,36 @@ public class MutationServiceImpl implements MutationService {
 
 
 
-    public void addStock(Mutation mutation) {
-        Stock stockTo = stockService.findStockByLocation(mutation.getLocationTo());
-        stockTo.setAmount(stockTo.getAmount() + mutation.getAmount());
+    public SuccessEvaluator<Mutation> addStock(Mutation mutation) {
+        SuccessEvaluator<Mutation> isAddStockSuccessfull = new SuccessEvaluator<>();
+        Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
+        if(stockTo == null)
+        {
+           Stock initstock = new Stock();
+            initstock.setAmount(0d);
+            initstock.setLocation(mutation.getLocation());
+            initstock.setArticle(mutation.getArticle());
+            initstock.setActiveStock(1);
+            stockService.saveStock(initstock);
+        }
+        stockTo = stockService.findStockByLocation(mutation.getLocation());
+        Double updatedStockTotalAmount = stockTo.getAmount() + mutation.getAmount();
+        stockTo.setAmount(updatedStockTotalAmount);
         stockService.saveStock(stockTo);
         mutationRepository.save(mutation);
+        if(stockService.findStockByLocation(mutation.getLocation()).getAmount()==updatedStockTotalAmount){
+            isAddStockSuccessfull.setIsSuccessfull(true);
+        }else {
+            isAddStockSuccessfull.setIsSuccessfull(false);
+            isAddStockSuccessfull.setMessage("Mismatch in stock amount expected amount ="+updatedStockTotalAmount+", retrieved amount from db = "+mutation.getAmount()+
+                    " on location: "+mutation.getLocation());
+        }
+        return isAddStockSuccessfull;
+
     }
 
     public String removeStock(Mutation mutation) {
-        Stock stockFrom = stockService.findStockByLocation(mutation.getLocationFrom());
+        Stock stockFrom = stockService.findStockByLocation(mutation.getLocation());
         stockFrom.setAmount(stockFrom.getAmount() - mutation.getAmount() );
 
         if(stockFrom.getAmount() < 0){

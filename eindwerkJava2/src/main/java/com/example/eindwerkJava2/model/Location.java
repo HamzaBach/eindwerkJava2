@@ -36,6 +36,7 @@ public class Location {
     @JoinColumn(name = "warehouse_Id")
     private Warehouse warehouse;
 
+    //TODO: Dit moet verwijzen naar een apparte entity (table) met id+name+singleStorage
     @Column(name = "singleStorage")
     private boolean singleStorage;
 
