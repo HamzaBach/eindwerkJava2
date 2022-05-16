@@ -13,8 +13,8 @@ public interface MutationService {
      List<Mutation> getMutations();
 
      SuccessEvaluator<Mutation> addStock(Mutation mutation);
-     String removeStock(Mutation mutation);
-     void moveStock(Mutation mutation);
+     SuccessEvaluator<Mutation> removeStock(Mutation mutation);
+     SuccessEvaluator<Mutation> moveStock(Mutation mutation);
 
      Optional<Mutation> findById(Long id);
      void deleteMutation(Mutation mutation);
