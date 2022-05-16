@@ -2,7 +2,7 @@ package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.City;
 import com.example.eindwerkJava2.repositories.CitiesRepository;
-import com.example.eindwerkJava2.wrappers.CitySuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,11 @@ public class CitiesServiceImpl implements CitiesService {
     private CitiesRepository citiesRepository;
 
     @Override
-    public CitySuccess getAllCities(){
-        CitySuccess retrievedCities = new CitySuccess();
+    public SuccessEvaluator<City> getAllCities(){
+        SuccessEvaluator<City> retrievedCities = new SuccessEvaluator<>();
         List<City> citiesList = this.citiesRepository.findAll();
         if(citiesList.size()>0){
-            retrievedCities.setCities(citiesList);
+            retrievedCities.setEntities(citiesList);
             retrievedCities.setIsSuccessfull(true);
         } else {
             retrievedCities.setIsSuccessfull(false);

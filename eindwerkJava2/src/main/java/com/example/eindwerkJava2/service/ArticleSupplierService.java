@@ -4,7 +4,7 @@ import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.ArticleSupplierRepository;
-import com.example.eindwerkJava2.wrappers.ArticleSupplierSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -19,12 +19,12 @@ public class ArticleSupplierService {
     @Autowired
     private ArticleSupplierRepository articleSupplierRepository;
 
-    public ArticleSupplierSuccess getAllArticleSuppliers() {
-        ArticleSupplierSuccess retrievedSuppliersArticles = new ArticleSupplierSuccess();
+    public SuccessEvaluator<ArticleSupplier> getAllArticleSuppliers() {
+        SuccessEvaluator<ArticleSupplier> retrievedSuppliersArticles = new SuccessEvaluator<ArticleSupplier>();
         List<ArticleSupplier> activeArticlesSuppliers = this.articleSupplierRepository.getAllArticleSuppliers();
         if (activeArticlesSuppliers.size() > 0) {
             retrievedSuppliersArticles.setIsSuccessfull(true);
-            retrievedSuppliersArticles.setArticlesSuppliers(activeArticlesSuppliers);
+            retrievedSuppliersArticles.setEntities(activeArticlesSuppliers);
         } else {
             retrievedSuppliersArticles.setIsSuccessfull(false);
             retrievedSuppliersArticles.setMessage("No articles from suppliers found within the database.");
@@ -33,7 +33,8 @@ public class ArticleSupplierService {
     }
 
     public SuccessObject saveArticleSupplier(ArticleSupplier articleSupplier) {
-        SuccessObject isSaveSuccessful = new ArticleSupplierSuccess();
+        //TODO Success logic makes no sense here...
+        SuccessObject isSaveSuccessful = new SuccessEvaluator<ArticleSupplier>();
         List<ArticleSupplier> articlesFromSupplier = articleSupplierRepository.getActiveArticlesFromSpecificSupplier(articleSupplier.getSupplier().getSupplierId());
         duplicateArticlesFromSupplierHandler(articleSupplier, isSaveSuccessful, articlesFromSupplier);
         if (isSaveSuccessful.getIsSuccessfull()) {
@@ -66,21 +67,21 @@ public class ArticleSupplierService {
         }
     }
 
-    public ArticleSupplierSuccess findById(long id) {
-        ArticleSupplierSuccess success = new ArticleSupplierSuccess();
+    public SuccessEvaluator<ArticleSupplier> findById(Long id) {
+        SuccessEvaluator<ArticleSupplier> success = new SuccessEvaluator<>();
         if (articleSupplierRepository.findById(id).isEmpty()) {
             success.setIsSuccessfull(false);
             success.setMessage("Article from the given supplier was not found!");
         } else {
             ArticleSupplier articleSupplier = articleSupplierRepository.findById(id).get();
-            success.setArticleSupplier(articleSupplier);
+            success.setEntity(articleSupplier);
             success.setIsSuccessfull(true);
         }
         return success;
     }
 
-    public SuccessObject deleteArticleSupplier(ArticleSupplier articleSupplier) {
-        SuccessObject success = new ArticleSupplierSuccess();
+    public SuccessEvaluator<ArticleSupplier> deleteArticleSupplier(ArticleSupplier articleSupplier) {
+        SuccessEvaluator<ArticleSupplier> success = new SuccessEvaluator<>();
         articleSupplier.setActiveArticleSupplier(0);
         this.articleSupplierRepository.save(articleSupplier);
         if (articleSupplierRepository.findById(articleSupplier.getArticleSupplierId()).get().getActiveArticleSupplier() == 0) {
@@ -108,7 +109,7 @@ public class ArticleSupplierService {
 
     public List<Article> getArticlesFromSupplier(Supplier supplier) {
         List<Article> articleList = new ArrayList<>();
-        List<ArticleSupplier> articleSuppliers = getAllArticleSuppliers().getArticlesSuppliers();
+        List<ArticleSupplier> articleSuppliers = getAllArticleSuppliers().getEntities();
         for (ArticleSupplier articleSupplier : articleSuppliers) {
             if (articleSupplier.getSupplier().equals(supplier)) {
                 articleList.add(articleSupplier.getArticle());

@@ -1,10 +1,10 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.City;
-import com.example.eindwerkJava2.wrappers.CitySuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 
 public interface CitiesService {
-    CitySuccess getAllCities();
+    SuccessEvaluator<City> getAllCities();
     //TODO: add logic for saving!
    void saveCity(City city);
     }

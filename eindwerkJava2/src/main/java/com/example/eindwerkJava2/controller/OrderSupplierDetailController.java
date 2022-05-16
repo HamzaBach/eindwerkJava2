@@ -7,7 +7,7 @@ import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
-import com.example.eindwerkJava2.wrappers.OrderSupplierHeaderSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
 
 @Controller
 public class OrderSupplierDetailController {
@@ -36,9 +35,9 @@ public class OrderSupplierDetailController {
 
     @GetMapping("orderdetail/{orderSupplierId}")
     public String fillHeader(@PathVariable("orderSupplierId") Long orderHeaderId, Model model) {
-        OrderSupplierHeaderSuccess findOrderSuccess = orderSupplierHeaderService.findById(orderHeaderId);
+        SuccessEvaluator<OrderSupplierHeader> findOrderSuccess = orderSupplierHeaderService.findById(orderHeaderId);
         if (findOrderSuccess.getIsSuccessfull()) {
-            OrderSupplierHeader orderSupplierHeader = findOrderSuccess.getOrderSupplierHeader();
+            OrderSupplierHeader orderSupplierHeader = findOrderSuccess.getEntity();
             Supplier supplier = orderSupplierHeader.getSupplier();
             model.addAttribute("orderSupplierDetail", new OrderSupplierDetail());
             model.addAttribute("orderheader", orderSupplierHeader);

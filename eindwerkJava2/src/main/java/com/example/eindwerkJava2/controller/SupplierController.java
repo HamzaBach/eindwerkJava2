@@ -1,12 +1,11 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Supplier;
-import com.example.eindwerkJava2.repositories.SupplierRepository;
 import com.example.eindwerkJava2.service.CitiesService;
 import com.example.eindwerkJava2.service.CountriesService;
 import com.example.eindwerkJava2.service.SupplierService;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
-import com.example.eindwerkJava2.wrappers.SupplierSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +24,9 @@ public class SupplierController {
 
     @GetMapping("/supplier")
     public String viewSuppliers(Model model) {
-        SupplierSuccess supplierSuccess = supplierService.getAllSuppliers();
+        SuccessEvaluator<Supplier> supplierSuccess = supplierService.getAllSuppliers();
         if (supplierSuccess.getIsSuccessfull()) {
-            model.addAttribute("suppliersList", supplierSuccess.getSuppliers());
+            model.addAttribute("suppliersList", supplierSuccess.getEntities());
         } else {
             model.addAttribute("error", supplierSuccess.getMessage());
         }
@@ -38,7 +37,7 @@ public class SupplierController {
     public String showNewSupplierForm(Model model) {
         Supplier supplier = new Supplier();
         model.addAttribute("supplier", new Supplier());
-        model.addAttribute("citiesList", citiesService.getAllCities().getCities());
+        model.addAttribute("citiesList", citiesService.getAllCities().getEntities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
         return "/forms/form_supplier";
     }
@@ -64,19 +63,19 @@ public class SupplierController {
 
     @GetMapping("edit/supplier/{supplierId}")
     public String showEditSupplierForm(@PathVariable("supplierId") Long supplierId, Model model) {
-        SupplierSuccess findSupplierSuccess = supplierService.findById(supplierId);
-        Supplier supplier = findSupplierSuccess.getSupplier();
+        SuccessEvaluator<Supplier> findSupplierSuccess = supplierService.findById(supplierId);
+        Supplier supplier = findSupplierSuccess.getEntity();
         model.addAttribute("supplier", supplier);
-        model.addAttribute("citiesList", citiesService.getAllCities().getCities());
+        model.addAttribute("citiesList", citiesService.getAllCities().getEntities());
         model.addAttribute("countriesList", countriesService.getAllCountries());
         return "/forms/form_supplier";
     }
 
     @GetMapping("delete/supplier/{supplierId}")
     public String deleteSupplier(@PathVariable("supplierId") Long supplierId, RedirectAttributes redirAttr) {
-        SupplierSuccess findSupplierSuccess = supplierService.findById(supplierId);
+        SuccessEvaluator<Supplier> findSupplierSuccess = supplierService.findById(supplierId);
         if (findSupplierSuccess.getIsSuccessfull()) {
-            Supplier supplier = findSupplierSuccess.getSupplier();
+            Supplier supplier = findSupplierSuccess.getEntity();
             SuccessObject toBeDeletedSupplier = this.supplierService.deleteSupplier(supplier);
             if (toBeDeletedSupplier.getIsSuccessfull()) {
                 redirAttr.addFlashAttribute("success", toBeDeletedSupplier.getMessage());

@@ -21,7 +21,7 @@ public class ArticleRestController {
 
     @GetMapping
     public List<ArticleDto> getAllArticles() {
-        return articleService.articleDtos(articleService.getActiveArticles().getArticles());
+        return articleService.articleDtos(articleService.getActiveArticles().getEntities());
     }
 
     @GetMapping("{barcode}")

@@ -1,15 +1,13 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Category;
-import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.repositories.CategoryRepository;
-import com.example.eindwerkJava2.wrappers.CategorySuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -20,22 +18,22 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public CategorySuccess getCategories() {
-        CategorySuccess success = new CategorySuccess();
+    public SuccessEvaluator<Category> getCategories() {
+        SuccessEvaluator<Category> success = new SuccessEvaluator<>();
         List<Category> retrievedCategories = categoryRepository.findAllActiveCategories();
         if (retrievedCategories.isEmpty()) {
             success.setIsSuccessfull(false);
             success.setMessage("No categories where found, please add categories!");
         } else {
             success.setIsSuccessfull(true);
-            success.setCategories(retrievedCategories);
+            success.setEntities(retrievedCategories);
         }
         return success;
     }
 
-    public SuccessObject addCategory(Category category) {
-        SuccessObject isSaveSuccessful = new CategorySuccess();
-        Boolean existsCategoryByCategoryName = categoryRepository.existsCategoryByCategoryName(category.getCategoryName());
+    public SuccessEvaluator<Category> addCategory(Category category) {
+        SuccessEvaluator<Category> isSaveSuccessful = new SuccessEvaluator<>();
+        boolean existsCategoryByCategoryName = categoryRepository.existsCategoryByCategoryName(category.getCategoryName());
         if (existsCategoryByCategoryName) {
             Category categoryWithSameName = categoryRepository.findByCategoryName(category.getCategoryName()).get();
             // use case if a new category gets named to the name of an already present category name -> block!
@@ -60,21 +58,21 @@ public class CategoryService {
     }
 
 
-    public CategorySuccess findById(Long id) {
-        CategorySuccess success = new CategorySuccess();
+    public SuccessEvaluator<Category> findById(Long id) {
+        SuccessEvaluator<Category> success = new SuccessEvaluator<>();
         if(categoryRepository.findById(id).isEmpty()){
             success.setIsSuccessfull(false);
             success.setMessage("Category not found!");
         } else {
             Category retrievedCategory = categoryRepository.findById(id).get();
-            success.setCategory(retrievedCategory);
+            success.setEntity(retrievedCategory);
             success.setIsSuccessfull(true);
         }
         return success;
     }
 
     public SuccessObject deleteCategory(Category category) {
-        SuccessObject success = new CategorySuccess();
+        SuccessObject success = new SuccessEvaluator<>();
         category.setActive(0);
         this.categoryRepository.save(category);
         if(categoryRepository.findById(category.getCategoryId()).get().getActive()==0){

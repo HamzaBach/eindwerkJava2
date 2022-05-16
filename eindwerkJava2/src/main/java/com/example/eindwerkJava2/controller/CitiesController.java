@@ -3,10 +3,7 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.City;
 import com.example.eindwerkJava2.service.CitiesService;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
-import com.example.eindwerkJava2.wrappers.CategorySuccess;
-import com.example.eindwerkJava2.wrappers.CitySuccess;
-import com.example.eindwerkJava2.wrappers.SuccessObject;
+import com.example.eindwerkJava2.wrappers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +23,9 @@ public class CitiesController {
 
     @GetMapping("/city")
     public String viewCities(Model model){
-        CitySuccess retrievedCities = citiesService.getAllCities();
+        SuccessEvaluator<City> retrievedCities = citiesService.getAllCities();
         if(retrievedCities.getIsSuccessfull()){
-            model.addAttribute("citiesList", retrievedCities.getCities());
+            model.addAttribute("citiesList", retrievedCities.getEntities());
         } else {
             model.addAttribute("error",retrievedCities.getMessage());
         }
