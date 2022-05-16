@@ -11,7 +11,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Table(name = "Countries")
-public class Countries {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long countryId;
@@ -22,10 +22,10 @@ public class Countries {
     @Column(name = "iso")
     private String iso;
 
-    public Countries() {
+    public Country() {
     }
 
-    public Countries(String countryName, String iso) {
+    public Country(String countryName, String iso) {
         this.countryName = countryName;
         this.iso = iso;
     }

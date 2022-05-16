@@ -20,6 +20,7 @@
     <div th:unless="${category.categoryId == null}">
         <h1>Edit category</h1>
     </div>
+    <div th:include="fragments/header::errorMessaging"/>
 
     <form action="#" th:action="@{/saveCategory}" th:object="${category}", method="POST" >
         <div class="row">

@@ -1,6 +1,6 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Countries;
+import com.example.eindwerkJava2.model.Country;
 import com.example.eindwerkJava2.repositories.CountriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class CountriesServiceImpl implements CountriesService {
     private CountriesRepository countriesRepository;
 
     @Override
-    public List<Countries> getAllCountries(){
+    public List<Country> getAllCountries(){
         return countriesRepository.findAll();
     }
 }

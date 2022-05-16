@@ -30,6 +30,7 @@
 
 <div align="center" style="margin: 100px" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
     <h1>Locations</h1>
+    <div th:include="fragments/header::errorMessaging"/>
    
     <div align="center" style="margin-bottom: -3px;">
         <a th:href="@{/new/location}" class="btn btn-primary btn-lg" style="margin:20px">New location</a>

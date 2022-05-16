@@ -36,27 +36,27 @@ public class DummyDataConfig {
                 }
             }
 
-            List<Cities> dummyCities = new ArrayList<Cities>();
-            Cities Genk = new Cities(3600, "Genk", "Limburg" );
-            Cities Koln = new Cities(4235, "Köln", "NordRhein-Westfalen" );
-            Cities Stockholm = new Cities(1000, "Stockholm", "Stockholm" );
+            List<City> dummyCities = new ArrayList<City>();
+            City Genk = new City(3600, "Genk", "Limburg" );
+            City Koln = new City(4235, "Köln", "NordRhein-Westfalen" );
+            City Stockholm = new City(1000, "Stockholm", "Stockholm" );
             dummyCities.add(Genk);
             dummyCities.add(Koln);
             dummyCities.add(Stockholm);
-            for(Cities city:dummyCities){
-                if(!citiesRepository.existsCitiesByCityName(city.getCityName())){
+            for(City city:dummyCities){
+                if(!citiesRepository.existsCityByCityName(city.getCityName())){
                     citiesRepository.save(city);
                 }
             }
 
-            List<Countries> dummyCountries = new ArrayList<Countries>();
-            Countries Belgium = new Countries("Belgium","BE");
-            Countries Germany = new Countries("Germany","DE");
-            Countries Sweden = new Countries("Sweden", "SV");
+            List<Country> dummyCountries = new ArrayList<Country>();
+            Country Belgium = new Country("Belgium","BE");
+            Country Germany = new Country("Germany","DE");
+            Country Sweden = new Country("Sweden", "SV");
             dummyCountries.add(Belgium);
             dummyCountries.add(Germany);
             dummyCountries.add(Sweden);
-            for(Countries country:dummyCountries){
+            for(Country country:dummyCountries){
                 if(!countriesRepository.existsCountriesByCountryName(country.getCountryName())){
                     countriesRepository.save(country);
                 }
@@ -160,6 +160,26 @@ public class DummyDataConfig {
                     articleSupplierRepository.save(articleSupplier);
                 }
             }
+
+
+            if(warehouseRepository.count()<2){
+                Warehouse warehouse = new Warehouse();
+                warehouse.setWarehouseName("Magazijn");
+                Location location = new Location();
+                location.setActiveLocation(1);
+                location.setLocationName("LAADZONE");
+                location.setSingleStorage(false);
+                location.setWarehouse(warehouse);
+                Location location2 = new Location();
+                location.setActiveLocation(1);
+                location.setLocationName("SUPPLIER/ORDER");
+                location.setSingleStorage(false);
+                location.setWarehouse(warehouse);
+                warehouseRepository.save(warehouse);
+                locationRepository.save(location);
+                locationRepository.save(location2);
+            }
+
         };
     }
 }

@@ -25,7 +25,7 @@ public class SaleLineService {
 
     public void saveSaveLine(CreateSaleLineDto createSaleLineDto) {
         SaleLine saleLine = new SaleLine();
-        Article article = articleService.findByBarcode(createSaleLineDto.getBarcode()).getArticle();
+        Article article = (Article) articleService.findByBarcode(createSaleLineDto.getBarcode()).getEntity();
         saleLine.setArticle(article);
         saleLine.setQuantity(createSaleLineDto.getQuantity());
         saleLine.setUnitPrice(createSaleLineDto.getUnitPrice());

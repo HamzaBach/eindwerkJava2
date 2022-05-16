@@ -23,7 +23,7 @@ public class BarcodeService {
     }
 
     public BufferedImage generateArticleBarcodeImage(@PathVariable("articleId") Long articleId) {
-        Article article = articleService.findById(articleId).getArticle();
+        Article article = (Article) articleService.findById(articleId).getEntity();
         String barcode = article.getArticleBarcode();
         if(!barcode.isEmpty()){
             Code128Bean barcodeGenerator = new Code128Bean();

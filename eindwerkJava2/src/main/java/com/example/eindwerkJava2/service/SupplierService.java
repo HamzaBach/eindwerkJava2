@@ -1,15 +1,14 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Supplier;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 
 public interface SupplierService {
-    public List<Supplier> getAllSuppliers();
-    void saveSupplier(Supplier supplier);
-    public Optional<Supplier> findById(long id);
-    public void deleteSupplier(Supplier supplier);
+    public SuccessEvaluator<Supplier> getAllSuppliers();
+    SuccessObject saveSupplier(Supplier supplier);
+    public SuccessEvaluator<Supplier> findById(Long id);
+    public SuccessObject deleteSupplier(Supplier supplier);
     void makePdf();
 
 

@@ -1,10 +1,11 @@
 package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.CategoryService;
-import com.example.eindwerkJava2.wrappers.ArticleSuccess;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,12 +60,12 @@ public class ArticleController {
      */
     @GetMapping("/articles")
     public String getArticles(Model model) {
-        ArticleSuccess retrievedArticles = articleService.getActiveArticles();
-        if(!retrievedArticles.getIsSuccessfull()){
-            model.addAttribute("error",retrievedArticles.getMessage());
+        SuccessEvaluator<Article> retrievedArticles = articleService.getActiveArticles();
+        if (!retrievedArticles.getIsSuccessfull()) {
+            model.addAttribute("error", retrievedArticles.getMessage());
         } else {
-            model.addAttribute("article", new Article());
-            List<Article> articles = retrievedArticles.getArticles();
+            //model.addAttribute("article", new Article());
+            List<Article> articles = retrievedArticles.getEntities();
             model.addAttribute("articlesList", articles);
         }
         return "articles";
@@ -73,11 +74,14 @@ public class ArticleController {
 
     @GetMapping("delete/article/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId, RedirectAttributes redirAttrs) {
-        ArticleSuccess findArticle = articleService.findById(articleId);
+        SuccessEvaluator<Article> findArticle = articleService.findById(articleId);
         if (findArticle.getIsSuccessfull()) {
-            SuccessObject toBeDeletedArticle = this.articleService.deleteArticle(findArticle.getArticle());
-            redirAttrs.addFlashAttribute("success", toBeDeletedArticle.getMessage());
-            findArticle.setMessage(toBeDeletedArticle.getMessage());
+            SuccessObject toBeDeletedArticle = this.articleService.deleteArticle(findArticle.getEntity());
+            if (toBeDeletedArticle.getIsSuccessfull()) {
+                redirAttrs.addFlashAttribute("success", toBeDeletedArticle.getMessage());
+            } else {
+                redirAttrs.addFlashAttribute("error", toBeDeletedArticle.getMessage());
+            }
         } else {
             redirAttrs.addFlashAttribute("error", findArticle.getMessage());
         }
@@ -93,11 +97,13 @@ public class ArticleController {
      */
     @GetMapping("/new/article")
     public String showNewArticleForm(Model model) {
+        SuccessEvaluator<Category> categorySuccess = categoryService.getCategories();
         model.addAttribute("article", new Article());
-        model.addAttribute("categoriesList", categoryService.getCategories());
-//        model.addAttribute("suppliersList", supplierService.getAllSuppliers());
-        List<Article> articles = articleService.getActiveArticles().getArticles();
-        model.addAttribute("articlesList", articles);
+        if (categorySuccess.getIsSuccessfull()) {
+            model.addAttribute("categoriesList", categorySuccess.getEntities());
+        } else {
+            model.addAttribute("error", categorySuccess.getMessage());
+        }
         return "/forms/form_article";
     }
 
@@ -122,7 +128,6 @@ public class ArticleController {
             model.addAttribute("error", success.getMessage());
             return "/forms/form_article";
         }
-
     }
 
     /**
@@ -135,9 +140,10 @@ public class ArticleController {
     @GetMapping("/article/image/{articleId}")
     @ResponseBody
     void showImage(@PathVariable("articleId") Long articleId, HttpServletResponse response)
-            throws IOException {
-        Article article = articleService.findById(articleId).getArticle();
-        if (article.getArticleImage() != null) {
+            throws IOException { //TODO: add message for IOException
+        SuccessEvaluator<Article> success = articleService.findById(articleId);
+        Article article = success.getEntity();
+        if (article.getArticleImage() != null && success.getIsSuccessfull()) {
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
             response.getOutputStream().write(article.getArticleImage());
             response.getOutputStream().close();
@@ -153,11 +159,21 @@ public class ArticleController {
      * @return A form is returned with all the attributes of the to be edited article.
      */
     @GetMapping("edit/article/{articleId}")
-    public String showEditarticleForm(@PathVariable("articleId") Long articleId, Model model) {
-        Article article = articleService.findById(articleId).getArticle();
-        model.addAttribute("article", article);
-        model.addAttribute("categoriesList", categoryService.getCategories());
-        model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
+    public String showEditArticleForm(@PathVariable("articleId") Long articleId, Model model) {
+        SuccessEvaluator<Article> success = articleService.findById(articleId);
+        SuccessEvaluator<Category> categorySuccess = categoryService.getCategories();
+        if (success.getIsSuccessfull()) {
+            Article article = success.getEntity();
+            model.addAttribute("article", article);
+            model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
+            if (categorySuccess.getIsSuccessfull()) {
+                model.addAttribute("categoriesList", categorySuccess.getEntities());
+            } else {
+                model.addAttribute("error", categorySuccess.getMessage());
+            }
+        } else {
+            model.addAttribute("error", success.getMessage());
+        }
         return "/forms/form_article";
     }
 

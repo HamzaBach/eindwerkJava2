@@ -26,6 +26,7 @@
 
 <div align="center" style="margin: 100px" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
     <h1>Categories</h1>
+    <div th:include="fragments/header::errorMessaging"/>
     <a th:href = "@{/new/category}" class="btn btn-primary btn-lg" style="margin:20px"
     >New category</a>
 
