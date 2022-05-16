@@ -31,7 +31,7 @@ public class OrderReceiveController {
 
     @GetMapping(path = "orderReceived")
     public String getAllOrders(Model model) {
-        List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderService.getAllClosedOrders();
+        List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderService.getAllClosedOrders().getEntities();
         List<OrderSupplierHeader> resultList =  orderSupplierHeaderList.stream().filter(orderSupplierDetailService::checkIfOrderIsCompleted).collect(Collectors.toList());
 
         model.addAttribute("orderList", resultList);
@@ -40,7 +40,7 @@ public class OrderReceiveController {
 
     @GetMapping(path = "/view/orderReceived/{orderId}")
     public String viewOrder(@PathVariable("orderId") Long orderId, Model model) {
-        OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).get();
+        OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).getEntity();
         List<OrderSupplierDetail> orderSupplierDetailList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader);
 
 

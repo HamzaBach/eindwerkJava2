@@ -1,9 +1,9 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.Exceptions.NegativeInventoryException;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.MutationRepository;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,8 @@ public class MutationServiceImpl implements MutationService {
 
 
 
-    public void addStock(Mutation mutation) {
+    public SuccessEvaluator<Mutation> addStock(Mutation mutation) {
+        SuccessEvaluator<Mutation> isAddStockSuccessfull = new SuccessEvaluator<>();
         Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
         if(stockTo == null)
         {
@@ -45,9 +46,19 @@ public class MutationServiceImpl implements MutationService {
             stockService.saveStock(initstock);
         }
         stockTo = stockService.findStockByLocation(mutation.getLocation());
-        stockTo.setAmount(stockTo.getAmount() + mutation.getAmount());
+        Double updatedStockTotalAmount = stockTo.getAmount() + mutation.getAmount();
+        stockTo.setAmount(updatedStockTotalAmount);
         stockService.saveStock(stockTo);
         mutationRepository.save(mutation);
+        if(stockService.findStockByLocation(mutation.getLocation()).getAmount()==updatedStockTotalAmount){
+            isAddStockSuccessfull.setIsSuccessfull(true);
+        }else {
+            isAddStockSuccessfull.setIsSuccessfull(false);
+            isAddStockSuccessfull.setMessage("Mismatch in stock amount expected amount ="+updatedStockTotalAmount+", retrieved amount from db = "+mutation.getAmount()+
+                    " on location: "+mutation.getLocation());
+        }
+        return isAddStockSuccessfull;
+
     }
 
     public String removeStock(Mutation mutation) {

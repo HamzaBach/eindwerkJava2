@@ -1,11 +1,12 @@
 package com.example.eindwerkJava2.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@NoArgsConstructor
 @Entity
 @Table
 @Getter
@@ -36,7 +37,4 @@ public class Mutation {
     private User user;
 
     private LocalDateTime localDateTime;
-        
-    public Mutation(){}
-
 }
