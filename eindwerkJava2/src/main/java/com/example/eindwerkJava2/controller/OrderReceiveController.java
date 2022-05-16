@@ -1,8 +1,9 @@
 package com.example.eindwerkJava2.controller;
 
+import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
-import com.example.eindwerkJava2.model.Supplier;
+import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
 import org.springframework.stereotype.Controller;
@@ -19,11 +20,13 @@ import java.util.stream.Collectors;
 public class OrderReceiveController {
     private final OrderSupplierHeaderService orderSupplierHeaderService;
     private final OrderSupplierDetailService orderSupplierDetailService;
+    private final LocationService locationService;
 
-    public OrderReceiveController(OrderSupplierHeaderService orderSupplierHeaderService, OrderSupplierDetailService orderSupplierDetailService) {
+    public OrderReceiveController(OrderSupplierHeaderService orderSupplierHeaderService, OrderSupplierDetailService orderSupplierDetailService, LocationService locationService) {
 
         this.orderSupplierHeaderService = orderSupplierHeaderService;
         this.orderSupplierDetailService = orderSupplierDetailService;
+        this.locationService = locationService;
     }
 
     @GetMapping(path = "orderReceived")
@@ -39,8 +42,12 @@ public class OrderReceiveController {
     public String viewOrder(@PathVariable("orderId") Long orderId, Model model) {
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).get();
         List<OrderSupplierDetail> orderSupplierDetailList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader);
+
+
         model.addAttribute("orderheader", orderSupplierHeader);
         model.addAttribute("orderLines", orderSupplierDetailList);
+        model.addAttribute("locationList", locationService.getAllLocations());
+
         for (OrderSupplierDetail orderLine : orderSupplierDetailList) {
             model.addAttribute("orderSupplierDetail", orderLine);
         }

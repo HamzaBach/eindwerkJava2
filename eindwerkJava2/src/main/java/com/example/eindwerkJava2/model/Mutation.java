@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
@@ -21,17 +22,8 @@ public class Mutation {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name="locationFrom")
-    private Location locationFrom;
-    @ManyToOne
-    @JoinColumn(name="locationTo")
-    private Location locationTo;
-    @ManyToOne
-    @JoinColumn(name="warehouseFrom")
-    private Warehouse warehouseFrom;
-    @ManyToOne
-    @JoinColumn(name="warehouseTo")
-    private Warehouse warehouseTo;
+    @JoinColumn(name="location")
+    private Location Location;
 
 //     1 locatie mag maar 1 artikel bevatten
 //    artikel mag maar op 1 locatie staan in de fysieke winkel. In magazijn mogen er meerdere locaties zijn rekeninghoudnde met bovenstaande regel
@@ -43,6 +35,8 @@ public class Mutation {
     @JoinColumn(name="userId")
     private User user;
 
+    private LocalDateTime localDateTime;
+        
     public Mutation(){}
 
 }
