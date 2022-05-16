@@ -32,13 +32,11 @@ public class MutationServiceImpl implements MutationService {
     }
 
 
-
     public SuccessEvaluator<Mutation> addStock(Mutation mutation) {
         SuccessEvaluator<Mutation> isAddStockSuccessfull = new SuccessEvaluator<>();
         Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
-        if(stockTo == null)
-        {
-           Stock initstock = new Stock();
+        if (stockTo == null) {
+            Stock initstock = new Stock();
             initstock.setAmount(0d);
             initstock.setLocation(mutation.getLocation());
             initstock.setArticle(mutation.getArticle());
@@ -46,42 +44,59 @@ public class MutationServiceImpl implements MutationService {
             stockService.saveStock(initstock);
         }
         stockTo = stockService.findStockByLocation(mutation.getLocation());
-        Double updatedStockTotalAmount = stockTo.getAmount() + mutation.getAmount();
+        double updatedStockTotalAmount = stockTo.getAmount() + mutation.getAmount();
         stockTo.setAmount(updatedStockTotalAmount);
         stockService.saveStock(stockTo);
         mutationRepository.save(mutation);
-        if(stockService.findStockByLocation(mutation.getLocation()).getAmount()==updatedStockTotalAmount){
+        if (stockService.findStockByLocation(mutation.getLocation()).getAmount() == updatedStockTotalAmount) {
             isAddStockSuccessfull.setIsSuccessfull(true);
-        }else {
+        } else {
             isAddStockSuccessfull.setIsSuccessfull(false);
-            isAddStockSuccessfull.setMessage("Mismatch in stock amount expected amount ="+updatedStockTotalAmount+", retrieved amount from db = "+mutation.getAmount()+
-                    " on location: "+mutation.getLocation());
+            isAddStockSuccessfull.setMessage("Mismatch in stock amount expected amount =" + updatedStockTotalAmount + ", retrieved amount from db = " + mutation.getAmount() +
+                    " on location: " + mutation.getLocation());
         }
         return isAddStockSuccessfull;
 
     }
 
-    public String removeStock(Mutation mutation) {
+    public SuccessEvaluator<Mutation> removeStock(Mutation mutation) {
         Stock stockFrom = stockService.findStockByLocation(mutation.getLocation());
-        stockFrom.setAmount(stockFrom.getAmount() - mutation.getAmount() );
+        double updatedStockTotalAmount = stockFrom.getAmount() - mutation.getAmount();
+        stockFrom.setAmount(updatedStockTotalAmount);
 
-        if(stockFrom.getAmount() < 0){
-            return "Failure";
-        } else{
+        SuccessEvaluator<Mutation> isRemoveStockSuccessfull = new SuccessEvaluator<>();
+        if (updatedStockTotalAmount < 0) {
+            isRemoveStockSuccessfull.setIsSuccessfull(false);
+            isRemoveStockSuccessfull.setMessage("Insufficient amount (" + stockFrom.getAmount() + ") while the to be retrieved amount is higher: " + mutation.getAmount() +
+                    " on location " + mutation.getLocation());
+        } else {
             stockService.saveStock(stockFrom);
             mutationRepository.save(mutation);
-            return "Success";
+            if (stockService.findStockByLocation(mutation.getLocation()).getAmount() == updatedStockTotalAmount) {
+                isRemoveStockSuccessfull.setIsSuccessfull(true);
+            } else {
+                isRemoveStockSuccessfull.setIsSuccessfull(false);
+                isRemoveStockSuccessfull.setMessage("Mismatch in stock amount expected amount =" + updatedStockTotalAmount + ", retrieved amount from db = " + mutation.getAmount() +
+                        " on location: " + mutation.getLocation());
+            }
         }
-
-
+        return isRemoveStockSuccessfull;
     }
 
 
-    public void moveStock(Mutation mutation) {
-
-        if( removeStock(mutation) == "Success"){
-            addStock(mutation);
+    public SuccessEvaluator<Mutation> moveStock(Mutation mutation) {
+        SuccessEvaluator<Mutation> isMoveStockSuccessful = new SuccessEvaluator<>();
+        SuccessEvaluator<Mutation> isRemoveStockSuccessful = removeStock(mutation);
+        if (isRemoveStockSuccessful.getIsSuccessfull()) {
+            SuccessEvaluator<Mutation> isAddStockSuccessful = addStock(mutation);
+            if(!isAddStockSuccessful.getIsSuccessfull()){
+                isMoveStockSuccessful.setMessage(isAddStockSuccessful.getMessage());
+            }
+        } else {
+            isMoveStockSuccessful.setIsSuccessfull(false);
+            isMoveStockSuccessful.setMessage(isRemoveStockSuccessful.getMessage());
         }
+        return isMoveStockSuccessful;
 
     }
 
