@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,11 +60,9 @@ public class OrderSupplierDetailService {
         Mutation mutation = new Mutation();
         mutation.setAmount(orderSupplierDetail.getReceivedQuantity());
         mutation.setArticle(orderSupplierDetail.getArticle());
-        Location location = locationService.findByLocationId(1L);
-        mutation.setLocationTo(location);
-        mutation.setWarehouseTo(location.getWarehouse());
+        mutation.setLocalDateTime(LocalDateTime.now());
+        mutation.setLocation(locationService.findByLocationId(0l));
         mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
-        mutation.setLocationFrom(locationService.findByLocationId(2L));
         mutationServiceImpl.addStock(mutation);
     }
 

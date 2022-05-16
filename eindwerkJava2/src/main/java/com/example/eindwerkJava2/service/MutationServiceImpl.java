@@ -34,14 +34,24 @@ public class MutationServiceImpl implements MutationService {
 
 
     public void addStock(Mutation mutation) {
-        Stock stockTo = stockService.findStockByLocation(mutation.getLocationTo());
+        Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
+        if(stockTo == null)
+        {
+           Stock initstock = new Stock();
+            initstock.setAmount(0d);
+            initstock.setLocation(mutation.getLocation());
+            initstock.setArticle(mutation.getArticle());
+            initstock.setActiveStock(1);
+            stockService.saveStock(initstock);
+        }
+        stockTo = stockService.findStockByLocation(mutation.getLocation());
         stockTo.setAmount(stockTo.getAmount() + mutation.getAmount());
         stockService.saveStock(stockTo);
         mutationRepository.save(mutation);
     }
 
     public String removeStock(Mutation mutation) {
-        Stock stockFrom = stockService.findStockByLocation(mutation.getLocationFrom());
+        Stock stockFrom = stockService.findStockByLocation(mutation.getLocation());
         stockFrom.setAmount(stockFrom.getAmount() - mutation.getAmount() );
 
         if(stockFrom.getAmount() < 0){
