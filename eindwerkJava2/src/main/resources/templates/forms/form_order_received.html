@@ -16,8 +16,7 @@
         });
 
         $("#location").change(function(){
-        $("#test").val("test");
-
+        $('#articlesOverview td:nth-child(9)').html($("#location option:selected").text());
         });
     });
 
@@ -88,22 +87,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="orderdetail : ${orderLines}">
-                <form action="#" th:action="@{'/saveReceive/'+${orderdetail.orderSupplierDetailId}}"
+            <tr th:each="orderReceivedDetail : ${orderLines}">
+                <form action="#" th:action="@{'/saveReceive/'+${orderReceivedDetail.orderSupplierDetailId}}"
                       th:object="${orderSupplierDetail}" , method="POST">
                     <input type="hidden" th:field="*{orderSupplierDetailId}"
-                           th:value="${orderdetail.orderSupplierDetailId}"
+                           th:value="${orderReceivedDetail.orderSupplierDetailId}"
                            class="form-control"/>
-                    <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
-                    <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
-                    <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
-                    <td class="col-md-3" th:text="${orderdetail.deltaQuantity}"></td>
+                    <td class="col-md-1" th:text="${orderReceivedDetail.orderlineNumber}"></td>
+                    <td class="col-md-2" th:text="${orderReceivedDetail.article.articleName}"></td>
+                    <td class="col-md-3" th:text="${orderReceivedDetail.expectedQuantity}"></td>
+                    <td class="col-md-3" th:text="${orderReceivedDetail.deltaQuantity}"></td>
                     <td class="col-md-3">
                         <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
                                class="form-control" required>
                     </td>
                     <td class="col-md-3">
-                        <input type="text" id="test">
+                        <input th:field="*{location}" type="text" disabled>
                     </td>
                     <td class="col-md-1">
                         <button type="submit" class="btn btn-success btn-sm">Save</button>

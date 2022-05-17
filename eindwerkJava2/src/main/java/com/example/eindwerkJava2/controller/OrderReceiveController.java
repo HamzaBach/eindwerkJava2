@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
+import com.example.eindwerkJava2.model.dto.OrderReceiveDTO;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,23 +44,24 @@ public class OrderReceiveController {
     public String viewOrder(@PathVariable("orderId") Long orderId, Model model) {
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).getEntity();
         List<OrderSupplierDetail> orderSupplierDetailList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader);
-
+        OrderReceiveDTO orderReceiveDTO = new OrderReceiveDTO();
+        List<OrderReceiveDTO> orderReceiveDTOS=orderReceiveDTO.mapOrderSupplierDetailToDTO(orderSupplierDetailList);
 
         model.addAttribute("orderheader", orderSupplierHeader);
-        model.addAttribute("orderLines", orderSupplierDetailList);
+        model.addAttribute("orderLines", orderReceiveDTOS);
         model.addAttribute("locationList", locationService.getAllLocations());
 
-        for (OrderSupplierDetail orderLine : orderSupplierDetailList) {
+        for (OrderReceiveDTO orderLine : orderReceiveDTOS) {
             model.addAttribute("orderSupplierDetail", orderLine);
         }
         return "forms/form_order_received";
     }
 
     @PostMapping("/saveReceive/{orderLineId}")
-    public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderSupplierDetail orderSupplierDetail,
+    public String saveDetail(@ModelAttribute("orderReceiveDTO") OrderReceiveDTO orderReceiveDTO,
                              @PathVariable("orderLineId") Long orderLineId) {
         OrderSupplierDetail orderLine = orderSupplierDetailService.getById(orderLineId).get();
-        orderLine.setReceivedQuantity(orderSupplierDetail.getReceivedQuantity()+orderLine.getReceivedQuantity());
+        orderLine.setReceivedQuantity(orderReceiveDTO.getReceivedQuantity()+orderLine.getReceivedQuantity());
         orderLine.setDeltaQuantity(orderLine.getExpectedQuantity()-orderLine.getReceivedQuantity());
         this.orderSupplierDetailService.save(orderLine);
         return "redirect:/view/orderReceived/" + orderLine.getOrderSupplierHeader().getOrderSupplierId();
