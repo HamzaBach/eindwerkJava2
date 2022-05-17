@@ -21,7 +21,8 @@ public class DummyDataConfig {
                                          WarehouseRepository warehouseRepository,
                                          LocationRepository locationRepository,
                                          RoleRepository roleRepository,
-                                         UserRepository userRepository){
+                                         UserRepository userRepository,
+                                         LocationTypeRepository locationTypeRepository){
         return args ->{
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category( "Smartphone", "SMTPH");
@@ -162,22 +163,41 @@ public class DummyDataConfig {
             }
 
 
-            if(warehouseRepository.count()<2){
-                Warehouse warehouse = new Warehouse();
-                warehouse.setWarehouseName("Magazijn");
-                Location location = new Location();
-                location.setActiveLocation(1);
-                location.setLocationName("LAADZONE");
-                location.setSingleStorage(false);
-                location.setWarehouse(warehouse);
-                Location location2 = new Location();
-                location.setActiveLocation(1);
-                location.setLocationName("SUPPLIER/ORDER");
-                location.setSingleStorage(false);
-                location.setWarehouse(warehouse);
-                warehouseRepository.save(warehouse);
-                locationRepository.save(location);
-                locationRepository.save(location2);
+
+            if(warehouseRepository.count()==0 && locationRepository.count()==0){
+                // Defining location types:
+                LocationType loadingDock = new LocationType("Loading dock",false);
+                LocationType shoppingCart = new LocationType("Shopping cart",false);
+                LocationType singleStorage = new LocationType("Single storage",true);
+                locationTypeRepository.save(loadingDock);
+                locationTypeRepository.save(shoppingCart);
+                locationTypeRepository.save(singleStorage);
+
+                //Defining warehouses:
+                Warehouse store = new Warehouse("Physical store");
+                warehouseRepository.save(store);
+                Warehouse storage = new Warehouse("Storage");
+                warehouseRepository.save(storage);
+
+                //Defining single storage locations for store & storage:
+                for(int i=0; i<10;i++){
+                    Location location = new Location(store.getWarehouseName()+": LOC "+i,store,singleStorage);
+                    locationRepository.save(location);
+                }
+                for(int i=0; i<10;i++){
+                    Location location1 = new Location(storage.getWarehouseName()+": LOC "+i,storage,singleStorage);
+                    locationRepository.save(location1);
+                }
+                //Defining a loading dock for store & storage:
+                Location storeLoadingDock = new Location(store.getWarehouseName()+": DOCK 01",store,loadingDock);
+                locationRepository.save(storeLoadingDock);
+                Location storageLoadingDock = new Location(storage.getWarehouseName()+": DOCK 01",storage,loadingDock);
+                locationRepository.save(storageLoadingDock);
+                Location storeShoppingCart = new Location(store.getWarehouseName()+": CART 01",store,shoppingCart);
+                locationRepository.save(storeShoppingCart);
+
+                //Linking warehouses to locations?:
+
             }
 
         };

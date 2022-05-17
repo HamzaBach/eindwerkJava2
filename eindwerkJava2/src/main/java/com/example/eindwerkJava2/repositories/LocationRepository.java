@@ -31,5 +31,12 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Query("SELECT u FROM Location u WHERE u.activeLocation = 1")
     List<Location> activeLocations();
 
+    /**
+     * Method to retrieve the maximum id of locations within the database.
+     * @return The maximum used id within the location database is returned.
+     */
+    @Query(value = "select MAX(location_id) AS Max_Id from location",nativeQuery = true)
+    Long getMaxId();
+
 
 }

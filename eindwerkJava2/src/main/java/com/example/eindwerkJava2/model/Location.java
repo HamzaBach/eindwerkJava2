@@ -36,32 +36,22 @@ public class Location {
     @JoinColumn(name = "warehouse_Id")
     private Warehouse warehouse;
 
-    //TODO: Dit moet verwijzen naar een apparte entity (table) met id+name+singleStorage
+/*    //TODO: Dit moet verwijzen naar een apparte entity (table) met id+name+singleStorage
     @Column(name = "singleStorage")
-    private boolean singleStorage;
+    private boolean singleStorage;*/
+
+    @ManyToOne
+    @JoinColumn(name = "locationTypeId")
+    private LocationType locationType;
 
     @Column(name = "active")
     private int activeLocation = 1;
 
-
-    /**
-     * Instantiates a new Location.
-     *
-     * @param locationId     ID of the location in the database
-     * @param stocks         link to stock table
-     * @param locationName   name of the location
-     * @param warehouse      the warehouse that the location belongs to
-     * @param singleStorage  wether the location is single storage or not
-     * @param activeLocation location ( active or inactive(=deleted) )
-     */
-    public Location(Long locationId, List<Stock> stocks, String locationName, Warehouse warehouse, boolean singleStorage, int activeLocation) {
-
-        this.locationId = locationId;
-        this.stocks = stocks;
-        this.locationName = locationName;
-        this.warehouse = warehouse;
-        this.singleStorage = singleStorage;
-        this.activeLocation = activeLocation;
+    public Location(String locationName, Warehouse warehouse, LocationType locationType){
+        this.setLocationName(locationName);
+        this.setWarehouse(warehouse);
+        this.setLocationType(locationType);
     }
+
 
 }
