@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Orders</title>
@@ -14,10 +14,12 @@
               { 'bSortable': false, 'aTargets': [ 4,5 ] }
            ]
         });
+
+        $("#location").change(function(){
+        $("#test").val("test");
+
+        });
     });
-
-
-
 
     </script>
 </head>
@@ -67,7 +69,6 @@
                                     th:value="${location.locationId}"
                                     th:text="${location.locationName}"></option>
                         </select>
-
                     </div>
                 </div>
             </div>
@@ -81,6 +82,7 @@
                 <th class="col-md-3">Expected Quantity</th>
                 <th class="col-md-3">Delta Quantity</th>
                 <th class="col-md-3">Received Quantity</th>
+                <th class="col-md-3">Location</th>
                 <th class="col-md-1"></th>
 
             </tr>
@@ -99,6 +101,9 @@
                     <td class="col-md-3">
                         <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
                                class="form-control" required>
+                    </td>
+                    <td class="col-md-3">
+                        <input type="text" id="test">
                     </td>
                     <td class="col-md-1">
                         <button type="submit" class="btn btn-success btn-sm">Save</button>

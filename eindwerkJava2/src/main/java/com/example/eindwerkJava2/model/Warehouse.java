@@ -34,6 +34,10 @@ public class Warehouse {
     @Column(name = "active")
     private int activeWarehouse = 1;
 
+    public Warehouse(String warehouseName){
+        this.setWarehouseName(warehouseName);
+    }
+
 
     /**
      * Gets active warehouse.
