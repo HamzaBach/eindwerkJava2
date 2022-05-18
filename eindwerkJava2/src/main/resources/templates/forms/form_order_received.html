@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Orders</title>
@@ -15,10 +15,16 @@
            ]
         });
 
+
+
+
+
         $("#location").change(function(){
-        $('#articlesOverview td:nth-child(9)').html($("#location option:selected").text());
+        $('#articlesOverview td:nth-child(10)').html($("#location option:selected").val());
         });
+
     });
+
 
     </script>
 </head>
@@ -62,7 +68,7 @@
                         <label>Stock Locations</label>
                     </div>
                     <div class="col-md-5">
-                        <select class="form-control" id="location" name="location"  required>
+                        <select class="form-control" id="location" name="location" required>
                             <option value="" selected="selected" hidden="hidden">Choose the location..</option>
                             <option th:each="location : ${locationList}"
                                     th:value="${location.locationId}"
@@ -79,34 +85,63 @@
                 <th class="col-md-1">Line</th>
                 <th class="col-md-2">Article</th>
                 <th class="col-md-3">Expected Quantity</th>
-                <th class="col-md-3">Delta Quantity</th>
-                <th class="col-md-3">Received Quantity</th>
-                <th class="col-md-3">Location</th>
-                <th class="col-md-1"></th>
+                <th class="col-md-1">Delta Quantity</th>
+                <th class="col-md-1">Received Quantity</th>
+                <th class="col-md-1" ></th>
+                <th class="col-md-1">Location</th>
+                <th class="col-md-1">User</th>
 
             </tr>
             </thead>
             <tbody>
             <tr th:each="orderReceivedDetail : ${orderLines}">
                 <form action="#" th:action="@{'/saveReceive/'+${orderReceivedDetail.orderSupplierDetailId}}"
-                      th:object="${orderSupplierDetail}" , method="POST">
+                      th:object="${OrderReceiveDTO}" , method="POST">
                     <input type="hidden" th:field="*{orderSupplierDetailId}"
                            th:value="${orderReceivedDetail.orderSupplierDetailId}"
                            class="form-control"/>
-                    <td class="col-md-1" th:text="${orderReceivedDetail.orderlineNumber}"></td>
-                    <td class="col-md-2" th:text="${orderReceivedDetail.article.articleName}"></td>
-                    <td class="col-md-3" th:text="${orderReceivedDetail.expectedQuantity}"></td>
-                    <td class="col-md-3" th:text="${orderReceivedDetail.deltaQuantity}"></td>
-                    <td class="col-md-3">
-                        <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
-                               class="form-control" required>
+                    <td class="col-md-1">
+                        <label th:text="${orderReceivedDetail.orderlineNumber}"></label>
+                        <input type="hidden" th:field="*{orderlineNumber}"
+                               th:value="${orderReceivedDetail.orderlineNumber}" class="form-control"/>
+                    </td>
+                    <td class="col-md-2">
+                        <label th:text="${orderReceivedDetail.article.articleName}"></label>
+                        <input type="hidden" th:field="*{article}" th:value="${orderReceivedDetail.article}"
+                               class="form-control"/>
                     </td>
                     <td class="col-md-3">
-                        <input th:field="*{location}" type="text" disabled>
+                        <label th:text="${orderReceivedDetail.expectedQuantity}"></label>
+                        <input type="hidden" th:field="*{expectedQuantity}"
+                               th:value="${orderReceivedDetail.expectedQuantity}" class="form-control"/>
+                    </td>
+                    <td class="col-md-3">
+                        <label th:text="${orderReceivedDetail.deltaQuantity}"></label>
+                        <input type="hidden" th:field="*{deltaQuantity}"
+                               th:value="${orderReceivedDetail.deltaQuantity}" class="form-control"/>
+                    </td>
+                    <td class="col-md-3">
+                        <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"
+                               class="form-control" required/>
                     </td>
                     <td class="col-md-1">
                         <button type="submit" class="btn btn-success btn-sm">Save</button>
                     </td>
+                    <td class="col-md-3">
+                        <select class="form-control" id="locationTo" th:field="*{location}" name="location" required>
+                            <option value="" selected="selected" hidden="hidden">Choose the location..</option>
+                            <option th:each="location : ${locationList}"
+                                    th:value="${location.locationId}"
+                                    th:text="${location.locationName}"></option>
+                        </select>
+                        <!--<input  id="locationTo" th:field="*{locationId}" th:value="${orderReceivedDetail.locationId}"  required/>-->
+                    </td>
+                    <td class="col-md-3">
+                        <input hidden type="text" th:value="${currentUser.userId}"
+                               th:name="user" th:id="user"
+                               th:errorclass="fieldError"/>
+                    </td>
+
                 </form>
             </tr>
             </tbody>

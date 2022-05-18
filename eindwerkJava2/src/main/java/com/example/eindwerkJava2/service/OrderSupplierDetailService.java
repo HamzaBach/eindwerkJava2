@@ -55,14 +55,15 @@ public class OrderSupplierDetailService {
     }
 
 
-    public void save(OrderSupplierDetail orderSupplierDetail) {
+    public void save(OrderSupplierDetail orderSupplierDetail, Location location) {
             orderSupplierDetailRepository.save(orderSupplierDetail);
         Mutation mutation = new Mutation();
         mutation.setAmount(orderSupplierDetail.getReceivedQuantity());
         mutation.setArticle(orderSupplierDetail.getArticle());
         mutation.setLocalDateTime(LocalDateTime.now());
-        mutation.setLocation(locationService.findByLocationId(0l));
+//        mutation.setLocation(locationService.findByLocationId(0l));
         mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
+        mutation.setLocation(location);
         mutationServiceImpl.addStock(mutation);
     }
 

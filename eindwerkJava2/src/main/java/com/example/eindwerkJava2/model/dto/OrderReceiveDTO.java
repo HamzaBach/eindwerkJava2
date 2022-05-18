@@ -1,9 +1,6 @@
 package com.example.eindwerkJava2.model.dto;
 
-import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.Location;
-import com.example.eindwerkJava2.model.OrderSupplierDetail;
-import com.example.eindwerkJava2.model.OrderSupplierHeader;
+import com.example.eindwerkJava2.model.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,9 +19,9 @@ public class OrderReceiveDTO {
     private double expectedQuantity;
     private double deltaQuantity;
     private double receivedQuantity;
-    private LocalDate expectedDayOfDelivery;
     private String orderlineNumber;
     private Location location;
+    private User user;
 
     public List<OrderReceiveDTO> mapOrderSupplierDetailToDTO(List<OrderSupplierDetail> orderSupplierDetailList){
         List<OrderReceiveDTO> orderReceiveDTOS=new ArrayList<>();
@@ -37,7 +34,6 @@ public class OrderReceiveDTO {
             orderReceiveDTO.setExpectedQuantity(x.getExpectedQuantity());
             orderReceiveDTO.setDeltaQuantity(x.getDeltaQuantity());
             orderReceiveDTO.setReceivedQuantity(x.getReceivedQuantity());
-            orderReceiveDTO.setExpectedDayOfDelivery(x.getExpectedDayOfDelivery());
             orderReceiveDTO.setOrderSupplierDetailId(x.getOrderSupplierDetailId());
             orderReceiveDTOS.add(orderReceiveDTO);
         }
