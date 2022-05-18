@@ -70,7 +70,7 @@ public class OrderSupplierHeaderController {
     }
 
     @GetMapping("save/orderHeader/{supplierId}")
-    public String createOrderHeadder(@PathVariable("supplierId") Long supplierId, Model model) {
+    public String createOrderHeader(@PathVariable("supplierId") Long supplierId, Model model) {
         SuccessEvaluator<Supplier> findSupplierSuccess = supplierService.findById(supplierId);
         if (findSupplierSuccess.getIsSuccessfull()) {
             SuccessObject isSaveOrderSuccessful = orderSupplierHeaderService.save(new OrderSupplierHeader(findSupplierSuccess.getEntity(), LocalDate.now()));
@@ -78,33 +78,22 @@ public class OrderSupplierHeaderController {
                 model.addAttribute("error", isSaveOrderSuccessful.getMessage());
             }
         }
-        viewOrderSupplier(model);
-        return "orderSupplier";
-    }
-
-    @PostMapping("/SaveOrderHeadSupplier")
-    public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader, RedirectAttributes redirectAttributes) {
-        SuccessObject isSaveSuccessful = orderSupplierHeaderService.save(orderSupplierHeader);
-        if (isSaveSuccessful.getIsSuccessfull()) {
-            Long orderSupplierId = orderSupplierHeaderService.getMaxId();
-            redirectAttributes.addAttribute("orderSupplierId", orderSupplierId);
-        } else {
-            redirectAttributes.addAttribute("error", isSaveSuccessful.getMessage());
-        }
-        return "redirect:/viewOrderSupplier/{orderSupplierId}";
-    }
-
-    @GetMapping("/generatePdf/{orderSupplierId}")
-    public String generatePdf(@PathVariable("orderSupplierId") Long orderHeaderId, RedirectAttributes redirAttr) {
-        SuccessEvaluator<OrderSupplierHeader> findOrderSuccess = orderSupplierHeaderService.findById(orderHeaderId);
-        if (findOrderSuccess.getIsSuccessfull()) {
-            List<OrderSupplierDetail> orderList = orderSupplierDetailService.getCombinedDetailLineList((findOrderSuccess.getEntity()));
-            orderSupplierHeaderService.makePdf(orderHeaderId, orderList);
-        } else {
-            redirAttr.addFlashAttribute("error", findOrderSuccess.getMessage());
-        }
         return "redirect:/orderSupplier";
     }
+
+//    @PostMapping("/SaveOrderHeadSupplier")
+//    public String SaveOrderHeadSupplier(@ModelAttribute("OrderSupplierHeader") OrderSupplierHeader orderSupplierHeader, RedirectAttributes redirectAttributes) {
+//        SuccessObject isSaveSuccessful = orderSupplierHeaderService.save(orderSupplierHeader);
+//        if (isSaveSuccessful.getIsSuccessfull()) {
+//            Long orderSupplierId = orderSupplierHeaderService.getMaxId();
+//            redirectAttributes.addAttribute("orderSupplierId", orderSupplierId);
+//        } else {
+//            redirectAttributes.addAttribute("error", isSaveSuccessful.getMessage());
+//        }
+//        return "redirect:/viewOrderSupplier/{orderSupplierId}";
+//    }
+
+
 
     @GetMapping("/closeOrder/{orderSupplierId}")
     public String closeOrder(@PathVariable("orderSupplierId") Long orderHeaderId, Model model, RedirectAttributes redirAttr) {
