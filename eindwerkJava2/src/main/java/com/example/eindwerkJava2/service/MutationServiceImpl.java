@@ -5,7 +5,6 @@ import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.MutationRepository;
 import com.example.eindwerkJava2.repositories.TransactionRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
-import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,15 +31,23 @@ public class MutationServiceImpl implements MutationService {
         this.transactionRepository=transactionRepository;
     }
 
-    public List<Mutation> getMutations() {
-        return mutationRepository.findAll();
+    public SuccessEvaluator<Mutation> getMutations() {
+        SuccessEvaluator<Mutation> getMutationsSuccess = new SuccessEvaluator<>();
+        getMutationsSuccess.setEntities(mutationRepository.findAll());
+        if (getMutationsSuccess.getEntities().size()==0){
+            getMutationsSuccess.setIsSuccessfull(false);
+            getMutationsSuccess.setMessage("Empty mutations database.");
+        } else {
+            getMutationsSuccess.setIsSuccessfull(true);
+        }
+        return getMutationsSuccess;
     }
 
 
     public SuccessEvaluator<Mutation> addStock(Mutation mutation) {
         SuccessEvaluator<Mutation> isAddStockSuccessfull = new SuccessEvaluator<>();
         Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
-        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie opboeken").get());
+        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Opboeken").get());
         if (stockTo == null) {
             Stock initstock = new Stock();
             initstock.setAmount(0d);
@@ -69,7 +76,7 @@ public class MutationServiceImpl implements MutationService {
         Stock stockFrom = stockService.findStockByLocation(mutation.getLocation());
         double updatedStockTotalAmount = stockFrom.getAmount() - mutation.getAmount();
         stockFrom.setAmount(updatedStockTotalAmount);
-        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie afboeken").get());
+        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Afboeken").get());
 
         SuccessEvaluator<Mutation> isRemoveStockSuccessfull = new SuccessEvaluator<>();
         if (updatedStockTotalAmount < 0) {
