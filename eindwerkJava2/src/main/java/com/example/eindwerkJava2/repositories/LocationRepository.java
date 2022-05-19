@@ -38,5 +38,11 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Query(value = "select MAX(location_id) AS Max_Id from location",nativeQuery = true)
     Long getMaxId();
 
+    @Query(value = "SELECT * from location WHERE location_type_id IN (SELECT location_type_id FROM location_type where single_storage = 0)", nativeQuery = true)
+    List<Location> getNonSingleStorageLocations();
+
+    @Query(value = "SELECT * from location WHERE location_type_id IN (SELECT location_type_id FROM location_type where single_storage = 1)", nativeQuery = true)
+    List<Location> getSingleStorageLocations();
+
 
 }

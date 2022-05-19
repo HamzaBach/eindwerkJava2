@@ -22,7 +22,8 @@ public class DummyDataConfig {
                                          LocationRepository locationRepository,
                                          RoleRepository roleRepository,
                                          UserRepository userRepository,
-                                         LocationTypeRepository locationTypeRepository){
+                                         LocationTypeRepository locationTypeRepository,
+                                         TransactionRepository transactionRepository){
         return args ->{
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category( "Smartphone", "SMTPH");
@@ -198,6 +199,23 @@ public class DummyDataConfig {
 
                 //Linking warehouses to locations?:
 
+            }
+            if(transactionRepository.count()==0){
+                TransactionType opboeken = new TransactionType("Opboeken",1d);
+                TransactionType afboeken = new TransactionType("Afboeken",-1d);
+                TransactionType correctieOpboeken = new TransactionType("Correctie opboeken",1d);
+                TransactionType correctieAfboeken = new TransactionType("Correctie afboeken",-1d);
+                List<TransactionType> defaultTransType = new ArrayList<>();
+                defaultTransType.add(opboeken);
+                defaultTransType.add(afboeken);
+                defaultTransType.add(correctieOpboeken);
+                defaultTransType.add(correctieAfboeken);
+
+                for(TransactionType trans:defaultTransType){
+                    if(!transactionRepository.existsByTransactionTypeName(trans.getTransactionTypeName())){
+                        transactionRepository.save(trans);
+                    }
+                }
             }
 
         };

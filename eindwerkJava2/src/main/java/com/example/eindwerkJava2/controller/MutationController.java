@@ -4,6 +4,7 @@ import com.example.eindwerkJava2.Exceptions.NegativeInventoryException;
 import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.service.*;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,19 @@ public class MutationController {
     public String  viewMutations(Model model){
         Mutation mutation = new Mutation();
 
-        model.addAttribute("mutationList", mutationServiceImp.getMutations());
+        SuccessEvaluator<Mutation> getMutationSuccess = mutationServiceImp.getMutations();
+        if (getMutationSuccess.getIsSuccessfull()){
+            model.addAttribute("mutationList", getMutationSuccess.getEntities());
+        } else {
+            model.addAttribute("error", getMutationSuccess.getMessage());
+        }
 
         return "mutation";
     }
 
-    @GetMapping("/new/mutation")
+    //TODO to be deleted, not real use cases...
+
+/*    @GetMapping("/new/mutation")
     public String showNewMutationForm(Model model){
         Mutation mutation = new Mutation();
 
@@ -50,9 +58,10 @@ public class MutationController {
         model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
         model.addAttribute("locationList", locationService.getAllLocations());
         return "/forms/form_mutation";
-    }
+    }*/
 
-    @PostMapping("/saveMutation")
+
+/*    @PostMapping("/saveMutation")
     public String saveMutation(@ModelAttribute("mutation") Mutation mutation, Model model) throws NegativeInventoryException {
         this.mutationServiceImp.addStock(mutation);
         return "redirect:/mutation";
@@ -74,6 +83,6 @@ public class MutationController {
         model.addAttribute("userList",userService.getActiveUsers().getEntities());
         model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
         return "/forms/form_mutation";
-    }
+    }*/
 
 }

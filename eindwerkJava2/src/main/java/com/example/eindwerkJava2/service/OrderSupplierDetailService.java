@@ -1,7 +1,10 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.*;
+import com.example.eindwerkJava2.model.dto.OrderReceiveDTO;
 import com.example.eindwerkJava2.repositories.OrderSupplierDetailRepository;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,40 +33,52 @@ public class OrderSupplierDetailService {
         return orderSupplierDetailRepository.findAll();
     }
 
-    public void updateExpectedQuantity(OrderSupplierDetail orderSupplierDetail){
+    public void updateExpectedQuantity(OrderSupplierDetail orderSupplierDetail) {
         List<OrderSupplierDetail> orderSupplierDetailList = getOrderDetailsFromHeader(orderSupplierDetail.getOrderSupplierHeader());
         boolean check = false;
-        for(OrderSupplierDetail order: orderSupplierDetailList){
-            if(order.getArticle().equals(orderSupplierDetail.getArticle())){
+        for (OrderSupplierDetail order : orderSupplierDetailList) {
+            if (order.getArticle().equals(orderSupplierDetail.getArticle())) {
                 OrderSupplierDetail existingArticleOrderLine = orderSupplierDetailRepository.getById(order.getOrderSupplierDetailId());
-                existingArticleOrderLine.setExpectedQuantity(order.getExpectedQuantity()+orderSupplierDetail.getExpectedQuantity()  );
+                existingArticleOrderLine.setExpectedQuantity(order.getExpectedQuantity() + orderSupplierDetail.getExpectedQuantity());
                 existingArticleOrderLine.setDeltaQuantity(existingArticleOrderLine.getExpectedQuantity());
-                if (checkLatestDate(existingArticleOrderLine.getExpectedDayOfDelivery(),orderSupplierDetail.getExpectedDayOfDelivery())){
+                if (checkLatestDate(existingArticleOrderLine.getExpectedDayOfDelivery(), orderSupplierDetail.getExpectedDayOfDelivery())) {
                     existingArticleOrderLine.setExpectedDayOfDelivery(orderSupplierDetail.getExpectedDayOfDelivery());
                 }
                 orderSupplierDetailRepository.save(existingArticleOrderLine);
                 check = true;
             }
         }
-        if(!check){
+        if (!check) {
             orderSupplierDetail.setDeltaQuantity(orderSupplierDetail.getExpectedQuantity());
             orderSupplierDetailRepository.save(orderSupplierDetail);
         }
     }
-    private boolean checkLatestDate(LocalDate first, LocalDate second){
+
+    private boolean checkLatestDate(LocalDate first, LocalDate second) {
         return second.isAfter(first);
     }
 
 
-    public void save(OrderSupplierDetail orderSupplierDetail) {
+    public SuccessObject save(OrderSupplierDetail orderSupplierDetail, OrderReceiveDTO orderReceiveDTO) {
+        SuccessObject isSaveSuccessful = new SuccessEvaluator<>();
+        if(orderReceiveDTO.getReceivedQuantity()<=0){
+            isSaveSuccessful.setIsSuccessfull(false);
+            isSaveSuccessful.setMessage("Unable to save the order because the received quantity is set to: "+orderReceiveDTO.getReceivedQuantity());
+        } else {
             orderSupplierDetailRepository.save(orderSupplierDetail);
-        Mutation mutation = new Mutation();
-        mutation.setAmount(orderSupplierDetail.getReceivedQuantity());
-        mutation.setArticle(orderSupplierDetail.getArticle());
-        mutation.setLocalDateTime(LocalDateTime.now());
-        mutation.setLocation(locationService.findByLocationId(0l));
-        mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
-        mutationServiceImpl.addStock(mutation);
+            Mutation mutation = new Mutation();
+            mutation.setAmount(orderReceiveDTO.getReceivedQuantity());
+            mutation.setArticle(orderReceiveDTO.getArticle());
+            mutation.setLocalDateTime(LocalDateTime.now());
+            mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
+            mutation.setLocation(orderReceiveDTO.getLocation());
+            mutation.setUser(orderReceiveDTO.getUser());
+            mutationServiceImpl.addStock(mutation);
+
+            isSaveSuccessful.setIsSuccessfull(true);
+            isSaveSuccessful.setMessage("Article "+orderReceiveDTO.getArticle().getArticleName()+" with an amount of "+orderReceiveDTO.getReceivedQuantity()+" was succesfully booked to location: "+orderReceiveDTO.getLocation().getLocationName());
+        }
+        return isSaveSuccessful;
     }
 
     public List<OrderSupplierDetail> getOrderDetailsFromHeader(OrderSupplierHeader orderSupplierHeader) {
@@ -78,18 +93,18 @@ public class OrderSupplierDetailService {
 
     }
 
-    public boolean checkIfOrderIsCompleted(OrderSupplierHeader orderSupplierHeader){
+    public boolean checkIfOrderIsCompleted(OrderSupplierHeader orderSupplierHeader) {
         List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
         int count = 0;
-        for(OrderSupplierDetail orderLine: detailList){
-            count+=orderLine.getDeltaQuantity();
+        for (OrderSupplierDetail orderLine : detailList) {
+            count += orderLine.getDeltaQuantity();
         }
         return count != 0;
 
 
     }
 
-    public List<OrderSupplierDetail> getCombinedDetailLineList(OrderSupplierHeader orderSupplierHeader){
+    public List<OrderSupplierDetail> getCombinedDetailLineList(OrderSupplierHeader orderSupplierHeader) {
 
         List<OrderSupplierDetail> detailList = getOrderDetailsFromHeader(orderSupplierHeader);
         Map<Article, Double> quantityPerArticle = detailList.stream()
