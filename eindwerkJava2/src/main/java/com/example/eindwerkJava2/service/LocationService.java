@@ -48,6 +48,14 @@ public class LocationService {
         return this.locationRepository.findAll();
     }
 
+    public List<Location> getNonSingleStorageLocations(){
+        return this.locationRepository.getNonSingleStorageLocations();
+    }
+
+    public List<Location> getSingleStorageLocations(){
+        return this.locationRepository.getSingleStorageLocations();
+    }
+
     /**
      * Add a location.
      *

@@ -9,6 +9,8 @@ import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +42,15 @@ public class OrderReceiveController {
 
     @GetMapping(path = "orderReceived")
     public String getAllOrders(Model model) {
-        List<OrderSupplierHeader> orderSupplierHeaderList = orderSupplierHeaderService.getAllClosedOrders().getEntities();
-        List<OrderSupplierHeader> resultList =  orderSupplierHeaderList.stream().filter(orderSupplierDetailService::checkIfOrderIsCompleted).collect(Collectors.toList());
+        SuccessEvaluator<OrderSupplierHeader> success = orderSupplierHeaderService.getAllClosedOrders();
+        if (success.getIsSuccessfull()) {
+            List<OrderSupplierHeader> orderSupplierHeaderList = success.getEntities();
+            List<OrderSupplierHeader> resultList =  orderSupplierHeaderList.stream().filter(orderSupplierDetailService::checkIfOrderIsCompleted).collect(Collectors.toList());
+            model.addAttribute("orderList", resultList);
+        } else {
+            model.addAttribute("error", success.getMessage());
+        }
 
-        model.addAttribute("orderList", resultList);
         return "orders_received";
     }
 
@@ -57,7 +65,7 @@ public class OrderReceiveController {
         model.addAttribute("currentUser",user);
         model.addAttribute("orderheader", orderSupplierHeader);
         model.addAttribute("orderLines", orderReceiveDTOS);
-        model.addAttribute("locationList", locationService.getAllLocations());
+        model.addAttribute("locationList", locationService.getNonSingleStorageLocations());
 
         for (OrderReceiveDTO orderLine : orderReceiveDTOS) {
             model.addAttribute("OrderReceiveDTO", orderLine);
@@ -67,11 +75,16 @@ public class OrderReceiveController {
 
     @PostMapping("/saveReceive/{orderLineId}")
     public String saveDetail(@ModelAttribute("OrderReceiveDTO") OrderReceiveDTO orderReceiveDTO,
-                             @PathVariable("orderLineId") Long orderLineId) {
+                             @PathVariable("orderLineId") Long orderLineId, RedirectAttributes redirAttr) {
         OrderSupplierDetail orderLine = orderSupplierDetailService.getById(orderLineId).get();
         orderLine.setReceivedQuantity(orderReceiveDTO.getReceivedQuantity()+orderLine.getReceivedQuantity());
         orderLine.setDeltaQuantity(orderLine.getExpectedQuantity()-orderLine.getReceivedQuantity());
-        this.orderSupplierDetailService.save(orderLine,orderReceiveDTO.getLocation());
+        SuccessObject isSaveSuccessful = this.orderSupplierDetailService.save(orderLine,orderReceiveDTO);
+        if(isSaveSuccessful.getIsSuccessfull()){
+            redirAttr.addFlashAttribute("success",isSaveSuccessful.getMessage());
+        } else {
+            redirAttr.addFlashAttribute("error",isSaveSuccessful.getMessage());
+        }
         return "redirect:/view/orderReceived/" + orderLine.getOrderSupplierHeader().getOrderSupplierId();
     }
 

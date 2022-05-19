@@ -3,7 +3,9 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.MutationRepository;
+import com.example.eindwerkJava2.repositories.TransactionRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
+import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,15 @@ public class MutationServiceImpl implements MutationService {
     private final MutationRepository mutationRepository;
     @Autowired
     private final StockService stockService;
+    @Autowired
+    private final TransactionRepository transactionRepository;
 
 
     @Autowired
-    public MutationServiceImpl(MutationRepository mutationRepository, StockService stockService) {
+    public MutationServiceImpl(MutationRepository mutationRepository, StockService stockService, TransactionRepository transactionRepository) {
         this.mutationRepository = mutationRepository;
         this.stockService = stockService;
+        this.transactionRepository=transactionRepository;
     }
 
     public List<Mutation> getMutations() {
@@ -35,6 +40,7 @@ public class MutationServiceImpl implements MutationService {
     public SuccessEvaluator<Mutation> addStock(Mutation mutation) {
         SuccessEvaluator<Mutation> isAddStockSuccessfull = new SuccessEvaluator<>();
         Stock stockTo = stockService.findStockByLocation(mutation.getLocation());
+        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie opboeken").get());
         if (stockTo == null) {
             Stock initstock = new Stock();
             initstock.setAmount(0d);
@@ -63,6 +69,7 @@ public class MutationServiceImpl implements MutationService {
         Stock stockFrom = stockService.findStockByLocation(mutation.getLocation());
         double updatedStockTotalAmount = stockFrom.getAmount() - mutation.getAmount();
         stockFrom.setAmount(updatedStockTotalAmount);
+        mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie afboeken").get());
 
         SuccessEvaluator<Mutation> isRemoveStockSuccessfull = new SuccessEvaluator<>();
         if (updatedStockTotalAmount < 0) {
@@ -97,7 +104,38 @@ public class MutationServiceImpl implements MutationService {
             isMoveStockSuccessful.setMessage(isRemoveStockSuccessful.getMessage());
         }
         return isMoveStockSuccessful;
+    }
 
+    public SuccessEvaluator<Mutation> correctStockAmount(Mutation mutation){
+        Stock stock=stockService.findStockByLocation(mutation.getLocation());
+        Double amountDifference = mutation.getAmount()-stock.getAmount();
+        SuccessEvaluator<Mutation> isCorrectionSuccessful = new SuccessEvaluator<>();
+        if(amountDifference>0){
+            mutation.setAmount(amountDifference);
+            mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie opboeken").get());
+            stock.setAmount(stock.getAmount()+amountDifference);
+            mutationRepository.save(mutation);
+            stockService.saveStock(stock);
+            if(stockService.findStockByLocation(mutation.getLocation()).getAmount()==stock.getAmount()){
+                isCorrectionSuccessful.setIsSuccessfull(true);
+            }else{
+                isCorrectionSuccessful.setIsSuccessfull(false);
+                isCorrectionSuccessful.setMessage("Correction on the stock amount was not correctly done!");
+            }
+        } else if (amountDifference<0){
+            mutation.setAmount(amountDifference);
+            mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie afboeken").get());
+            stock.setAmount(stock.getAmount()+amountDifference);
+            mutationRepository.save(mutation);
+            stockService.saveStock(stock);
+            if(stockService.findStockByLocation(mutation.getLocation()).getAmount()==stock.getAmount()){
+                isCorrectionSuccessful.setIsSuccessfull(true);
+            }else{
+                isCorrectionSuccessful.setIsSuccessfull(false);
+                isCorrectionSuccessful.setMessage("Correction on the stock amount was not correctly done!");
+            }
+        }
+        return isCorrectionSuccessful;
     }
 
     public Optional<Mutation> findById(Long id) {

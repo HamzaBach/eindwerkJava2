@@ -26,6 +26,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
 
+    //TODO: @Sebastiaan: why do we link location with List<Stock> stocks ?
     @OneToMany(mappedBy = "location")
     private List<Stock> stocks;
 
@@ -35,10 +36,6 @@ public class Location {
     @ManyToOne
     @JoinColumn(name = "warehouse_Id")
     private Warehouse warehouse;
-
-/*    //TODO: Dit moet verwijzen naar een apparte entity (table) met id+name+singleStorage
-    @Column(name = "singleStorage")
-    private boolean singleStorage;*/
 
     @ManyToOne
     @JoinColumn(name = "locationTypeId")
