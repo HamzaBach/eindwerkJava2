@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
@@ -29,15 +30,35 @@
                     <input type="hidden" th:field="*{stockId}" th:value="${stock.stockId}" class="form-control"/>
                     <!--        <input type="text" th:field="*{stockId}" placeholder="StockID" class="form-control">-->
                     <!--        <input type="text" th:field="*{locationId}" placeholder="LocationId" class="form-control">-->
-                    <label class="form-label fw-bold"> Location</label>
-                    <select class="form-control" id="location" name="location" th:field="*{location}" required>
-                        <option value="" selected="selected" hidden="hidden">Choose the location..</option>
-                        <option th:each="location : ${locationList}"
-                                th:value="${location.locationId}"
-                                th:text="${location.locationName}"></option>
-                    </select>
+
+                    <div class="row">
+                        <div class="col-xl-11" id="category">
+                            <div class="mb-3 form-group text-start">
+                                <label class="form-label fw-bold"> Article </label>
+                                <input disabled th:value="${stock.article.articleName}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-xl-1">
+                            <a th:href="@{/category}" class="btn btn-outline-primary">
+                                <i class="bi bi-collection"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> Amount</label>
+                        <input type="text" th:field="*{amount}" placeholder="Amount" class="form-control" required>
+                    </div>
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> Location</label>
+                        <select class="form-control" id="location" name="location" th:field="*{location}" required>
+                            <option value="" selected="selected" hidden="hidden">Choose the location..</option>
+                            <option th:each="location : ${locationList}"
+                                    th:value="${location.locationId}"
+                                    th:text="${location.locationName}"></option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3 form-group text-start">
+                <!--<div class="mb-3 form-group text-start">
                     <label class="form-label fw-bold"> Article</label>
                     <select class="form-control" id="article" name="article" th:field="*{article}" required>
                         <option value="" selected="selected" hidden="hidden">Choose the article..</option>
@@ -45,16 +66,12 @@
                                 th:value="${article.articleId}"
                                 th:text="${article.articleName}"></option>
                     </select>
-                </div>
+                </div>-->
 
-                <div class="mb-3 form-group text-start">
-                    <label class="form-label fw-bold"> Amount</label>
-                    <input type="text" th:field="*{amount}" placeholder="Amount" class="form-control" required>
-                </div>
                 <div class="mb-3 form-group text-center">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-save"></i> Save
-                    </button>
+                    <a th:href="@{'/edit/stock/' + ${stock.stockId}}" class="btn btn-outline-primary"
+                       sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                        <i class="bi bi-save"></i> Save</a>
                 </div>
             </div>
 

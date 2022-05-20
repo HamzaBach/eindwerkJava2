@@ -33,6 +33,13 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     boolean existsArticleByArticleName(String articleName);
 
     /**
+     * Method to verify if an article with a particular article name exists in the database.
+     * @param articleAbbreviation This abbreviation is used to see whether an article with same abbreviation is present or not in the database.
+     * @return A boolean is returned to indicate if an article is present or not with the same abbreviation in the database.
+     */
+    boolean existsArticleByArticleAbbreviation(String articleAbbreviation);
+
+    /**
      * Method to return all articles in a list that have the same activeArticle value.
      * @param activeArticle An integer to indicate whether an article is active (1) or inactive (0).
      * @return A list of articles is returned that carry that activeArticle value.
@@ -54,10 +61,18 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByArticleName(String articleName);
 
     /**
+     * Method to find an article in the repository via the article abbreviation.
+     * @param articleAbbreviation
+     * @return
+     */
+    Optional<Article> findByArticleAbbreviation(String articleAbbreviation);
+
+    /**
      * Method to find an article in the repository via the barcode.
      * @param barcode
      * @return
      */
     Optional<Article> findByArticleBarcode(String barcode);
 
+    boolean existsArticleByArticleSupplier(ArticleSupplier articleSupplier);
 }

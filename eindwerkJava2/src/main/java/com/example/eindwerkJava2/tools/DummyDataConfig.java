@@ -108,6 +108,24 @@ public class DummyDataConfig {
                 }
             }
 
+            ArticleSupplier appleProduct1 = new ArticleSupplier(article1,Apple,"IPH12-2019-06",640.00, 500.00,1);
+            ArticleSupplier appleProduct2 = new ArticleSupplier(article4,Apple,"IPH13-2021-06",750.00,650.00,1);
+            ArticleSupplier appleProduct3 = new ArticleSupplier(article2,Apple,"AIP3-2019-06",199.00,150.00,1);
+            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3,Nokia,"N3310-2007-02",150.00, 100.00,1);
+            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5,Motorola,"Rzr010-2009-02",350.00, 300.00,1);
+            List<ArticleSupplier> dummyArticleSuppliers=new ArrayList<ArticleSupplier>();
+            dummyArticleSuppliers.add(appleProduct1);
+            dummyArticleSuppliers.add(appleProduct2);
+            dummyArticleSuppliers.add(appleProduct3);
+            dummyArticleSuppliers.add(nokiaProduct1);
+            dummyArticleSuppliers.add(motorolaProduct1);
+            for(ArticleSupplier articleSupplier:dummyArticleSuppliers){
+                if((articleSupplierRepository.count()<5)){
+                    articleSupplierRepository.save(articleSupplier);
+                }
+            }
+
+
             List<Role> defaultRoles = new ArrayList<Role>();
             Role role1 = new Role("USER");
             Role role2 = new Role("CREATOR");
@@ -143,23 +161,6 @@ public class DummyDataConfig {
                 if(userRepository.findByUserName(user.getUserName()).getRoles().isEmpty()){
                     user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
-                }
-            }
-
-            ArticleSupplier appleProduct1 = new ArticleSupplier(article1,Apple,"IPH12-2019-06",640.00, 500.00,1);
-            ArticleSupplier appleProduct2 = new ArticleSupplier(article4,Apple,"IPH13-2021-06",750.00,650.00,1);
-            ArticleSupplier appleProduct3 = new ArticleSupplier(article2,Apple,"AIP3-2019-06",199.00,150.00,1);
-            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3,Nokia,"N3310-2007-02",150.00, 100.00,1);
-            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5,Motorola,"Rzr010-2009-02",350.00, 300.00,1);
-            List<ArticleSupplier> dummyArticleSuppliers=new ArrayList<ArticleSupplier>();
-            dummyArticleSuppliers.add(appleProduct1);
-            dummyArticleSuppliers.add(appleProduct2);
-            dummyArticleSuppliers.add(appleProduct3);
-            dummyArticleSuppliers.add(nokiaProduct1);
-            dummyArticleSuppliers.add(motorolaProduct1);
-            for(ArticleSupplier articleSupplier:dummyArticleSuppliers){
-                if((articleSupplierRepository.count()<5)){
-                    articleSupplierRepository.save(articleSupplier);
                 }
             }
 
