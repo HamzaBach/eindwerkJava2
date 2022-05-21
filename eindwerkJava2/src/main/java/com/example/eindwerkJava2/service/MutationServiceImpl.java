@@ -84,14 +84,7 @@ public class MutationServiceImpl implements MutationService {
             }
         }
         //Retrieve saved article on location and compare the amount in order to determine whether the save was successful.
-        Optional<Stock> recentlyUpdatedStock = stockService.findStockByArticleIdAndLocationId(mutation.getArticle().getArticleId(), mutation.getLocation().getLocationId());
-        if (recentlyUpdatedStock.get().getAmount() == updatedStockTotalAmount) {
-            isAddStockSuccessfull.setIsSuccessfull(true);
-        } else {
-            isAddStockSuccessfull.setIsSuccessfull(false);
-            isAddStockSuccessfull.setMessage("Mismatch in stock amount expected amount =" + updatedStockTotalAmount + ", retrieved amount from db = " + mutation.getAmount() +
-                    " on location: " + mutation.getLocation());
-        }
+        stockMovementValidator(mutation, isAddStockSuccessfull, updatedStockTotalAmount);
         return isAddStockSuccessfull;
 
     }
@@ -115,19 +108,21 @@ public class MutationServiceImpl implements MutationService {
                     stockService.saveStock(updateStockArticle);
                     mutationRepository.save(mutation);
                 }
-
-
             }
         }
+        stockMovementValidator(mutation, isRemoveStockSuccessfull, updatedStockTotalAmount);
+        return isRemoveStockSuccessfull;
+    }
+
+    private void stockMovementValidator(Mutation mutation, SuccessEvaluator<Mutation> successObject, double updatedStockTotalAmount) {
         Optional<Stock> recentlyUpdatedStock = stockService.findStockByArticleIdAndLocationId(mutation.getArticle().getArticleId(), mutation.getLocation().getLocationId());
         if (recentlyUpdatedStock.get().getAmount() == updatedStockTotalAmount) {
-            isRemoveStockSuccessfull.setIsSuccessfull(true);
+            successObject.setIsSuccessfull(true);
         } else {
-            isRemoveStockSuccessfull.setIsSuccessfull(false);
-            isRemoveStockSuccessfull.setMessage("Mismatch in stock amount expected amount =" + updatedStockTotalAmount + ", retrieved amount from db = " + mutation.getAmount() +
+            successObject.setIsSuccessfull(false);
+            successObject.setMessage("Mismatch in stock amount expected amount =" + updatedStockTotalAmount + ", retrieved amount from db = " + mutation.getAmount() +
                     " on location: " + mutation.getLocation());
         }
-        return isRemoveStockSuccessfull;
     }
 
 
@@ -172,14 +167,7 @@ public class MutationServiceImpl implements MutationService {
             }
         }
         //Retrieve saved article on location and compare the amount in order to determine whether the save was successful.
-        Optional<Stock> recentlyUpdatedStock = stockService.findStockByArticleIdAndLocationId(mutation.getArticle().getArticleId(), mutation.getLocation().getLocationId());
-        if (recentlyUpdatedStock.get().getAmount()==updatedStockTotalAmount) {
-            isCorrectionSuccessful.setIsSuccessfull(true);
-        } else {
-            isCorrectionSuccessful.setIsSuccessfull(false);
-            isCorrectionSuccessful.setMessage("Correction on the stock amount was not correctly done!");
-        }
-
+        stockMovementValidator(mutation, isCorrectionSuccessful, updatedStockTotalAmount);
         return isCorrectionSuccessful;
     }
 
