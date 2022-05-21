@@ -75,6 +75,7 @@ public class MutationServiceImpl implements MutationService {
                     } else {
                         isAddStockSuccessfull.setIsSuccessfull(false);
                         isAddStockSuccessfull.setMessage("Cannot add a different article to a single storage location!");
+                        return isAddStockSuccessfull;
                     }
 
                 }
