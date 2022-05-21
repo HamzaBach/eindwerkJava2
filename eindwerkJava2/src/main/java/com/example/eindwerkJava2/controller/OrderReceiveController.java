@@ -64,7 +64,7 @@ public class OrderReceiveController {
 
         model.addAttribute("currentUser",user);
         model.addAttribute("orderheader", orderSupplierHeader);
-        model.addAttribute("orderLines", orderReceiveDTOS);
+        model.addAttribute("orderLines", orderSupplierDetailList);
         model.addAttribute("locationList", locationService.getNonSingleStorageLocations());
 
         for (OrderReceiveDTO orderLine : orderReceiveDTOS) {
@@ -73,10 +73,10 @@ public class OrderReceiveController {
         return "forms/form_order_received";
     }
 
-    @PostMapping("/saveReceive/{orderLineId}")
+    @PostMapping("/saveReceive/{orderSupplierDetailId}")
     public String saveDetail(@ModelAttribute("OrderReceiveDTO") OrderReceiveDTO orderReceiveDTO,
-                             @PathVariable("orderLineId") Long orderLineId, RedirectAttributes redirAttr) {
-        OrderSupplierDetail orderLine = orderSupplierDetailService.getById(orderLineId).get();
+                             @PathVariable("orderSupplierDetailId") Long orderSupplierDetailId, RedirectAttributes redirAttr) {
+        OrderSupplierDetail orderLine = orderSupplierDetailService.getById(orderSupplierDetailId).get();
         orderLine.setReceivedQuantity(orderReceiveDTO.getReceivedQuantity()+orderLine.getReceivedQuantity());
         orderLine.setDeltaQuantity(orderLine.getExpectedQuantity()-orderLine.getReceivedQuantity());
         SuccessObject isSaveSuccessful = this.orderSupplierDetailService.save(orderLine,orderReceiveDTO);

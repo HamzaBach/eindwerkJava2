@@ -38,14 +38,12 @@ public class Stock {
     /**
      * Initiates a new Stock.
      *
-     * @param stockId     ID of the stock in the database.
      * @param location    link to the location table.
      * @param article     link to table article, column articleSupplier.
      * @param amount      link to the amount table.
      * @param activeStock stock (active or  inactive (=deleted)).
      */
-    public Stock(Long stockId, Location location, Article article, double amount, int activeStock) {
-        this.stockId = stockId;
+    public Stock(Article article, double amount, Location location, int activeStock) {
         this.location = location;
         this.article = article;
         this.amount = amount;
@@ -56,7 +54,12 @@ public class Stock {
      * Instantiates a new Stock.
      */
     public Stock() {
+    }
 
+    public void reserveStockLocation(Mutation mutation) {
+        this.article = mutation.getArticle();
+        this.amount = 0.0;
+        this.location = mutation.getLocation();
     }
 
 

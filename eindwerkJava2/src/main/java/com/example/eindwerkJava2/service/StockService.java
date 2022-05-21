@@ -28,6 +28,10 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    public boolean existsStockByLocation(Location location){
+        return stockRepository.existsStockByLocation(location);
+    }
+
     public void saveStock(Stock stock){
         this.stockRepository.save(stock);
     }
@@ -40,9 +44,12 @@ public class StockService {
         return this.stockRepository.findByStockId(Stockid);
     }
 
-    public Stock findStockByLocation(Location location){
+    public List<Stock> findStockByLocation(Location location){
         return this.stockRepository.findByLocation(location);
     };
+    public Optional<Stock> findStockByArticleIdAndLocationId(Long articleId, Long locationId){
+        return stockRepository.findStockByArticleIdAndLocationId(articleId,locationId);
+    }
 
     public Stock findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
     public void deleteStock(Stock stock)
