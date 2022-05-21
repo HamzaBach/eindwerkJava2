@@ -56,11 +56,5 @@ public class Stock {
     public Stock() {
     }
 
-    public void reserveStockLocation(Mutation mutation) {
-        this.article = mutation.getArticle();
-        this.amount = 0.0;
-        this.location = mutation.getLocation();
-    }
-
 
 }
