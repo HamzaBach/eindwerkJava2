@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.service;
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.repositories.CategoryRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
@@ -48,6 +49,25 @@ public class CategoryService {
                     && categoryWithSameName.getActive() == 1) {
                 isSaveSuccessful.setIsSuccessfull(false);
                 isSaveSuccessful.setMessage("Cannot modify this category because the category name " + category.getCategoryName() + " already exists!");
+                return isSaveSuccessful;
+            }
+        }
+        boolean existsCategoryAbbreviation = categoryRepository.existsCategoryByCategoryAbbreviation(category.getCategoryAbbreviation());
+        if (existsCategoryAbbreviation) {
+            Category categoryWithSameAbbreviation = categoryRepository.findByCategoryAbbreviation(category.getCategoryAbbreviation()).get();
+            // use case if a new category gets named to the name of an already present category abbreviation -> block!
+            if (category.getCategoryId() == null
+                    && categoryWithSameAbbreviation.getActive() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("New category cannot be added because this category abbreviation " + category.getCategoryAbbreviation() + " already exists!");
+                return isSaveSuccessful;
+            }
+            // use case if an existing category gets renamed to the name of an already present category abbreviation -> block!
+            if (category.getCategoryId() != null
+                    && categoryWithSameAbbreviation.getCategoryId() != category.getCategoryId()
+                    && categoryWithSameAbbreviation.getActive() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("Cannot modify this category because the category abbreviation " + category.getCategoryAbbreviation() + " already exists!");
                 return isSaveSuccessful;
             }
         }

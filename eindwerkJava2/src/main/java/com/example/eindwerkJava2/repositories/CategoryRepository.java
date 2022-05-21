@@ -12,5 +12,8 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     @Query(value = "SELECT * FROM category WHERE active = 1", nativeQuery = true)
     List<Category> findAllActiveCategories();
     boolean existsCategoryByCategoryName(String categoryname);
+    boolean existsCategoryByCategoryAbbreviation(String categoryAbbreviation);
     Optional<Category> findByCategoryName(String categoryName);
+    Optional<Category> findByCategoryAbbreviation(String categoryAbbreviation);
+
 }

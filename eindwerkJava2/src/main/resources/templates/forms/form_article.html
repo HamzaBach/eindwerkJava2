@@ -10,15 +10,16 @@
     <div th:include="fragments/header::dataTableJquery"/>
     <script type="text/javascript" th:src="@{js/article.js}"></script>
     <script type="text/javascript" class="init">$(document).ready(function() {	$('#articleSuppliersOverview').DataTable();} );
+
     </script>
-<!--    <script type="text/javascript">-->
-<!--    function togglerequire(id){-->
-<!--    $(id).children("textarea, input, select").each(function(){-->
-<!--        var re = $(this).prop('readonly');-->
-<!--        $(this).prop('readonly', !re);-->
-<!--    });-->
-<!--}-->
-<!--    </script>-->
+    <!--    <script type="text/javascript">-->
+    <!--    function togglerequire(id){-->
+    <!--    $(id).children("textarea, input, select").each(function(){-->
+    <!--        var re = $(this).prop('readonly');-->
+    <!--        $(this).prop('readonly', !re);-->
+    <!--    });-->
+    <!--}-->
+    <!--    </script>-->
 
     <title>Article</title>
 </head>
@@ -34,19 +35,19 @@
     <div th:unless="${article.articleId == null}">
         <h1>Edit Article</h1>
     </div>
-<!--    <div th:unless="${article.articleId == null}">-->
-<!--        <button type="button" id="editButton" ></button>-->
-<!--    </div>-->
-<!--    <div th:unless="${article.articleId == null}">-->
-<!--        <button type="button" id="editButton" onclick="togglerequire('#name'); togglerequire('#description');-->
-<!--        togglerequire('#abbreviation'); togglerequire('#abbreviation'); togglerequire('#category'); togglerequire('#supplier');"></button>-->
-<!--    </div>-->
+    <!--    <div th:unless="${article.articleId == null}">-->
+    <!--        <button type="button" id="editButton" ></button>-->
+    <!--    </div>-->
+    <!--    <div th:unless="${article.articleId == null}">-->
+    <!--        <button type="button" id="editButton" onclick="togglerequire('#name'); togglerequire('#description');-->
+    <!--        togglerequire('#abbreviation'); togglerequire('#abbreviation'); togglerequire('#category'); togglerequire('#supplier');"></button>-->
+    <!--    </div>-->
 
     <div th:include="fragments/header::errorMessaging"/>
     <form th:action="@{/saveArticle}"
           th:object="${article}" , method="POST"
           enctype="multipart/form-data">
-        <div class="row" >
+        <div class="row">
             <div class="col-xl-2">
             </div>
             <div class="col-xl-4">
@@ -54,24 +55,25 @@
                     <input type="hidden" th:field="*{articleId}" th:value="${article.articleId}" class="form-control"/>
                     <label for="articleName" class="form-label fw-bold">Name</label>
                     <input th:field="*{articleName}" type="text" placeholder="Name" class="form-control"
-                           id="articleName" required>
+                           id="articleName" required th:readonly="${isDisabled}">
                 </div>
                 <div class="mb-3 form-group text-start" id="description">
                     <label for="articleDescription" class="form-label fw-bold">Description</label>
                     <textarea th:field="*{articleDescription}" type="text" rows="4" placeholder="Description"
-                              class="form-control" id="articleDescription" required/>
+                              class="form-control" id="articleDescription" required th:readonly="${isDisabled}"/>
                 </div>
                 <div class="mb-3 form-group text-start" id="abbreviation">
                     <label for="articleAbbreviation" class="form-label fw-bold">Abbreviation</label>
                     <input th:field="*{articleAbbreviation}" type="text" placeholder="Abbreviation"
-                           class="form-control" id="articleAbbreviation" required/>
+                           class="form-control" id="articleAbbreviation" required th:readonly="${isDisabled}"/>
                 </div>
                 <div class="mb-3 form-group text-start">
                     <label for="articleCategory" class="form-label fw-bold">Category</label>
                     <div class="row">
                         <div class="col-xl-11" id="category">
-                            <select th:field="*{category}" class="form-select" id="articleCategory" required>
-                                <option value="" selected="selected" hidden="hidden" >Select category...</option>
+                            <select th:field="*{category}" class="form-select" id="articleCategory" required
+                                    th:disabled="${isDisabled}">
+                                <option value="" selected="selected" hidden="hidden">Select category...</option>
                                 <option th:each="category : ${categoriesList}"
                                         th:text="${category.categoryName}"
                                         th:value="${category.categoryId}">
@@ -89,7 +91,7 @@
                     <div class="row">
                         <div class="col-xl-11">
                             <input th:field="*{articleBarcode}" type="text" placeholder="Barcode" class="form-control"
-                                   id="articleBarcode"/>
+                                   id="articleBarcode" th:readonly="${isDisabled}"/>
                         </div>
                         <div class="col-xl-1">
                             <a th:href="@{${'/article/barcode/'+article.articleId}}" class="btn btn-outline-primary"
@@ -128,8 +130,9 @@
                     <label for="articleSupplier" class="form-label fw-bold">Chosen supplier</label>
                     <div class="row">
                         <div class="col-xl-11" id="supplier">
-                            <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier">
-                                <option value="" selected="selected" hidden="hidden" >Select supplier...</option>
+                            <select th:field="*{articleSupplier}" class="form-select" id="articleSupplier"
+                                    th:disabled="${isDisabled}">
+                                <option value="" selected="selected" hidden="hidden">Select supplier...</option>
                                 <option th:each="articleSupplier: ${articleSuppliersList}"
                                         th:text="${articleSupplier.supplier.supplierName}"
                                         th:value="${articleSupplier.articleSupplierId}">
@@ -145,14 +148,23 @@
                 <div class="mb-3 form-group text-start">
                     <div th:unless="${article.articleSupplier == null}">
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-6 text-center">
                                 <label for="articlePurchasePrice" class="form-label fw-bold">Purchase price</label>
                                 <h3 id="articlePurchasePrice" th:text="€+*{articleSupplier.purchasePrice}"></h3>
                             </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-6 text-center">
                                 <label for="articleSalesPrice" class="form-label fw-bold">Sales price</label>
                                 <h3 id="articleSalesPrice" th:text="€+*{articleSupplier.salesPrice}"></h3>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <div class="row">
+                        <div class="text-center mb-3">
+                            <button type="submit" class="btn btn-success btn-lg" th:disabled="${isDisabled}">
+                                <i class="bi bi-save"></i> Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -173,25 +185,25 @@
                 </div>
                 <div class="p-2">
                     <label for="articleImg" class="fw-bold">Select image:</label>
-                    <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg">
+                    <input type="file" id="articleImg" name="image" accept="image/png, image/jpeg"
+                           th:disabled="${isDisabled}">
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xl-1">
-            </div>
-            <div class="col-xl-5">
-                <div class="row">
-                    <div align="center">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-save"></i> Save
-                        </button>
-                    </div>
-                </div>
+
+    </form>
+    <div class="row">
+        <div class="col-xl-2">
+        </div>
+        <div class="col-xl-4">
+            <div class="text-center mb-3">
+                <a th:href="@{/articles}" class="btn btn-secondary btn-lg" type="button">
+                    <i class="bi bi-x-square"></i> Back to articles </a>
             </div>
         </div>
-    </form>
+
+    </div>
 
     <div th:if="${article.articleId != null}">
         <h1>Article provided by:</h1>

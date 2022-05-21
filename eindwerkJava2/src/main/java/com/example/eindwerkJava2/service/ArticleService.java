@@ -79,6 +79,25 @@ public class ArticleService {
                 return isSaveSuccessful;
             }
         }
+        boolean existsArticleAbbreviation = articleRepository.existsArticleByArticleAbbreviation(article.getArticleAbbreviation());
+        if (existsArticleAbbreviation) {
+            Article articleWithSameAbbreviation = articleRepository.findByArticleAbbreviation(article.getArticleAbbreviation()).get();
+            // use case if a new article gets named to the name of an already present article abbreviation -> block!
+            if (article.getArticleId() == null
+                    && articleWithSameAbbreviation.getActiveArticle() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("New article cannot be added because this article abbreviation " + article.getArticleAbbreviation() + " already exists!");
+                return isSaveSuccessful;
+            }
+            // use case if an existing article gets renamed to the name of an already present article abbreviation -> block!
+            if (article.getArticleId() != null
+                    && articleWithSameAbbreviation.getArticleId() != article.getArticleId()
+                    && articleWithSameAbbreviation.getActiveArticle() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("Cannot modify this article because the article abbreviation " + article.getArticleAbbreviation() + " already exists!");
+                return isSaveSuccessful;
+            }
+        }
         articleImageHandler(article, articleImage);
         //Generate unique barcode:
         articleBarcodeHandler(article);
@@ -134,7 +153,6 @@ public class ArticleService {
      * Method to retrieve an article from the database based on its barcode.
      *
      * @param barcode The barcode of the to be retrieved article from the database.
-
      * @return The successObject (wrapper around article {@link com.example.eindwerkJava2.wrappers.SuccessEvaluator}) to indicate whether the find action was successful or not.
      */
     public SuccessEvaluator<Article> findByBarcode(String barcode) {
@@ -177,8 +195,8 @@ public class ArticleService {
         return toArticleDto(article);
     }
 
-    public ArticleDto toArticleDto(Article article){
-           String articleImageAsBase64 = Base64.encodeBase64String(article.getArticleImage());
+    public ArticleDto toArticleDto(Article article) {
+        String articleImageAsBase64 = Base64.encodeBase64String(article.getArticleImage());
         return new ArticleDto(
                 article.getArticleName(),
                 article.getCategory().getCategoryName(),

@@ -97,26 +97,18 @@
                            class="form-control"/>
                     <td class="col-md-1">
                         <label th:text="${orderReceivedDetail.orderlineNumber}"></label>
-                        <input type="hidden" th:field="*{orderlineNumber}"
-                               th:value="${orderReceivedDetail.orderlineNumber}" class="form-control"/>
                         <input hidden type="text" th:value="${currentUser.userId}"
                                th:name="user" th:id="user"
                                th:errorclass="fieldError"/>
                     </td>
                     <td class="col-md-2">
                         <label th:text="${orderReceivedDetail.article.articleName}"></label>
-                        <input type="hidden" th:field="*{article}" th:value="${orderReceivedDetail.article}"
-                               class="form-control"/>
                     </td>
                     <td class="col-md-1">
                         <label th:text="${orderReceivedDetail.expectedQuantity}"></label>
-                        <input type="hidden" th:field="*{expectedQuantity}"
-                               th:value="${orderReceivedDetail.expectedQuantity}" class="form-control"/>
                     </td>
                     <td class="col-md-1">
                         <label th:text="${orderReceivedDetail.deltaQuantity}"></label>
-                        <input type="hidden" th:field="*{deltaQuantity}"
-                               th:value="${orderReceivedDetail.deltaQuantity}" class="form-control"/>
                     </td>
                     <td class="col-md-1">
                         <input th:field="*{receivedQuantity}" type="number" placeholder="Qty"

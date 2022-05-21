@@ -68,7 +68,7 @@ public class OrderSupplierDetailService {
             orderSupplierDetailRepository.save(orderSupplierDetail);
             Mutation mutation = new Mutation();
             mutation.setAmount(orderReceiveDTO.getReceivedQuantity());
-            mutation.setArticle(orderReceiveDTO.getArticle());
+            mutation.setArticle(orderSupplierDetail.getArticle());
             mutation.setLocalDateTime(LocalDateTime.now());
             mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
             mutation.setLocation(orderReceiveDTO.getLocation());
@@ -76,7 +76,7 @@ public class OrderSupplierDetailService {
             mutationServiceImpl.addStock(mutation);
 
             isSaveSuccessful.setIsSuccessfull(true);
-            isSaveSuccessful.setMessage("Article "+orderReceiveDTO.getArticle().getArticleName()+" with an amount of "+orderReceiveDTO.getReceivedQuantity()+" was succesfully booked to location: "+orderReceiveDTO.getLocation().getLocationName());
+            isSaveSuccessful.setMessage("Article "+orderSupplierDetail.getArticle().getArticleName()+" with an amount of "+orderReceiveDTO.getReceivedQuantity()+" was succesfully booked to location: "+orderReceiveDTO.getLocation().getLocationName());
         }
         return isSaveSuccessful;
     }

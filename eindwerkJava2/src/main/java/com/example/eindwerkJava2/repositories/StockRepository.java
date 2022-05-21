@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
@@ -19,5 +20,8 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock>activeStock();
     //TODO Waarschijnlijk moet dit een list worden omdat meerdere artikels op verschillende locaties kunnen zijn
     Stock findByArticle(Article article);
-    Stock findByLocation(Location location);
+    List<Stock> findByLocation(Location location);
+    boolean existsStockByLocation(Location location);
+    @Query(value="SELECT * FROM Stock WHERE article_id = ?1 AND location_id = ?2",nativeQuery = true)
+    Optional<Stock> findStockByArticleIdAndLocationId(long articleId, long locationId);
 }

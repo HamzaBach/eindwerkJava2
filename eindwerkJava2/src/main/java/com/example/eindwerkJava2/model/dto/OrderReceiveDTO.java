@@ -14,12 +14,7 @@ import java.util.List;
 @Setter
 public class OrderReceiveDTO {
     private Long orderSupplierDetailId;
-    private OrderSupplierHeader orderSupplierHeader;
-    private Article article;
-    private double expectedQuantity;
-    private double deltaQuantity;
     private double receivedQuantity;
-    private String orderlineNumber;
     private Location location;
     private User user;
 
@@ -27,12 +22,7 @@ public class OrderReceiveDTO {
         List<OrderReceiveDTO> orderReceiveDTOS=new ArrayList<>();
         for(OrderSupplierDetail x:orderSupplierDetailList){
             OrderReceiveDTO orderReceiveDTO = new OrderReceiveDTO();
-            orderReceiveDTO.setArticle(x.getArticle());
-            orderReceiveDTO.setOrderlineNumber(x.getOrderlineNumber());
             orderReceiveDTO.setOrderSupplierDetailId(x.getOrderSupplierDetailId());
-            orderReceiveDTO.setOrderSupplierHeader(x.getOrderSupplierHeader());
-            orderReceiveDTO.setExpectedQuantity(x.getExpectedQuantity());
-            orderReceiveDTO.setDeltaQuantity(x.getDeltaQuantity());
             orderReceiveDTO.setReceivedQuantity(x.getReceivedQuantity());
             orderReceiveDTO.setOrderSupplierDetailId(x.getOrderSupplierDetailId());
             orderReceiveDTOS.add(orderReceiveDTO);
