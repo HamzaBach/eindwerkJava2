@@ -44,9 +44,9 @@ public class StockService {
         return this.stockRepository.findByStockId(Stockid);
     }
 
-    public List<Stock> findStockByLocation(Location location){
+    public List<Stock> findStocksByLocation(Location location){
         return this.stockRepository.findByLocation(location);
-    };
+    }
     public Optional<Stock> findStockByArticleIdAndLocationId(Long articleId, Long locationId){
         return stockRepository.findStockByArticleIdAndLocationId(articleId,locationId);
     }
