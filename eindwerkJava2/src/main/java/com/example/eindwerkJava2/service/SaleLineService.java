@@ -1,13 +1,12 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.model.dto.CreateSaleLineDto;
-import com.example.eindwerkJava2.model.SaleHeader;
-import com.example.eindwerkJava2.model.SaleLine;
 import com.example.eindwerkJava2.model.dto.SaleLineDto;
 import com.example.eindwerkJava2.repositories.SaleLineRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,11 +15,20 @@ public class SaleLineService {
     private final SaleLineRepository saleLineRepository;
     private final ArticleService articleService;
     private final SaleHeaderService saleHeaderService;
+    private final MutationService mutationService;
+    private final TransactionService transactionService;
+    private final LocationService locationService;
+    private final UserService userService;
 
-    public SaleLineService(SaleLineRepository saleLineRepository, ArticleService articleService, SaleHeaderService saleHeaderService) {
+
+    public SaleLineService(SaleLineRepository saleLineRepository, ArticleService articleService, SaleHeaderService saleHeaderService, MutationService mutationService, TransactionService transactionService, LocationService locationService, UserService userService) {
         this.saleLineRepository = saleLineRepository;
         this.articleService = articleService;
         this.saleHeaderService = saleHeaderService;
+        this.mutationService = mutationService;
+        this.transactionService = transactionService;
+        this.locationService = locationService;
+        this.userService = userService;
     }
 
     public void saveSaveLine(CreateSaleLineDto createSaleLineDto) {
@@ -31,9 +39,36 @@ public class SaleLineService {
         saleLine.setUnitPrice(createSaleLineDto.getUnitPrice());
         SaleHeader saleHeader = saleHeaderService.getSaleHeaderById(createSaleLineDto.getSaleHeaderId());
         saleLine.setSaleHeader(saleHeader);
-        saleHeader.setTotalPrice(saleHeader.getTotalPrice()+createSaleLineDto.getUnitPrice()* createSaleLineDto.getQuantity());
+        saleHeader.setTotalPrice(saleHeader.getTotalPrice() + createSaleLineDto.getUnitPrice() * createSaleLineDto.getQuantity());
         saleHeaderService.createHeader(saleHeader);
         saleLineRepository.save(saleLine);
+
+        //mutationservice hier aanspreken
+
+        //Alle mutations opzoeken van dit artikel
+        List<Mutation> mutationsArticles = mutationService.findByArticle(saleLine.getArticle());
+
+        Location locationInStore = null;
+        for (Mutation mutatie : mutationsArticles
+        ) {
+            //Check of de locatie van de mutation in de winkel is + check of deze mutatie een opboeking was op deze locatie:
+            //Zoja: dan is dit de locatie in de winkel waar het artikel is geplaatst
+            if (mutatie.getLocation().getWarehouse().isStore() && mutatie.getTransactionType().getTransactionTypeFactor() ==-1D) {
+                locationInStore = mutatie.getLocation();
+            }
+        }
+
+        Mutation soldItems = new Mutation(
+                articleService.findByBarcode(createSaleLineDto.getBarcode()).getEntity(),  //artikel
+                (double) createSaleLineDto.getQuantity(),                                 //aantal
+                "Verkocht item",                                                 //comment
+                locationInStore,                                                         //locatie
+                transactionService.getSaleType(),                                       //transactiontype
+                userService.getUserByUserName(saleHeader.getNameSalesPerson()),
+                LocalDateTime.now());
+
+        mutationService.removeStock(soldItems);
+
     }
 
     public List<SaleLine> getAllSaleLinesFromHeader(Long saleHeaderId) {

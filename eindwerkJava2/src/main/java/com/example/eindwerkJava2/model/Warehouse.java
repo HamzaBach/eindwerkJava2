@@ -38,6 +38,9 @@ public class Warehouse {
         this.setWarehouseName(warehouseName);
     }
 
+    @Column(name = "store")
+    private boolean store;
+
 
     /**
      * Gets active warehouse.
@@ -65,12 +68,14 @@ public class Warehouse {
      * @param warehouseName   the warehouse name
      * @param locations       link to the location table
      * @param activeWarehouse the active parameter for the warehouse
+     * @param store           checked if the warehouse is the store
      */
-    public Warehouse(Long warehouseId, String warehouseName, List<Location> locations, int activeWarehouse) {
+    public Warehouse(Long warehouseId, String warehouseName, List<Location> locations, int activeWarehouse, boolean store) {
         this.warehouseId = warehouseId;
         this.warehouseName = warehouseName;
         this.locations = locations;
         this.activeWarehouse = activeWarehouse;
+        this.store = store;
     }
 
 }

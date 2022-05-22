@@ -22,6 +22,10 @@ public class TransactionService {
         return this.transactionRepository.findAll();
     }
 
+    public TransactionType getSaleType(){
+        return transactionRepository.findByTransactionTypeName("Opboeken").get();
+    }
+
 
 
 }
