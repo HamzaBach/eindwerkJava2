@@ -32,4 +32,7 @@ public class SaleHeader {
         this.totalPrice = 0;
     }
 
+    public String getNameSalesPerson() {
+        return nameSalesPerson;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.service;
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.model.Stock;
 import com.example.eindwerkJava2.repositories.MutationRepository;
@@ -188,6 +189,11 @@ public class MutationServiceImpl implements MutationService {
         }
 
         return totalamount;
+    }
+
+    @Override
+    public List<Mutation> findByArticle(Article article){
+        return mutationRepository.findByArticle(article);
     }
 
 }
