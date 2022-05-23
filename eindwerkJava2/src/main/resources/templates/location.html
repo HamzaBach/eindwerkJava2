@@ -52,7 +52,7 @@
 <!--                <td th:text="${location.locationId}"></td>-->
                 <td th:text="${location.locationName}"></td>
                 <td th:text="${location.warehouse.warehouseName}"></td>
-                <td><input disabled type="checkbox" th:checked="${location.singleStorage}"/></td>
+                <td><input disabled type="checkbox" th:checked="${location.locationType.singleStorage}"/></td>
                 <td><a th:href="@{'/edit/location/' + ${location.locationId}}" class="btn btn-outline-primary"
                        sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                     <i class="bi bi-pencil-square"></i> Edit

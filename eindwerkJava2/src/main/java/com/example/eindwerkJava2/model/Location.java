@@ -44,6 +44,8 @@ public class Location {
     @Column(name = "active")
     private int activeLocation = 1;
 
+    
+
     public Location(String locationName, Warehouse warehouse, LocationType locationType){
         this.setLocationName(locationName);
         this.setWarehouse(warehouse);

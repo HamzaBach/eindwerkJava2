@@ -48,4 +48,5 @@ public class Mutation {
         this.user = user;
         this.localDateTime = localDateTime;
     }
+
 }
