@@ -37,4 +37,15 @@ public class Mutation {
     private User user;
 
     private LocalDateTime localDateTime;
+
+
+    public Mutation(Article article, Double amount, String comment, com.example.eindwerkJava2.model.Location location, TransactionType transactionType, User user, LocalDateTime localDateTime) {
+        this.article = article;
+        this.amount = amount;
+        this.comment = comment;
+        Location = location;
+        this.transactionType = transactionType;
+        this.user = user;
+        this.localDateTime = localDateTime;
+    }
 }
