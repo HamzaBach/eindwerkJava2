@@ -26,7 +26,6 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
 
-    //TODO: @Sebastiaan: why do we link location with List<Stock> stocks ?
     @OneToMany(mappedBy = "location")
     private List<Stock> stocks;
 
