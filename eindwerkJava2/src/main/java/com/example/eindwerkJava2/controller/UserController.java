@@ -97,18 +97,17 @@ public class UserController {
      *
      * @param userId   The id of the user for retrieving it from the persistence layer.
      * @param response It is used for preparing the image to be used in the front-end.
-     * @param user     The user object that is used for obtaining the user's image.
      * @throws IOException Exception is triggered in case the retrieval of the image goes wrong.
      */
     @GetMapping("/user/image/{userId}")
     @ResponseBody
-    void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, User user)
+    void showImage(@PathVariable("userId") Long userId, HttpServletResponse response)
             throws IOException {
         SuccessEvaluator<User> success = userService.findById(userId);
-        if (user.getUserImage() != null && success.getIsSuccessfull()) {
-            user = success.getEntity();
+        User userRetrievedFromDb = success.getEntity();
+        if (success.getEntity().getUserImage() != null && success.getIsSuccessfull()) {
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-            response.getOutputStream().write(success.getEntity().getUserImage());
+            response.getOutputStream().write(userRetrievedFromDb.getUserImage());
             response.getOutputStream().close();
         }
     }
