@@ -30,14 +30,14 @@
           th:object="${user}" , method="POST"
           enctype="multipart/form-data">
         <div class="row">
-            <div class="col-xl-1">
+            <div class="col-xl-2">
             </div>
             <div class="col-xl-4">
                 <div class="mb-3 form-group text-start">
                     <input type="hidden" th:field="*{userId}" th:value="${user.userId}" class="form-control"/>
                     <label for="userName" class="form-label">Username</label>
                     <input th:field="*{userName}" type="text" placeholder="Username" class="form-control"
-                           id="userName">
+                           id="userName" th:readonly="${isDisabled}">
                 </div>
                 <div class="mb-3 form-group text-start" th:if="${user.userId==null}">
                     <label for="userPassword" class="form-label"> New password</label>
@@ -58,9 +58,9 @@
                                     <!--        <td th:text="${user.userId}"></td>-->
                                     <td th:text="${role.name}" th:field="*{roles[__${itemStat.index}__].name}" ></td>
                                     <td>
-                                        <a th:href="@{'/unassignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-warning">
+                                        <button th:href="@{'/unassignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-warning" th:disabled="${isDisabled}">
                                             <i class="bi bi-trash"></i> Unassign role
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -77,9 +77,9 @@
                                 <tr th:each="role: ${userNotRoles}">
                                     <td th:text="${role.name}" th:value="role.id"></td>
                                     <td>
-                                        <a th:href="@{'/assignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-primary">
+                                        <button th:href="@{'/assignRole/' + ${user.userId}+'/'+ ${role.id}}" class="btn btn-outline-primary" th:disabled="${isDisabled}">
                                             <i class="bi bi-trash"></i> Assign role
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -95,6 +95,7 @@
             <div class="col-xl-4">
                 <div class="bg-image hover-overlay ripple">
                     <img th:src="@{${'/user/image/'+user.userId}}"
+                         alt="Not Found"
                          onerror="this.src='https://www.stevensegallery.com/500/500';"
                          class="img-fluid rounded" id="userImage"
                          style="object-fit:contain;
@@ -105,7 +106,7 @@
                 </div>
                 <div class="p-2">
                     <label for="userImg">Select image:</label>
-                    <input type="file" id="userImg" name="image" accept="image/png, image/jpeg">
+                    <input type="file" id="userImg" name="image" accept="image/png, image/jpeg" th:disabled="${isDisabled}">
                 </div>
             </div>
             <div class="row">
@@ -114,7 +115,7 @@
                 <div class="col-xl-5">
                     <div class="row">
                         <div align="center">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="btn btn-primary btn-lg" th:disabled="${isDisabled}">
                                 <i class="bi bi-save"></i> Save
                             </button>
                         </div>

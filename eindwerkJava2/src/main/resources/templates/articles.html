@@ -58,7 +58,7 @@
             <td th:text="${article.articleBarcode}"></td>
             <td>
                 <a th:href="@{'/view/article/' + ${article.articleId}}" class="btn btn-outline-info"
-                   sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EDITOR')">
+                   sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EDITOR', 'CREATOR')">
                     <i class="bi bi-eyeglasses"></i> View
                 </a>
             </td>

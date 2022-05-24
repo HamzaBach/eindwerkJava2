@@ -98,27 +98,29 @@ public class UserService {
                 success.setIsSuccessfull(false);
                 success.setMessage("Cannot modify this user because a user with user name " + user.getUserName() + " already exists!");
             }
+        }
+        userImageHandler(user, userImage, existsUserId);
+        SuccessObject passwordAndRolesHandler = passwordAndRolesHandler(user, existsUserName);
+        if(passwordAndRolesHandler.getIsSuccessfull()){
+            userRepository.save(user);
+            success.setIsSuccessfull(true);
+            success.setMessage("User " + user.getUserName() + " was successfully saved!");
         } else {
-            userImageHandler(user, userImage, existsUserId);
-            SuccessObject passwordAndRolesHandler = passwordAndRolesHandler(user);
-            if(passwordAndRolesHandler.getIsSuccessfull()){
-                userRepository.save(user);
-                success.setIsSuccessfull(true);
-                success.setMessage("User " + user.getUserName() + " was successfully saved!");
-            } else {
-                success.setIsSuccessfull(false);
-                success.setMessage(passwordAndRolesHandler.getMessage());
-            }
+            success.setIsSuccessfull(false);
+            success.setMessage(passwordAndRolesHandler.getMessage());
         }
         return success;
     }
 
-    private SuccessObject passwordAndRolesHandler(User user) {
-        SuccessObject passwordSuccess = new SuccessEvaluator<>();
-        if (user.getPassword().isEmpty()) {
-            passwordSuccess.setMessage("Please input a password!");
-            passwordSuccess.setIsSuccessfull(false);
-            return passwordSuccess;
+    private SuccessObject passwordAndRolesHandler(User user, Boolean existsUserName) {
+        SuccessObject passwordAndRolesSuccess = new SuccessEvaluator<>();
+        if(existsUserName){
+            String password = userRepository.findByUserName(user.getUserName()).getPassword();
+            user.setPassword(password);
+        }
+        if (user.getPassword()==null) {
+            passwordAndRolesSuccess.setMessage("Please input a password!");
+            passwordAndRolesSuccess.setIsSuccessfull(false);
         } else {
             if (user.getUserId() == null) {
                 user.addOneRole(roleRepository.findById(1).get());
@@ -131,9 +133,9 @@ public class UserService {
                     user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
                 }
             }
-            passwordSuccess.setIsSuccessfull(true);
-            return passwordSuccess;
+            passwordAndRolesSuccess.setIsSuccessfull(true);
         }
+        return passwordAndRolesSuccess;
 
     }
 
