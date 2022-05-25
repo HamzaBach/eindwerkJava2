@@ -15,7 +15,7 @@ public interface MutationService {
 
      SuccessEvaluator<Mutation> addStock(Mutation mutation);
      SuccessEvaluator<Mutation> removeStock(Mutation mutation);
-     SuccessEvaluator<Mutation> moveStock(Mutation mutation);
+     SuccessEvaluator<Mutation> moveStock(Mutation mutation , long targetLocationId);
 
      Optional<Mutation> findById(Long id);
      void deleteMutation(Mutation mutation);
