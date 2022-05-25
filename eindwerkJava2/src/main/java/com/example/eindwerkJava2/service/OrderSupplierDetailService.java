@@ -99,7 +99,7 @@ public class OrderSupplierDetailService {
         for (OrderSupplierDetail orderLine : detailList) {
             count += orderLine.getDeltaQuantity();
         }
-        return count != 0;
+        return count >= 0;
 
 
     }
