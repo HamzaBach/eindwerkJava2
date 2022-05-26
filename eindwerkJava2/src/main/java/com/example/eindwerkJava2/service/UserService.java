@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents the service layer for users.
@@ -87,8 +89,8 @@ public class UserService {
      */
     public SuccessObject saveUser(User user, byte[] userImage) {
         SuccessObject success = new SuccessEvaluator<User>();
-        Boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
-        Boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
+        boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
+        boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
         if (existsUserName) {
             User duplicateUser = userRepository.findByUserName(user.getUserName());
             if (user.getUserId() == null && duplicateUser.getActiveUser() == 1) {
@@ -134,7 +136,14 @@ public class UserService {
             passwordSuccess.setIsSuccessfull(true);
             return passwordSuccess;
         }
+    }
 
+    private static boolean passwordValidator(String password){
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$"; //Password must have:
+        // one numeric char, one lowercase char, one uppercase char, one special symbol (@#$%), password length 8-20 char
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 
     private void userImageHandler(User user, byte[] userImage, Boolean existsUserId) {

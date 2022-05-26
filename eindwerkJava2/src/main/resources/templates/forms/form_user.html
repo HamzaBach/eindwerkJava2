@@ -10,6 +10,15 @@
     <div th:include="fragments/header::bootstrapCssAndIcons"/>
     <!--    Datatable -->
     <div th:include="fragments/header::dataTableJquery"/>
+    <script>
+        function togglediv(id) {
+        var div = document.getElementById(id);
+        div.style.display = div.style.display == "none" ? "block" : "none";
+        }
+    </script>
+    <style>
+        #changePassword{display:none;}
+    </style>
 
 </head>
 <body>
@@ -43,6 +52,24 @@
                     <label for="userPassword" class="form-label"> New password</label>
                     <input th:field="*{password}" type="password" placeholder="new password"
                            class="form-control" id="userPassword"/>
+                </div>
+                <div class="mb-3 form-group text-start" th:unless="${user.userId==null}">
+                    <button onclick="togglediv('changePassword')" type="button" class="btn btn-outline-primary">Modify password</button>
+                </div>
+                <div id="changePassword" th:unless="${user.userId==null}">
+
+                    <div class="mb-3 text-start">
+                        <label for="currentPassword">Current password (BETA - NOT WORKING YET)</label>
+                        <input id="currentPassword" type="password" class="form-control"/>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label for="newPassword1stTry">New password (BETA - NOT WORKING YET)</label>
+                        <input id="newPassword1stTry" type="password" class="form-control"/>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label for="newPassword2ndTry">Confirm new password (BETA - NOT WORKING YET)</label>
+                        <input id="newPassword2ndTry" type="password" class="form-control" th:field="*{password}"/>
+                    </div>
                 </div>
                 <div class="mb-3 form-group text-start">
                     <div class="row" th:unless="${user.userId == null}">
