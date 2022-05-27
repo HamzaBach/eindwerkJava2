@@ -2,6 +2,7 @@ package com.example.eindwerkJava2.repositories;
 
 import com.example.eindwerkJava2.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author Hamza Bachiri
  * @version 1.0
  */
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Method to verify if a user exists by a particular user name.

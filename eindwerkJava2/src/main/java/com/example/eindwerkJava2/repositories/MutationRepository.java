@@ -5,9 +5,10 @@ import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.model.Mutation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface MutationRepository extends JpaRepository<Mutation,Long> {
 
     List<Mutation> findByArticle(Article article);
