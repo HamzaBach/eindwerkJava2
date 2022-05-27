@@ -71,15 +71,15 @@
                             <table id="assignedRoles" class="table table-striped table-hover dataTable">
                                 <thead>
                                 <th scope="col">Assigned roles</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col" th:if="${!isDisabled}">Actions</th>
                                 </thead>
                                 <tbody>
                                 <tr th:each="role, itemStat : *{roles}">
                                     <!--        <td th:text="${user.userId}"></td>-->
                                     <td th:text="${role.name}" th:field="*{roles[__${itemStat.index}__].name}"></td>
-                                    <td>
-                                        <a th:href="@{'/unassignRole/' + ${userDto.userId}+'/'+ ${role.id}}"
-                                                class="btn btn-outline-warning" th:disabled="${isDisabled}" >
+                                    <td th:if="${!isDisabled}">
+                                        <a th:href="@{'/unassignRole/' + ${userDto.userId}+'/'+ ${role.id}}" id="unassignRole"
+                                                class="btn btn-outline-warning" >
                                             <i class="bi bi-trash"></i> Unassign role
                                         </a>
                                     </td>
@@ -92,14 +92,14 @@
                             <table id="notAssignedRoles" class="table table-striped table-hover dataTable">
                                 <thead>
                                 <th scope="col">Unassigned roles</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col" th:if="${!isDisabled}">Actions</th>
                                 </thead>
                                 <tbody>
                                 <tr th:each="role: ${userNotRoles}">
                                     <td th:text="${role.name}" th:value="role.id"></td>
-                                    <td>
+                                    <td th:if="${!isDisabled}">
                                         <a th:href="@{'/assignRole/' + ${userDto.userId}+'/'+ ${role.id}}"
-                                                class="btn btn-outline-primary" th:disabled="${isDisabled}" >
+                                                class="btn btn-outline-primary" id="assignRole" >
                                             <i class="bi bi-plus"></i> Assign role
                                         </a>
                                     </td>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="mb-3 form-group text-start" th:unless="${userDto.userId==null}">
-                    <button onclick="togglediv('changePassword')" type="button" class="btn btn-outline-primary">Modify
+                    <button onclick="togglediv('changePassword')" type="button" class="btn btn-outline-primary" th:disabled="${isDisabled}">Modify
                         password
                     </button>
                 </div>
@@ -121,11 +121,11 @@
 
                     <div class="mb-3 text-start">
                         <label for="currentPassword">Current password</label>
-                        <input id="currentPassword" type="password" class="form-control" th:field="*{password}"/>
+                        <input id="currentPassword" type="password" class="form-control" th:field="*{password}" th:readonly="${isDisabled}"/>
                     </div>
                     <div class="mb-3 text-start">
                         <label for="newPassword1stTry">New password</label>
-                        <input id="newPassword1stTry" type="password" class="form-control" th:field="*{newPassword}"
+                        <input id="newPassword1stTry" type="password" class="form-control" th:field="*{newPassword}" th:readonly="${isDisabled}"
                                data-bs-toggle="tooltip" data-bs-placement="right"
                                title="Conditions for password:
                                - Must have at least one numeric character
@@ -136,7 +136,7 @@
                     </div>
                     <div class="mb-3 text-start">
                         <label for="newPassword2ndTry">Confirm new password</label>
-                        <input id="newPassword2ndTry" type="password" class="form-control" th:field="*{confirmPassword}"
+                        <input id="newPassword2ndTry" type="password" class="form-control" th:field="*{confirmPassword}" th:readonly="${isDisabled}"
                                data-bs-toggle="tooltip" data-bs-placement="right"
                                title="Conditions for password:
                                - Must have at least one numeric character
