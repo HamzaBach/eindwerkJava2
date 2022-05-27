@@ -2,6 +2,7 @@ package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
+import com.example.eindwerkJava2.model.dto.UserDto;
 import com.example.eindwerkJava2.repositories.RoleRepository;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
@@ -11,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents the service layer for users.
@@ -82,71 +86,115 @@ public class UserService {
     /**
      * Method for saving or updating a user.
      *
-     * @param user      The to be saved user.
+     * @param userDto      The to be saved user.
      * @param userImage The image of the user that is saved within the user object.
      */
-    public SuccessObject saveUser(User user, byte[] userImage) {
-        SuccessObject success = new SuccessEvaluator<User>();
-        Boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
-        Boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
+    public SuccessEvaluator<UserDto> saveUser(UserDto userDto, byte[] userImage) {
+        SuccessEvaluator<UserDto> success = new SuccessEvaluator<UserDto>();
+        boolean existsUserName = userRepository.existsUserByUserName(userDto.getUserName());
         if (existsUserName) {
-            User duplicateUser = userRepository.findByUserName(user.getUserName());
-            if (user.getUserId() == null && duplicateUser.getActiveUser() == 1) {
+            User duplicateUser = userRepository.findByUserName(userDto.getUserName());
+            if (userDto.getUserId() == null && duplicateUser.getActiveUser() == 1) {
                 success.setIsSuccessfull(false);
-                success.setMessage("Cannot save this user because a user with user name " + user.getUserName() + " already exists!");
-            } else if (user.getUserId() != null && user.getUserId() != duplicateUser.getUserId() && duplicateUser.getActiveUser() == 1) {
+                success.setMessage("Cannot save this user because a user with user name " + userDto.getUserName() + " already exists!");
+                return success;
+            } else if (userDto.getUserId() != null && userDto.getUserId() != duplicateUser.getUserId() && duplicateUser.getActiveUser() == 1) {
                 success.setIsSuccessfull(false);
-                success.setMessage("Cannot modify this user because a user with user name " + user.getUserName() + " already exists!");
+                success.setMessage("Cannot modify this user because a user with user name " + userDto.getUserName() + " already exists!");
+                return success;
             }
+            userDto.convertUserToDTO(duplicateUser);
         }
-        userImageHandler(user, userImage, existsUserId);
-        SuccessObject passwordAndRolesHandler = passwordAndRolesHandler(user, existsUserName);
+        userImageHandler(userDto, userImage);
+        SuccessEvaluator<UserDto> passwordAndRolesHandler = passwordAndRolesHandler(userDto);
         if(passwordAndRolesHandler.getIsSuccessfull()){
-            userRepository.save(user);
+            User updatedUser = passwordAndRolesHandler.getEntity().convertDTOtoUser();
+            userRepository.save(updatedUser);
             success.setIsSuccessfull(true);
-            success.setMessage("User " + user.getUserName() + " was successfully saved!");
+            success.setMessage("User " + updatedUser.getUserName() + " was successfully saved!");
         } else {
             success.setIsSuccessfull(false);
             success.setMessage(passwordAndRolesHandler.getMessage());
+            success.setEntity(passwordAndRolesHandler.getEntity());
         }
         return success;
     }
 
-    private SuccessObject passwordAndRolesHandler(User user, Boolean existsUserName) {
-        SuccessObject passwordAndRolesSuccess = new SuccessEvaluator<>();
-        if(existsUserName){
-            String password = userRepository.findByUserName(user.getUserName()).getPassword();
-            user.setPassword(password);
-        }
-        if (user.getPassword()==null) {
-            passwordAndRolesSuccess.setMessage("Please input a password!");
-            passwordAndRolesSuccess.setIsSuccessfull(false);
+    private SuccessEvaluator<UserDto> passwordAndRolesHandler(UserDto userDto) {
+        SuccessEvaluator<UserDto> passwordSuccess = new SuccessEvaluator<>();
+        if (userDto.getPassword().isEmpty()&&userDto.getUserId()==null) {
+            passwordSuccess.setMessage("Please input a password!");
+            passwordSuccess.setIsSuccessfull(false);
+            return passwordSuccess;
         } else {
-            if (user.getUserId() == null) {
-                user.addOneRole(roleRepository.findById(1).get());
-                String encryptedPassword = passwordEncoder.encode(user.getPassword());
-                user.setPassword(encryptedPassword);
+            if (userDto.getUserId() == null) {
+                userDto.addOneRole(roleRepository.findById(1).get());
+                String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+                userDto.setPassword(encryptedPassword);
+                passwordSuccess.setEntity(userDto);
+                return passwordSuccess;
             }
-            if (userRepository.existsUserByUserName(user.getUserName())) {
-                User user1 = userRepository.findByUserName(user.getUserName());
-                if (user1.getUserId() == user.getUserId()) {
-                    user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
+            if (userRepository.existsUserByUserName(userDto.getUserName())) {
+                User user1 = userRepository.findByUserName(userDto.getUserName());
+                if (user1.getUserId() == userDto.getUserId()) {
+                    userDto.setRoles(userRepository.findById(userDto.getUserId()).get().getRoles());
                 }
             }
-            passwordAndRolesSuccess.setIsSuccessfull(true);
+            return modifyExistingPasswordHandler(userDto);
         }
-        return passwordAndRolesSuccess;
-
+    }
+    private SuccessEvaluator<UserDto> modifyExistingPasswordHandler(UserDto userDto){
+        SuccessEvaluator<UserDto> passwordModificationSuccess = new SuccessEvaluator<>();
+        passwordModificationSuccess.setEntity(userDto);
+        if(!userDto.getNewPassword().isEmpty()&&!userDto.getConfirmPassword().isEmpty()){
+            String currentPassword = userRepository.getById(userDto.getUserId()).getPassword();
+            boolean doesPasswordMatch = passwordEncoder.matches(userDto.getPassword(), currentPassword);
+            if(!doesPasswordMatch){
+                passwordModificationSuccess.setIsSuccessfull(false);
+                passwordModificationSuccess.setMessage("Your inputted current password does not match the password within the database, please try again.");
+                return passwordModificationSuccess;
+            }
+            if(Objects.equals(userDto.getNewPassword(), userDto.getConfirmPassword())){
+                if(!passwordValidator(userDto.getConfirmPassword())){
+                    passwordModificationSuccess.setIsSuccessfull(false);
+                    passwordModificationSuccess.setMessage("Password does not fulfill all criterias:" +
+                            "\n- At least one numeric character" +
+                            "\n- At least one lower case character" +
+                            "\n- At least one upper case character" +
+                            "\n- At least one special symbol among @#$%" +
+                            "\n- Password length should be at least 8-20 characters long");
+                } else {
+                    String encryptedPassword = passwordEncoder.encode(userDto.getConfirmPassword());
+                    userDto.setPassword(encryptedPassword);
+                    passwordModificationSuccess.setEntity(userDto);
+                    passwordModificationSuccess.setIsSuccessfull(true);
+                    passwordModificationSuccess.setMessage("Password has been modified");
+                }
+            } else {
+                passwordModificationSuccess.setIsSuccessfull(false);
+                passwordModificationSuccess.setMessage("The new password and the confirmed password are not equal");
+            }
+        }
+        return passwordModificationSuccess;
     }
 
-    private void userImageHandler(User user, byte[] userImage, Boolean existsUserId) {
+    private static boolean passwordValidator(String password){
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$"; //Password must have:
+        // one numeric char, one lowercase char, one uppercase char, one special symbol (@#$%), password length 8-20 char
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    private void userImageHandler(UserDto userDto, byte[] userImage) {
+        boolean existsUserId = userRepository.existsUserByUserId(userDto.getUserId());
         if (userImage.length == 0) {
             if (existsUserId) {
-                User currentUser = userRepository.getById(user.getUserId());
-                user.setUserImage(currentUser.getUserImage());
+                User currentUser = userRepository.getById(userDto.getUserId());
+                userDto.setUserImage(currentUser.getUserImage());
             }
         } else {
-            user.setUserImage(userImage);
+            userDto.setUserImage(userImage);
         }
     }
 

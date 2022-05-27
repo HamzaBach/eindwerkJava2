@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Role;
 import com.example.eindwerkJava2.model.User;
+import com.example.eindwerkJava2.model.dto.UserDto;
 import com.example.eindwerkJava2.service.RolesService;
 import com.example.eindwerkJava2.service.UserService;
 import com.example.eindwerkJava2.wrappers.*;
@@ -71,23 +72,27 @@ public class UserController {
     /**
      * Endpoint (POST) that saves a new user.
      *
-     * @param user          Object that is used for storing the new user in the persistence layer via the UserService.
+     * @param userDto          Object that is used for storing the new user in the persistence layer via the UserService.
      * @param multipartFile This is the picture of the user that is stored in the persistence layer via the UserService.
      * @param redirAttrs    The redirect attribute is used for the error/success message handling.
      * @return After a successful save the users overview is returned.
      * @throws IOException Exception is triggered in case the save action failed.
      */
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user,
+    public String saveUser(@ModelAttribute("userDTO") UserDto userDto,
                            @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirAttrs, Model model) throws IOException {
 
         byte[] addedImage = multipartFile.getBytes();
-        SuccessObject savedUser = this.userService.saveUser(user, addedImage);
+        SuccessEvaluator<UserDto> savedUser = this.userService.saveUser(userDto, addedImage);
         if (savedUser.getIsSuccessfull()) {
             redirAttrs.addFlashAttribute("success", savedUser.getMessage());
             return "redirect:/users";
         } else {
+            User user = userService.findById(userDto.getUserId()).getEntity();
             model.addAttribute("error", savedUser.getMessage());
+            model.addAttribute("userDto", userDto);
+            model.addAttribute("userRoles", rolesService.getUserRoles(user));
+            model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
             return "/forms/form_user";
         }
     }
@@ -106,7 +111,6 @@ public class UserController {
             throws IOException {
         SuccessEvaluator<User> success = userService.findById(userId);
         if (user.getUserImage() != null && success.getIsSuccessfull()) {
-            user = success.getEntity();
             response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
             response.getOutputStream().write(success.getEntity().getUserImage());
             response.getOutputStream().close();
@@ -126,10 +130,13 @@ public class UserController {
         SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
         if (userSuccess.getIsSuccessfull()) {
             User user = userSuccess.getEntity();
+            UserDto userDto = new UserDto();
+            userDto.convertUserToDTO(user);
             model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));
             model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
             model.addAttribute("user", user);
+            model.addAttribute("userDto", userDto);
         } else {
             model.addAttribute("error", userSuccess.getMessage());
         }
@@ -147,13 +154,17 @@ public class UserController {
     public String showViewUserForm(@PathVariable("userId") Long userId, Model model) {
         SuccessEvaluator<User> userSuccess = userService.findById(userId);
         SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
+
         if (userSuccess.getIsSuccessfull()) {
             model.addAttribute("isDisabled","true");
             User user = userSuccess.getEntity();
+            UserDto userDto=new UserDto();
+            userDto.convertUserToDTO(user);
             model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));
             model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
             model.addAttribute("user", user);
+            model.addAttribute("userDto", userDto);
         } else {
             model.addAttribute("error", userSuccess.getMessage());
         }
