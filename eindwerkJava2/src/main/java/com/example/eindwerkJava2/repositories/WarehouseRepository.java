@@ -3,6 +3,7 @@ import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * The interface Warehouse repository.
  * @author Sebastiaan
  */
+@Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 
     /**

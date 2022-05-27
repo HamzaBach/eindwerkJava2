@@ -132,11 +132,10 @@ public class UserController {
             User user = userSuccess.getEntity();
             UserDto userDto = new UserDto();
             userDto.convertUserToDTO(user);
-            model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));
             model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
-            model.addAttribute("user", user);
             model.addAttribute("userDto", userDto);
+            model.addAttribute("isDisabled","false");
         } else {
             model.addAttribute("error", userSuccess.getMessage());
         }
@@ -154,16 +153,13 @@ public class UserController {
     public String showViewUserForm(@PathVariable("userId") Long userId, Model model) {
         SuccessEvaluator<User> userSuccess = userService.findById(userId);
         SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
-
         if (userSuccess.getIsSuccessfull()) {
             model.addAttribute("isDisabled","true");
             User user = userSuccess.getEntity();
             UserDto userDto=new UserDto();
             userDto.convertUserToDTO(user);
-            model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));
             model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
-            model.addAttribute("user", user);
             model.addAttribute("userDto", userDto);
         } else {
             model.addAttribute("error", userSuccess.getMessage());
