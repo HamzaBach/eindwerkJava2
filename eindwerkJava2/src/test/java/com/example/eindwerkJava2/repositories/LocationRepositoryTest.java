@@ -71,13 +71,13 @@ class LocationRepositoryTest {
     }
 
     @Test
-    void getNonSingleStorageLocations() {
+    void getNonSingleStorageLocations_Should_Give_Three() {
         //Then
         assertEquals(3,locationRepositoryTest.getNonSingleStorageLocations().size());
     }
 
     @Test
-    void getSingleStorageLocations() {
+    void getSingleStorageLocations_Should_Give_20() {
         //Then
         assertEquals(20, locationRepositoryTest.getSingleStorageLocations().size());
     }
