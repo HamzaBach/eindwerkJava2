@@ -28,7 +28,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void findAllActiveCategories() {
+    void findAllActiveCategories_Should_Give_Two() {
         //Given+When see dummyData
         //Then
         assertEquals(2,categoryRepositoryTest.findAllActiveCategories().size());
