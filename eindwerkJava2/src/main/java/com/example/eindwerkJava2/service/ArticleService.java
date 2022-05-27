@@ -5,6 +5,7 @@ import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,25 @@ public class ArticleService {
                     && articleWithSameName.getActiveArticle() == 1) {
                 isSaveSuccessful.setIsSuccessfull(false);
                 isSaveSuccessful.setMessage("Cannot modify this article because the article name " + article.getArticleName() + " already exists!");
+                return isSaveSuccessful;
+            }
+        }
+        boolean existsArticleAbbreviation = articleRepository.existsArticleByArticleAbbreviation(article.getArticleAbbreviation());
+        if (existsArticleAbbreviation) {
+            Article articleWithSameAbbreviation = articleRepository.findByArticleAbbreviation(article.getArticleAbbreviation()).get();
+            // use case if a new article gets named to the name of an already present article abbreviation -> block!
+            if (article.getArticleId() == null
+                    && articleWithSameAbbreviation.getActiveArticle() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("New article cannot be added because this article abbreviation " + article.getArticleAbbreviation() + " already exists!");
+                return isSaveSuccessful;
+            }
+            // use case if an existing article gets renamed to the name of an already present article abbreviation -> block!
+            if (article.getArticleId() != null
+                    && articleWithSameAbbreviation.getArticleId() != article.getArticleId()
+                    && articleWithSameAbbreviation.getActiveArticle() == 1) {
+                isSaveSuccessful.setIsSuccessfull(false);
+                isSaveSuccessful.setMessage("Cannot modify this article because the article abbreviation " + article.getArticleAbbreviation() + " already exists!");
                 return isSaveSuccessful;
             }
         }
@@ -176,11 +196,12 @@ public class ArticleService {
     }
 
     public ArticleDto toArticleDto(Article article) {
+        String articleImageAsBase64 = Base64.encodeBase64String(article.getArticleImage());
         return new ArticleDto(
                 article.getArticleName(),
                 article.getCategory().getCategoryName(),
-                article.getArticleSupplier().getSalesPrice()
-        );
+                article.getArticleSupplier().getSalesPrice(),
+                articleImageAsBase64);
 
     }
 

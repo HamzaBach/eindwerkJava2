@@ -104,15 +104,12 @@ public class UserController {
     @ResponseBody
     void showImage(@PathVariable("userId") Long userId, HttpServletResponse response, User user)
             throws IOException {
-        if (user.getUserImage() != null) {
-            SuccessEvaluator<User> success = userService.findById(userId);
-            if (success.getIsSuccessfull()) {
-                user = success.getEntity();
-                response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-                response.getOutputStream().write(user.getUserImage());
-                response.getOutputStream().close();
-            }
-
+        SuccessEvaluator<User> success = userService.findById(userId);
+        if (user.getUserImage() != null && success.getIsSuccessfull()) {
+            user = success.getEntity();
+            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+            response.getOutputStream().write(success.getEntity().getUserImage());
+            response.getOutputStream().close();
         }
     }
 
@@ -128,6 +125,30 @@ public class UserController {
         SuccessEvaluator<User> userSuccess = userService.findById(userId);
         SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
         if (userSuccess.getIsSuccessfull()) {
+            User user = userSuccess.getEntity();
+            model.addAttribute("rolesList", roleSuccess.getEntities());
+            model.addAttribute("userRoles", rolesService.getUserRoles(user));
+            model.addAttribute("userNotRoles", rolesService.getUserNotRoles(user));
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("error", userSuccess.getMessage());
+        }
+        return "/forms/form_user";
+    }
+
+    /**
+     * Endpoint (GET) for viewing a user's settings and roles.
+     *
+     * @param userId The id of the user for retrieving it from the persistence layer.
+     * @param model  Model is used for adding the Roles, UserRoles and UserNotRoles as an attribute of the model to be accessed by the front-end.
+     * @return The form containing the settings of the user is returned.
+     */
+    @GetMapping("view/user/{userId}")
+    public String showViewUserForm(@PathVariable("userId") Long userId, Model model) {
+        SuccessEvaluator<User> userSuccess = userService.findById(userId);
+        SuccessEvaluator<Role> roleSuccess = rolesService.getAllRoles();
+        if (userSuccess.getIsSuccessfull()) {
+            model.addAttribute("isDisabled","true");
             User user = userSuccess.getEntity();
             model.addAttribute("rolesList", roleSuccess.getEntities());
             model.addAttribute("userRoles", rolesService.getUserRoles(user));

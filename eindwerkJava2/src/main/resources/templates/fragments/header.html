@@ -36,7 +36,8 @@
 <div th:fragment="navbar">
     <nav class="navbar navbar-expand-xl bg-dark navbar-dark fixed-top py-3">
         <div class="container">
-            <a th:href="@{/home}" class="navbar-brand">Eindproject Java 2</a>
+            <a th:href="@{/home}" class="navbar-brand">
+                <img class="img-fluid w-25 d-none d-sm-block" th:src="@{/img/PXL-Syntra_logo.jpg}" alt="Image missing..."/></a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
                 <span class="navbar-toggler-icon"></span>
@@ -80,8 +81,15 @@
                     <li class="nav-item">
                         <a th:href="@{/mutation}" class="nav-link">Mutations</a>
                     </li>
-                    <li class="nav-item">
-                        <a th:href="@{/orderSupplier}" class="nav-link">Orders</a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"   role="button" data-bs-toggle="dropdown">
+                            Orders
+                        </a>
+                        <ul class="dropdown-menu" >
+                            <li><a class="dropdown-item" th:href="@{/orderSupplier}">Orders</a></li>
+                            <li><a class="dropdown-item" th:href="@{/orderReceived}">Receive orders</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <label><strong><span sec:authentication="name" class="text-warning nav-link">Username</span></strong> </label>

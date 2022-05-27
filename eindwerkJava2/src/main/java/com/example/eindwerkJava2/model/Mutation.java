@@ -1,10 +1,12 @@
 package com.example.eindwerkJava2.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+import java.time.LocalDateTime;
+@NoArgsConstructor
 @Entity
 @Table
 @Getter
@@ -21,17 +23,8 @@ public class Mutation {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name="locationFrom")
-    private Location locationFrom;
-    @ManyToOne
-    @JoinColumn(name="locationTo")
-    private Location locationTo;
-    @ManyToOne
-    @JoinColumn(name="warehouseFrom")
-    private Warehouse warehouseFrom;
-    @ManyToOne
-    @JoinColumn(name="warehouseTo")
-    private Warehouse warehouseTo;
+    @JoinColumn(name="location")
+    private Location Location;
 
 //     1 locatie mag maar 1 artikel bevatten
 //    artikel mag maar op 1 locatie staan in de fysieke winkel. In magazijn mogen er meerdere locaties zijn rekeninghoudnde met bovenstaande regel
@@ -43,6 +36,17 @@ public class Mutation {
     @JoinColumn(name="userId")
     private User user;
 
-    public Mutation(){}
+    private LocalDateTime localDateTime;
+
+
+    public Mutation(Article article, Double amount, String comment, com.example.eindwerkJava2.model.Location location, TransactionType transactionType, User user, LocalDateTime localDateTime) {
+        this.article = article;
+        this.amount = amount;
+        this.comment = comment;
+        Location = location;
+        this.transactionType = transactionType;
+        this.user = user;
+        this.localDateTime = localDateTime;
+    }
 
 }

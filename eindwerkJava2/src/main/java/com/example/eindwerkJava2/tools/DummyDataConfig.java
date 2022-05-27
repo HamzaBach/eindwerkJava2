@@ -21,7 +21,9 @@ public class DummyDataConfig {
                                          WarehouseRepository warehouseRepository,
                                          LocationRepository locationRepository,
                                          RoleRepository roleRepository,
-                                         UserRepository userRepository){
+                                         UserRepository userRepository,
+                                         LocationTypeRepository locationTypeRepository,
+                                         TransactionRepository transactionRepository){
         return args ->{
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category( "Smartphone", "SMTPH");
@@ -106,6 +108,24 @@ public class DummyDataConfig {
                 }
             }
 
+            ArticleSupplier appleProduct1 = new ArticleSupplier(article1,Apple,"IPH12-2019-06",640.00, 500.00,1);
+            ArticleSupplier appleProduct2 = new ArticleSupplier(article4,Apple,"IPH13-2021-06",750.00,650.00,1);
+            ArticleSupplier appleProduct3 = new ArticleSupplier(article2,Apple,"AIP3-2019-06",199.00,150.00,1);
+            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3,Nokia,"N3310-2007-02",150.00, 100.00,1);
+            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5,Motorola,"Rzr010-2009-02",350.00, 300.00,1);
+            List<ArticleSupplier> dummyArticleSuppliers=new ArrayList<ArticleSupplier>();
+            dummyArticleSuppliers.add(appleProduct1);
+            dummyArticleSuppliers.add(appleProduct2);
+            dummyArticleSuppliers.add(appleProduct3);
+            dummyArticleSuppliers.add(nokiaProduct1);
+            dummyArticleSuppliers.add(motorolaProduct1);
+            for(ArticleSupplier articleSupplier:dummyArticleSuppliers){
+                if((articleSupplierRepository.count()<5)){
+                    articleSupplierRepository.save(articleSupplier);
+                }
+            }
+
+
             List<Role> defaultRoles = new ArrayList<Role>();
             Role role1 = new Role("USER");
             Role role2 = new Role("CREATOR");
@@ -144,40 +164,59 @@ public class DummyDataConfig {
                 }
             }
 
-            ArticleSupplier appleProduct1 = new ArticleSupplier(article1,Apple,"IPH12-2019-06",640.00, 500.00,1);
-            ArticleSupplier appleProduct2 = new ArticleSupplier(article4,Apple,"IPH13-2021-06",750.00,650.00,1);
-            ArticleSupplier appleProduct3 = new ArticleSupplier(article2,Apple,"AIP3-2019-06",199.00,150.00,1);
-            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3,Nokia,"N3310-2007-02",150.00, 100.00,1);
-            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5,Motorola,"Rzr010-2009-02",350.00, 300.00,1);
-            List<ArticleSupplier> dummyArticleSuppliers=new ArrayList<ArticleSupplier>();
-            dummyArticleSuppliers.add(appleProduct1);
-            dummyArticleSuppliers.add(appleProduct2);
-            dummyArticleSuppliers.add(appleProduct3);
-            dummyArticleSuppliers.add(nokiaProduct1);
-            dummyArticleSuppliers.add(motorolaProduct1);
-            for(ArticleSupplier articleSupplier:dummyArticleSuppliers){
-                if((articleSupplierRepository.count()<5)){
-                    articleSupplierRepository.save(articleSupplier);
+
+
+            if(warehouseRepository.count()==0 && locationRepository.count()==0){
+                // Defining location types:
+                LocationType loadingDock = new LocationType("Loading dock",false);
+                LocationType shoppingCart = new LocationType("Shopping cart",false);
+                LocationType singleStorage = new LocationType("Single storage",true);
+                locationTypeRepository.save(loadingDock);
+                locationTypeRepository.save(shoppingCart);
+                locationTypeRepository.save(singleStorage);
+
+                //Defining warehouses:
+                Warehouse store = new Warehouse("Physical store");
+                warehouseRepository.save(store);
+                Warehouse storage = new Warehouse("Storage");
+                warehouseRepository.save(storage);
+
+                //Defining single storage locations for store & storage:
+                for(int i=0; i<10;i++){
+                    Location location = new Location(store.getWarehouseName()+": LOC "+i,store,singleStorage);
+                    locationRepository.save(location);
                 }
+                for(int i=0; i<10;i++){
+                    Location location1 = new Location(storage.getWarehouseName()+": LOC "+i,storage,singleStorage);
+                    locationRepository.save(location1);
+                }
+                //Defining a loading dock for store & storage:
+                Location storeLoadingDock = new Location(store.getWarehouseName()+": DOCK 01",store,loadingDock);
+                locationRepository.save(storeLoadingDock);
+                Location storageLoadingDock = new Location(storage.getWarehouseName()+": DOCK 01",storage,loadingDock);
+                locationRepository.save(storageLoadingDock);
+                Location storeShoppingCart = new Location(store.getWarehouseName()+": CART 01",store,shoppingCart);
+                locationRepository.save(storeShoppingCart);
+
+                //Linking warehouses to locations?:
+
             }
+            if(transactionRepository.count()==0){
+                TransactionType opboeken = new TransactionType("Opboeken",1d);
+                TransactionType afboeken = new TransactionType("Afboeken",-1d);
+                TransactionType correctieOpboeken = new TransactionType("Correctie opboeken",1d);
+                TransactionType correctieAfboeken = new TransactionType("Correctie afboeken",-1d);
+                List<TransactionType> defaultTransType = new ArrayList<>();
+                defaultTransType.add(opboeken);
+                defaultTransType.add(afboeken);
+                defaultTransType.add(correctieOpboeken);
+                defaultTransType.add(correctieAfboeken);
 
-
-            if(warehouseRepository.count()<2){
-                Warehouse warehouse = new Warehouse();
-                warehouse.setWarehouseName("Magazijn");
-                Location location = new Location();
-                location.setActiveLocation(1);
-                location.setLocationName("LAADZONE");
-                location.setSingleStorage(false);
-                location.setWarehouse(warehouse);
-                Location location2 = new Location();
-                location.setActiveLocation(1);
-                location.setLocationName("SUPPLIER/ORDER");
-                location.setSingleStorage(false);
-                location.setWarehouse(warehouse);
-                warehouseRepository.save(warehouse);
-                locationRepository.save(location);
-                locationRepository.save(location2);
+                for(TransactionType trans:defaultTransType){
+                    if(!transactionRepository.existsByTransactionTypeName(trans.getTransactionTypeName())){
+                        transactionRepository.save(trans);
+                    }
+                }
             }
 
         };

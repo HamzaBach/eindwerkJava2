@@ -46,6 +46,7 @@
         <th scope="col">Barcode</th>
         <th scope="col"></th>
         <th scope="col"></th>
+        <th scope="col"></th>
         </thead>
         <tbody>
         <tr th:each="article: ${articlesList}">
@@ -55,6 +56,12 @@
             <td th:text="${article.articleDescription}"></td>
             <td th:text="${article.category.categoryName}"></td>
             <td th:text="${article.articleBarcode}"></td>
+            <td>
+                <a th:href="@{'/view/article/' + ${article.articleId}}" class="btn btn-outline-info"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EDITOR', 'CREATOR')">
+                    <i class="bi bi-eyeglasses"></i> View
+                </a>
+            </td>
             <td>
                 <a th:href="@{'/edit/article/' + ${article.articleId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">

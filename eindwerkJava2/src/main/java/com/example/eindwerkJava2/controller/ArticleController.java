@@ -166,6 +166,35 @@ public class ArticleController {
             Article article = success.getEntity();
             model.addAttribute("article", article);
             model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
+            model.addAttribute("isDisabled","false");
+            if (categorySuccess.getIsSuccessfull()) {
+                model.addAttribute("categoriesList", categorySuccess.getEntities());
+            } else {
+                model.addAttribute("error", categorySuccess.getMessage());
+            }
+        } else {
+            model.addAttribute("error", success.getMessage());
+        }
+        return "/forms/form_article";
+    }
+
+    /**
+     * Endpoint (GET) to edit a particular article.
+     *
+     * @param articleId The article id is used to retrieve the to be edited article from the back-end.
+     * @param model     Attributes are added to the model for the front-end to use.
+     *                  Attributes include: the to be edited Article object, categoriesList and articlesSuppliersList.
+     * @return A form is returned with all the attributes of the to be edited article.
+     */
+    @GetMapping("view/article/{articleId}")
+    public String showViewArticleForm(@PathVariable("articleId") Long articleId, Model model) {
+        SuccessEvaluator<Article> success = articleService.findById(articleId);
+        SuccessEvaluator<Category> categorySuccess = categoryService.getCategories();
+        if (success.getIsSuccessfull()) {
+            Article article = success.getEntity();
+            model.addAttribute("article", article);
+            model.addAttribute("articleSuppliersList", articleSupplierService.getAllSuppliersPerArticle(article));
+            model.addAttribute("isDisabled","true");
             if (categorySuccess.getIsSuccessfull()) {
                 model.addAttribute("categoriesList", categorySuccess.getEntities());
             } else {

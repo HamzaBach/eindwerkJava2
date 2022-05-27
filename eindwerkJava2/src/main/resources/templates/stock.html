@@ -33,23 +33,25 @@
         <thead>
         <!--        <th scope ="col">Id</th>-->
         <th scope="col">Article</th>
-        <th scope="col">Location</th>
         <th scope="col">Amount</th>
+        <th scope="col">Warehouse</th>
+        <th scope="col">Location</th>
         <th scope="col"></th>
-        <th scope="col"></th>
+<!--        <th scope="col"></th>-->
         </thead>
         <tbody>
         <tr th:each="Stock:${stockList}">
             <!--            <td th:text="${Stock.stockId}"></td>-->
             <td th:text="${Stock.article.articleName}"></td>
-            <td th:text="${Stock.location.locationName}"></td>
             <td th:text="${Stock.amount}"></td>
+            <td th:text="${Stock.location.warehouse.warehouseName}"></td>
+            <td th:text="${Stock.location.locationName}"></td>
             <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                 <i class="bi bi-pencil-square"></i> Edit</a></td>
-            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger"
-                   sec:authorize="hasAuthority('ADMIN')">
-                <i class="bi bi-trash"></i> Delete </a></td>
+<!--            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger"-->
+<!--                   sec:authorize="hasAuthority('ADMIN')">-->
+<!--                <i class="bi bi-trash"></i> Delete </a></td>-->
         </tr>
         </tbody>
     </table>

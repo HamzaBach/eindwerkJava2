@@ -11,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class represents the service layer for users.
@@ -89,8 +87,8 @@ public class UserService {
      */
     public SuccessObject saveUser(User user, byte[] userImage) {
         SuccessObject success = new SuccessEvaluator<User>();
-        boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
-        boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
+        Boolean existsUserName = userRepository.existsUserByUserName(user.getUserName());
+        Boolean existsUserId = userRepository.existsUserByUserId(user.getUserId());
         if (existsUserName) {
             User duplicateUser = userRepository.findByUserName(user.getUserName());
             if (user.getUserId() == null && duplicateUser.getActiveUser() == 1) {
@@ -100,27 +98,29 @@ public class UserService {
                 success.setIsSuccessfull(false);
                 success.setMessage("Cannot modify this user because a user with user name " + user.getUserName() + " already exists!");
             }
+        }
+        userImageHandler(user, userImage, existsUserId);
+        SuccessObject passwordAndRolesHandler = passwordAndRolesHandler(user, existsUserName);
+        if(passwordAndRolesHandler.getIsSuccessfull()){
+            userRepository.save(user);
+            success.setIsSuccessfull(true);
+            success.setMessage("User " + user.getUserName() + " was successfully saved!");
         } else {
-            userImageHandler(user, userImage, existsUserId);
-            SuccessObject passwordAndRolesHandler = passwordAndRolesHandler(user);
-            if(passwordAndRolesHandler.getIsSuccessfull()){
-                userRepository.save(user);
-                success.setIsSuccessfull(true);
-                success.setMessage("User " + user.getUserName() + " was successfully saved!");
-            } else {
-                success.setIsSuccessfull(false);
-                success.setMessage(passwordAndRolesHandler.getMessage());
-            }
+            success.setIsSuccessfull(false);
+            success.setMessage(passwordAndRolesHandler.getMessage());
         }
         return success;
     }
 
-    private SuccessObject passwordAndRolesHandler(User user) {
-        SuccessObject passwordSuccess = new SuccessEvaluator<>();
-        if (user.getPassword().isEmpty()) {
-            passwordSuccess.setMessage("Please input a password!");
-            passwordSuccess.setIsSuccessfull(false);
-            return passwordSuccess;
+    private SuccessObject passwordAndRolesHandler(User user, Boolean existsUserName) {
+        SuccessObject passwordAndRolesSuccess = new SuccessEvaluator<>();
+        if(existsUserName){
+            String password = userRepository.findByUserName(user.getUserName()).getPassword();
+            user.setPassword(password);
+        }
+        if (user.getPassword()==null) {
+            passwordAndRolesSuccess.setMessage("Please input a password!");
+            passwordAndRolesSuccess.setIsSuccessfull(false);
         } else {
             if (user.getUserId() == null) {
                 user.addOneRole(roleRepository.findById(1).get());
@@ -133,17 +133,10 @@ public class UserService {
                     user.setRoles(userRepository.findById(user.getUserId()).get().getRoles());
                 }
             }
-            passwordSuccess.setIsSuccessfull(true);
-            return passwordSuccess;
+            passwordAndRolesSuccess.setIsSuccessfull(true);
         }
-    }
+        return passwordAndRolesSuccess;
 
-    private static boolean passwordValidator(String password){
-        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$"; //Password must have:
-        // one numeric char, one lowercase char, one uppercase char, one special symbol (@#$%), password length 8-20 char
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
     }
 
     private void userImageHandler(User user, byte[] userImage, Boolean existsUserId) {
