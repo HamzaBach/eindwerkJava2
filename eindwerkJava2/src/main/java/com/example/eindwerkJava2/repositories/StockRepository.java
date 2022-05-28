@@ -19,7 +19,7 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query("SELECT u FROM Stock u WHERE u.activeStock = 1")
     List<Stock>activeStock();
     //TODO Waarschijnlijk moet dit een list worden omdat meerdere artikels op verschillende locaties kunnen zijn
-    Stock findByArticle(Article article);
+    List<Stock> findByArticle(Article article);
     List<Stock> findByLocation(Location location);
     boolean existsStockByLocation(Location location);
     @Query(value="SELECT * FROM Stock WHERE article_id = ?1 AND location_id = ?2 ",nativeQuery = true)

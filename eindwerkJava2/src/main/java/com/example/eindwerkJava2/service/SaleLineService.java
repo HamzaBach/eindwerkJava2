@@ -19,9 +19,10 @@ public class SaleLineService {
     private final TransactionService transactionService;
     private final LocationService locationService;
     private final UserService userService;
+    private final StockService stockService;
 
 
-    public SaleLineService(SaleLineRepository saleLineRepository, ArticleService articleService, SaleHeaderService saleHeaderService, MutationService mutationService, TransactionService transactionService, LocationService locationService, UserService userService) {
+    public SaleLineService(SaleLineRepository saleLineRepository, ArticleService articleService, SaleHeaderService saleHeaderService, MutationService mutationService, TransactionService transactionService, LocationService locationService, UserService userService, StockService stockService) {
         this.saleLineRepository = saleLineRepository;
         this.articleService = articleService;
         this.saleHeaderService = saleHeaderService;
@@ -29,6 +30,7 @@ public class SaleLineService {
         this.transactionService = transactionService;
         this.locationService = locationService;
         this.userService = userService;
+        this.stockService = stockService;
     }
 
     public void saveSaveLine(CreateSaleLineDto createSaleLineDto) {
@@ -43,19 +45,13 @@ public class SaleLineService {
         saleHeaderService.createHeader(saleHeader);
         saleLineRepository.save(saleLine);
 
-        //mutationservice hier aanspreken
-
-        //Alle mutations opzoeken van dit artikel
-        List<Mutation> mutationsArticles = mutationService.findByArticle(saleLine.getArticle());
-
+        List<Stock> stocks = stockService.findStockByArticleId(saleLine.getArticle());
         Location locationInStore = null;
-        for (Mutation mutatie : mutationsArticles
-        ) {
-            //Check of de locatie van de mutation in de winkel is + check of deze mutatie een opboeking was op deze locatie:
-            //Zoja: dan is dit de locatie in de winkel waar het artikel is geplaatst
-            if (mutatie.getLocation().getWarehouse().isStore() && mutatie.getTransactionType().getTransactionTypeFactor() ==-1D) {
-                locationInStore = mutatie.getLocation();
-            }
+        for (Stock stock: stocks
+             ) {
+           if(stock.getLocation().getWarehouse().isStore()){
+               locationInStore = stock.getLocation();
+           }
         }
 
         Mutation soldItems = new Mutation(
