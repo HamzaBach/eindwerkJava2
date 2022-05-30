@@ -211,4 +211,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
+    public Article findArticleByBarcode(String barcode) {
+        return articleRepository.findByArticleBarcode(barcode).get();
+    }
 }
