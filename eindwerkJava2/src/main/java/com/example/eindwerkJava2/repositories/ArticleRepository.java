@@ -6,6 +6,7 @@ import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
  * @author Hamza Bachiri
  * @version 1.0
  */
+@Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     /**
