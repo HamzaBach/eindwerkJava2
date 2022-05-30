@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,12 +46,10 @@ public class OrderReceiveController {
         SuccessEvaluator<OrderSupplierHeader> success = orderSupplierHeaderService.getAllClosedOrders();
         if (success.getIsSuccessfull()) {
             List<OrderSupplierHeader> orderSupplierHeaderList = success.getEntities();
-            List<OrderSupplierHeader> resultList =  orderSupplierHeaderList.stream().filter(orderSupplierDetailService::checkIfOrderIsCompleted).collect(Collectors.toList());
-            model.addAttribute("orderList", resultList);
+            model.addAttribute("orderList", orderSupplierHeaderList);
         } else {
             model.addAttribute("error", success.getMessage());
         }
-
         return "orders_received";
     }
 
@@ -80,12 +79,23 @@ public class OrderReceiveController {
         orderLine.setReceivedQuantity(orderReceiveDTO.getReceivedQuantity()+orderLine.getReceivedQuantity());
         orderLine.setDeltaQuantity(orderLine.getExpectedQuantity()-orderLine.getReceivedQuantity());
         SuccessObject isSaveSuccessful = this.orderSupplierDetailService.save(orderLine,orderReceiveDTO);
+
         if(isSaveSuccessful.getIsSuccessfull()){
             redirAttr.addFlashAttribute("success",isSaveSuccessful.getMessage());
         } else {
             redirAttr.addFlashAttribute("error",isSaveSuccessful.getMessage());
         }
+
         return "redirect:/view/orderReceived/" + orderLine.getOrderSupplierHeader().getOrderSupplierId();
+    }
+
+    @GetMapping("/closeReceive/{orderSupplierId}")
+    public String closeReceiving(@PathVariable("orderSupplierId") Long orderHeaderId, Model model, RedirectAttributes redirAttr) {
+        SuccessEvaluator<OrderSupplierHeader> orderSupplierHeader = orderSupplierHeaderService.findById(orderHeaderId);
+            orderSupplierHeader.getEntity().setDateOrderReceived(LocalDate.now());
+            orderSupplierHeaderService.save(orderSupplierHeader.getEntity());
+        return "redirect:/orderReceived";
+
     }
 
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Orders</title>
@@ -20,6 +21,11 @@
 <!--        });-->
 
     });
+
+
+
+
+
 
 
     </script>
@@ -60,17 +66,17 @@
                                class="form-control">
                     </div>
 
-<!--                    <div class="col-md-1">-->
-<!--                        <label>Stock Locations</label>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <select class="form-control" id="location" name="location" required>-->
-<!--                            <option value="" selected="selected" hidden="hidden">Choose the location..</option>-->
-<!--                            <option th:each="location : ${locationList}"-->
-<!--                                    th:value="${location.locationId}"-->
-<!--                                    th:text="${location.locationName}"></option>-->
-<!--                        </select>-->
-<!--                    </div>-->
+                    <!--                    <div class="col-md-1">-->
+                    <!--                        <label>Stock Locations</label>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-md-5">-->
+                    <!--                        <select class="form-control" id="location" name="location" required>-->
+                    <!--                            <option value="" selected="selected" hidden="hidden">Choose the location..</option>-->
+                    <!--                            <option th:each="location : ${locationList}"-->
+                    <!--                                    th:value="${location.locationId}"-->
+                    <!--                                    th:text="${location.locationName}"></option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
                 </div>
             </div>
         </form>
@@ -84,7 +90,7 @@
                 <th class="col-md-1">Delta Quantity</th>
                 <th class="col-md-1">Received Quantity</th>
                 <th class="col-md-2">Location</th>
-                <th class="col-md-1" ></th>
+                <th class="col-md-1"></th>
 
             </tr>
             </thead>
@@ -121,16 +127,21 @@
                                     th:value="${location.locationId}"
                                     th:text="${location.locationName}"></option>
                         </select>
-<!--                        <input  id="locationTo" name="locationTo" th:field="*{location}" th:value="${orderReceivedDetail.location}"  required/>-->
+                        <!--                        <input  id="locationTo" name="locationTo" th:field="*{location}" th:value="${orderReceivedDetail.location}"  required/>-->
                     </td>
                     <td class="col-md-1">
-                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                        <span th:if="${orderReceivedDetail.deltaQuantity > 0}">
+                            <button type="submit" class="btn btn-success btn-sm">Save</button>
+                        </span>
+                        <span th:if="${orderReceivedDetail.deltaQuantity <= 0}">
+                            <button type="submit" class="btn btn-success btn-sm" disabled>Save</button>
+                        </span>
                     </td>
-
                 </form>
             </tr>
             </tbody>
         </table>
+        <a th:href="@{'/closeReceive/'+${orderheader.orderSupplierId}}" class="btn btn-danger "> Close Receive</a>
     </div>
 </div>
 

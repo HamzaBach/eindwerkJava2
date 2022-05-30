@@ -34,11 +34,13 @@ public class OrderSupplierHeader {
     @Column(name = "date_order_closed")
     private LocalDate dateOrderClosed;
 
+    @Column(name = "date_order_received")
+    private LocalDate dateOrderReceived;
+
 
     public OrderSupplierHeader(Supplier supplier, LocalDate dateOfOrder) {
         this.supplier = supplier;
         this.dateOfOrder = dateOfOrder;
-
     }
 
 

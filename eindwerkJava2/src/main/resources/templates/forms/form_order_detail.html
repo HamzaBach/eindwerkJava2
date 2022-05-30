@@ -132,7 +132,8 @@
             <tr>
                 <th class="col-md-1">Line</th>
                 <th class="col-md-2">Article</th>
-                <th class="col-md-3">Quantity</th>
+                <th class="col-md-3">Expected Quantity</th>
+                <th class="col-md-3">Received Quantity</th>
                 <th class="col-md-4">Expected Date of Delivery</th>
                 <th></th>
                 <th></th>
@@ -144,6 +145,7 @@
                 <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
                 <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
                 <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
+                <td class="col-md-3" th:text="${orderdetail.receivedQuantity}"></td>
                 <td class="col-md-3" th:text="${orderdetail.expectedDayOfDelivery}"></td>
                 <td class="col-md-1">
                 </td>
