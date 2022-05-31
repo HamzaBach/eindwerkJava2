@@ -14,7 +14,7 @@ class ArticleRepositoryTest {
     @Autowired
     private ArticleRepository articleRepositoryTest;
     @Autowired
-    CategoryRepository categoryRepositoryTest;
+    private CategoryRepository categoryRepositoryTest;
 
     @Test
     void getMaxId_Should_Give_Two() {
