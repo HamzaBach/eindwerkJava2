@@ -16,15 +16,15 @@ class ArticleSupplierRepositoryTest {
     @Autowired
     private ArticleRepository articleRepositoryTest;
     @Autowired
-    CategoryRepository categoryRepositoryTest;
+    private CategoryRepository categoryRepositoryTest;
     @Autowired
-    SupplierRepository supplierRepositoryTest;
+    private SupplierRepository supplierRepositoryTest;
     @Autowired
-    CitiesRepository citiesRepositoryTest;
+    private CitiesRepository citiesRepositoryTest;
     @Autowired
-    CountriesRepository countriesRepositoryTest;
+    private CountriesRepository countriesRepositoryTest;
     @Autowired
-    ArticleSupplierRepository articleSupplierRepositoryTest;
+    private ArticleSupplierRepository articleSupplierRepositoryTest;
 
     Supplier initializeDbWithData() {
         //given

@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class SupplierRepositoryTest {
     @Autowired
-    CitiesRepository citiesRepositoryTest;
+    private CitiesRepository citiesRepositoryTest;
     @Autowired
-    CountriesRepository countriesRepositoryTest;
+    private CountriesRepository countriesRepositoryTest;
     @Autowired
-    SupplierRepository supplierRepositoryTest;
+    private SupplierRepository supplierRepositoryTest;
 
 
     @BeforeEach

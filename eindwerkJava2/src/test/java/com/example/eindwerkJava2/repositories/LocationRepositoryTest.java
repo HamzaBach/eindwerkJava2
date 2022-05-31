@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class LocationRepositoryTest {
     @Autowired
-    LocationTypeRepository locationTypeRepositoryTest;
+    private LocationTypeRepository locationTypeRepositoryTest;
     @Autowired
-    WarehouseRepository warehouseRepositoryTest;
+    private WarehouseRepository warehouseRepositoryTest;
     @Autowired
-    LocationRepository locationRepositoryTest;
+    private LocationRepository locationRepositoryTest;
 
     @BeforeEach
     void dummyData() {

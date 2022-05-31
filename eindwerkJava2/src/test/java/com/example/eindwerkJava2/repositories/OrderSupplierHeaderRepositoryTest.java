@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 class OrderSupplierHeaderRepositoryTest {
     @Autowired
-    CitiesRepository citiesRepositoryTest;
+    private CitiesRepository citiesRepositoryTest;
     @Autowired
-    CountriesRepository countriesRepositoryTest;
+    private CountriesRepository countriesRepositoryTest;
     @Autowired
-    SupplierRepository supplierRepositoryTest;
+    private SupplierRepository supplierRepositoryTest;
     @Autowired
-    OrderSupplierHeaderRepository orderSupplierHeaderTest;
+    private OrderSupplierHeaderRepository orderSupplierHeaderTest;
 
 
     @BeforeEach
