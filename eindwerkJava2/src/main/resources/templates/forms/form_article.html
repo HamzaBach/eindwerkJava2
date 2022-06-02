@@ -27,7 +27,12 @@
 <!--Navbar component-->
 <div th:include="fragments/header::navbar"/>
 
+
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/articles}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
 
     <div th:if="${article.articleId == null}">
         <h1>New Article</h1>
@@ -193,17 +198,7 @@
 
 
     </form>
-    <div class="row">
-        <div class="col-xl-2">
-        </div>
-        <div class="col-xl-4">
-            <div class="text-center mb-3">
-                <a th:href="@{/articles}" class="btn btn-secondary btn-lg" type="button">
-                    <i class="bi bi-x-square"></i> Back to articles </a>
-            </div>
-        </div>
 
-    </div>
 
     <div th:if="${article.articleId != null}">
         <h1>Article provided by:</h1>

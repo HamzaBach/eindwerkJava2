@@ -14,6 +14,11 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
     <h1>OrderSupplier</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <a th:href = "@{/new/orderSupplier}" class="btn btn-primary btn-lg" style="margin:20px" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">New Order</a>
@@ -34,7 +39,7 @@
             <td th:text="${order.dateOfOrder}"></td>
             <td th:text="${order.orderNumber}"></td>
             <td th:text="${order.dateOrderClosed} ? 'CLOSED - ' + ${order.dateOrderClosed}:'OPEN'" />
-            <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> View</a></td>
+            <td><a th:href="@{'/orderdetail/'+${order.orderSupplierId}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="btn btn-primary btn-sm"><i class="bi bi-eyeglasses"></i> View</a></td>
             <td th:unless="${order.dateOrderClosed}"><a th:href="@{'/closeOrder/'+${order.orderSupplierId}}" class="btn btn-secondary btn-sm"><i class="bi bi-x-circle"></i> Close Order</a></td>
             <td th:if="${order.dateOrderClosed}"><a th:href="@{'/generatePdf/'+${order.orderSupplierId}}" class="btn btn-success btn-sm"><i class="bi bi-file-earmark-pdf"></i> PDF</a></td>
         </tr>

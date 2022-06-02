@@ -19,6 +19,11 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
     <h1>Inventory</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <div align="center" style="margin-bottom: -3px;" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
