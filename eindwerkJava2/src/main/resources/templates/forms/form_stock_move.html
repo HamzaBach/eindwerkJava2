@@ -31,27 +31,14 @@
                     <!--        <input type="text" th:field="*{stockId}" placeholder="StockID" class="form-control">-->
                     <!--        <input type="text" th:field="*{locationId}" placeholder="LocationId" class="form-control">-->
 
-                    <div class="row">
-                        <div class="col-xl-11" id="category">
-                            <div class="mb-3 form-group text-start">
-                                <label class="form-label fw-bold"> Article </label>
-                                <input readonly   th:field="*{article}" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="col-xl-1">
-                            <a th:href="@{/category}" class="btn btn-outline-primary">
-                                <i class="bi bi-collection"></i></a>
-                        </div>
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> Article </label>
+                        <input readonly  th:field="*{article.articleName}"  class="form-control">
                     </div>
 
-                    <div class="row">
-                        <div class="col-xl-11" id="fromLocation">
-                            <div class="mb-3 form-group text-start">
-                                <label class="form-label fw-bold"> From Location </label>
-                                <input  th:field="*{location}" th:value="${stockDto.location.locationName}" class="form-control"/>
-                            </div>
-                        </div>
-
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> From Location </label>
+                        <input readonly th:field="*{location.locationName}" class="form-control">
                     </div>
 
                     <div class="mb-3 form-group text-start">
@@ -82,8 +69,10 @@
                     </select>
                 </div>-->
 
-                <div class="mb-3 form-group text-center">
-                    <button type="submit"> Save</button>
+                <div class="text-center mb-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-save"></i> Save
+                    </button>
                 </div>
             </div>
 
