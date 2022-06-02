@@ -9,8 +9,13 @@
 <body>
 
 <div th:include="fragments/header::navbar"/>
+
+
 <div align="center" style="margin: 100px">
 
+    <div align="left">
+        <a th:href="@{/location}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
 
     <div th:if="${location.locationId == null}">
         <h1>New Location</h1>
