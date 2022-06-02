@@ -71,13 +71,13 @@
                             <table id="assignedRoles" class="table table-striped table-hover dataTable">
                                 <thead>
                                 <th scope="col">Assigned roles</th>
-                                <th scope="col" th:if="${!isDisabled}">Actions</th>
+                                <th scope="col" th:unless="${isDisabled}">Actions</th>
                                 </thead>
                                 <tbody>
                                 <tr th:each="role, itemStat : *{roles}">
                                     <!--        <td th:text="${user.userId}"></td>-->
                                     <td th:text="${role.name}" th:field="*{roles[__${itemStat.index}__].name}"></td>
-                                    <td th:if="${!isDisabled}">
+                                    <td th:unless="${isDisabled}">
                                         <a th:href="@{'/unassignRole/' + ${userDto.userId}+'/'+ ${role.id}}" id="unassignRole"
                                                 class="btn btn-outline-warning" >
                                             <i class="bi bi-trash"></i> Unassign role
@@ -92,12 +92,12 @@
                             <table id="notAssignedRoles" class="table table-striped table-hover dataTable">
                                 <thead>
                                 <th scope="col">Unassigned roles</th>
-                                <th scope="col" th:if="${!isDisabled}">Actions</th>
+                                <th scope="col" th:unless="${isDisabled}">Actions</th>
                                 </thead>
                                 <tbody>
                                 <tr th:each="role: ${userNotRoles}">
                                     <td th:text="${role.name}" th:value="role.id"></td>
-                                    <td th:if="${!isDisabled}">
+                                    <td th:unless="${isDisabled}">
                                         <a th:href="@{'/assignRole/' + ${userDto.userId}+'/'+ ${role.id}}"
                                                 class="btn btn-outline-primary" id="assignRole" >
                                             <i class="bi bi-plus"></i> Assign role
