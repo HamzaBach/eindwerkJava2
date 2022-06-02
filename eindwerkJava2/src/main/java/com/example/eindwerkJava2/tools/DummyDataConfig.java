@@ -2,15 +2,24 @@ package com.example.eindwerkJava2.tools;
 
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.*;
+import com.example.eindwerkJava2.service.MutationServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class DummyDataConfig {
+    private int randomNumberGenerator(int min, int max){
+        int minValue=min;
+        int maxValue=max;
+        int range=maxValue-minValue+1;
+        return (int)(Math.random()*range)+minValue;
+    }
     @Bean
     CommandLineRunner commandLineRunner (ArticleRepository articleRepository,
                                          ArticleSupplierRepository articleSupplierRepository,
@@ -23,7 +32,8 @@ public class DummyDataConfig {
                                          RoleRepository roleRepository,
                                          UserRepository userRepository,
                                          LocationTypeRepository locationTypeRepository,
-                                         TransactionRepository transactionRepository){
+                                         TransactionRepository transactionRepository,
+                                         MutationServiceImpl mutationService){
         return args ->{
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category( "Smartphone", "SMTPH");
@@ -164,8 +174,6 @@ public class DummyDataConfig {
                 }
             }
 
-
-
             if(warehouseRepository.count()==0 && locationRepository.count()==0){
                 // Defining location types:
                 LocationType loadingDock = new LocationType("Loading dock",false);
@@ -218,6 +226,47 @@ public class DummyDataConfig {
                     }
                 }
             }
+
+
+
+            //Dumping dummyData in mutations
+            List<TransactionType> transactionTypeList=new ArrayList<>();
+            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Opboeken").get());
+            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Afboeken").get());
+            List<User> userList=userRepository.findByActiveUser(1);
+            List<Article> articleList=articleRepository.findByActiveArticle(1);
+            List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
+            LocalDateTime startTimeInventory = LocalDateTime.of(2021, Month.JANUARY,1,9,0);
+
+
+            if(mutationService.getMutations().getEntities().size()==0){
+                //Initialize Stock to LoadingDock
+                for(Article article:articleList){
+                    Mutation mutation = new Mutation(article,100.00,"Initialize Stock",
+                            locationRepository.findByLocationName("Loading dock"),
+                            transactionRepository.findByTransactionTypeName("Opboeken").get(),
+                            userList.get(randomNumberGenerator(0,userList.size())),startTimeInventory
+                    );
+                    mutationService.addStock(mutation);
+                }
+
+
+                //Move Stock from LoadingDock to store locations
+                //TODO Waiting on Abdeljalil to complete mutations when all the stars align with Venus. (targetLocation for moveStock method is missing)
+/*                List<Mutation> mutationList=mutationService.getMutations().getEntities();
+                for(int i=0;i>mutationList.size();i++){
+                    mutationService.moveStock(mutationList.get(i));
+                }*/
+
+                //Start selling
+
+
+            }
+
+            //Start moving and selling and buying
+
+
+
 
         };
     }
