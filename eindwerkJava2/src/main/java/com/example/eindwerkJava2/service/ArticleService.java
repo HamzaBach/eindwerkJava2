@@ -1,6 +1,8 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
+import com.example.eindwerkJava2.model.ArticleSupplier;
+import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
@@ -9,6 +11,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -213,5 +216,11 @@ public class ArticleService {
 
     public Article findArticleByBarcode(String barcode) {
         return articleRepository.findByArticleBarcode(barcode).get();
+    }
+
+    //TODO: implement succesEvaluator etc...
+    public List<Article> getArticlesWhereSupplierIsPreferredSupplier(Supplier supplier) {
+        List<Article> preferredArticlesFromSupplier = articleRepository.getArticlesWhereSupplierIsChosenSupplier(supplier.getSupplierId());
+        return preferredArticlesFromSupplier;
     }
 }
