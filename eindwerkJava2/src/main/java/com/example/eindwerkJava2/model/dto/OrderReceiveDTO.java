@@ -18,6 +18,8 @@ public class OrderReceiveDTO {
     private Location location;
     private User user;
 
+
+
     public List<OrderReceiveDTO> mapOrderSupplierDetailToDTO(List<OrderSupplierDetail> orderSupplierDetailList){
         List<OrderReceiveDTO> orderReceiveDTOS=new ArrayList<>();
         for(OrderSupplierDetail x:orderSupplierDetailList){

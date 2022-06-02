@@ -182,5 +182,9 @@ public class OrderSupplierHeaderService {
         // step 5: we close the document
         document.close();
     }
+
+    public OrderSupplierHeader findByOrderNumber(String orderNumber) {
+        return orderSupplierHeaderRepository.findByOrderNumber(orderNumber);
+    }
 }
 

@@ -56,7 +56,8 @@ public class StockService {
         return stockRepository.findStockByArticleIdAndLocationId(articleId,locationId);
     }
 
-    public Stock findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
+    public List<Stock> findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
+
     public void deleteStock(Stock stock)
     {
         stock.setActiveStock(0);

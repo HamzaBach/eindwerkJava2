@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class RoleRepositoryTest {
     @Autowired
-    RoleRepository roleRepositoryTest;
+    private RoleRepository roleRepositoryTest;
     @Autowired
-    UserRepository userRepositoryTest;
+    private UserRepository userRepositoryTest;
 
     @BeforeEach
     void addDefaultRolesAndUsers(){

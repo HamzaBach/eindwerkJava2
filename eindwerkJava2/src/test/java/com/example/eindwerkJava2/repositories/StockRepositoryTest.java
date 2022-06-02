@@ -11,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class StockRepositoryTest {
     @Autowired
-    StockRepository stockRepositoryTest;
+    private StockRepository stockRepositoryTest;
     @Autowired
-    ArticleRepository articleRepositoryTest;
+    private ArticleRepository articleRepositoryTest;
     @Autowired
-    CategoryRepository categoryRepositoryTest;
+    private CategoryRepository categoryRepositoryTest;
     @Autowired
-    LocationRepository locationRepositoryTest;
+    private LocationRepository locationRepositoryTest;
     @Autowired
-    LocationTypeRepository locationTypeRepositoryTest;
+    private LocationTypeRepository locationTypeRepositoryTest;
     @Autowired
-    WarehouseRepository warehouseRepositoryTest;
+    private WarehouseRepository warehouseRepositoryTest;
 
     private Stock toBeTestedStock;
 

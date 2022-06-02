@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class CategoryRepositoryTest {
     @Autowired
-    CategoryRepository categoryRepositoryTest;
+    private CategoryRepository categoryRepositoryTest;
 
     @BeforeEach
     void dummyData(){
