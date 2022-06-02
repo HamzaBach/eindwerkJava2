@@ -23,7 +23,8 @@ public class StockRestController {
         this.articleService = articleService;
     }
 
-    @GetMapping(path="stockinfo/{barcode}")
+    //TODO Fix findStockByArticleId which returns List<Stock> and not a single Stock object
+ /*   @GetMapping(path="stockinfo/{barcode}")
     private String stockOfArticle(@PathVariable String barcode) throws JSONException {
         Article article = articleService.findArticleByBarcode(barcode);
         Stock stock = stockService.findStockByArticleId(article);
@@ -38,7 +39,7 @@ public class StockRestController {
         JSONObject json = new JSONObject();
         json.put("article", ja);
         return json.toString();
-    }
+    }*/
 
 
 }
