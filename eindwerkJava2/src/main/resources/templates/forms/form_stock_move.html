@@ -33,12 +33,14 @@
 
                     <div class="mb-3 form-group text-start">
                         <label class="form-label fw-bold"> Article </label>
-                        <input readonly  th:field="*{article.articleName}"  class="form-control">
+                        <input hidden th:field="*{article}">
+                        <input readonly  th:value="${stockDto.article.articleName}"  class="form-control">
                     </div>
 
                     <div class="mb-3 form-group text-start">
                         <label class="form-label fw-bold"> From Location </label>
-                        <input readonly th:field="*{location.locationName}" class="form-control">
+                        <input hidden th:field="*{location}">
+                        <input readonly th:value="${stockDto.location.locationName}" class="form-control">
                     </div>
 
                     <div class="mb-3 form-group text-start">
@@ -49,7 +51,7 @@
 
 
                     <div class="mb-3 form-group text-start">
-                        <label class="form-label fw-bold"> ToLocation</label>
+                        <label class="form-label fw-bold"> To Location</label>
                         <select class="form-control" id="locationto" name="location" th:field="*{locationto}" required>
                             <option value="" selected="selected" hidden="hidden">Choose the location..</option>
                             <option th:each="location : ${locationList}"
