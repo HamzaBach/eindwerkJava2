@@ -41,7 +41,7 @@ public class OrderSupplierDetailController {
             Supplier supplier = orderSupplierHeader.getSupplier();
             model.addAttribute("orderSupplierDetail", new OrderSupplierDetail());
             model.addAttribute("orderheader", orderSupplierHeader);
-            model.addAttribute("articles", articleSupplierService.getArticlesFromSupplier(supplier));
+            model.addAttribute("articles", articleService.getArticlesWhereSupplierIsPreferredSupplier(supplier));
             model.addAttribute("orderDetails", orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader));
             model.addAttribute("lineCounter", (orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader).size() + 1));
         } else {

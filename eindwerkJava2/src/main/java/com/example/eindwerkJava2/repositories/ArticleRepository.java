@@ -77,4 +77,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByArticleBarcode(String barcode);
 
     boolean existsArticleByArticleSupplier(ArticleSupplier articleSupplier);
+    @Query(value = "select * from article where article_supplier_id in (select article_supplier_id from article_supplier where supplier =?1 and active=1)", nativeQuery = true)
+    List<Article> getArticlesWhereSupplierIsChosenSupplier(long supplierId);
 }
