@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class StockRepositoryTest {
@@ -23,7 +25,7 @@ class StockRepositoryTest {
     @Autowired
     private WarehouseRepository warehouseRepositoryTest;
 
-    private Stock toBeTestedStock;
+    private List<Stock> toBeTestedStock;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +61,7 @@ class StockRepositoryTest {
         stockRepositoryTest.save(stock1);
         stockRepositoryTest.save(stock2);
 
+        //TODO: findByArticle has been changed to list
         toBeTestedStock = stockRepositoryTest.findByArticle(articleRepositoryTest.findByArticleName("Iphone 12").get());
     }
 
@@ -79,9 +82,9 @@ class StockRepositoryTest {
 
     @Test
     void findStockByArticleIdAndLocationId_Should_Give_Iphone12() {
-        long articleId = toBeTestedStock.getArticle().getArticleId();
-        String articleName = toBeTestedStock.getArticle().getArticleName();
-        long locationId = stockRepositoryTest.findByArticle(toBeTestedStock.getArticle()).getLocation().getLocationId();
+        long articleId = toBeTestedStock.get(0).getArticle().getArticleId();
+        String articleName = toBeTestedStock.get(0).getArticle().getArticleName();
+        long locationId = stockRepositoryTest.findByArticle(toBeTestedStock.get(0).getArticle()).get(0).getLocation().getLocationId();
         assertEquals(articleName,stockRepositoryTest.findStockByArticleIdAndLocationId(articleId, locationId).get().getArticle().getArticleName());
     }
 }

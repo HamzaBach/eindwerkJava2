@@ -23,6 +23,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
      * @return the location
      */
     Location findByLocationId(Long locationId);
+    Location findByLocationName(String locationName);
 
 
     /**
