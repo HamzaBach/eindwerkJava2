@@ -199,7 +199,11 @@ public class UserController {
     public String showNewUserForm(Model model, RedirectAttributes redirAttrs) {
         SuccessEvaluator<Role> rolesSuccess = rolesService.getAllRoles();
         if (rolesSuccess.getIsSuccessfull()) {
-            model.addAttribute("user", new User());
+            model.addAttribute("isDisabled","true");
+            User user = new User();
+            UserDto userDto =new UserDto();
+            userDto.convertUserToDTO(user);
+            model.addAttribute("userDto", userDto);
             model.addAttribute("rolesList", rolesSuccess.getEntities());
             return "/forms/form_user";
         } else {
