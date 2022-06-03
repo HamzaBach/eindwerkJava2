@@ -23,13 +23,16 @@ public class MutationServiceImpl implements MutationService {
     private final StockService stockService;
     @Autowired
     private final TransactionRepository transactionRepository;
+    @Autowired
+    private final LocationService locationService;
 
 
     @Autowired
-    public MutationServiceImpl(MutationRepository mutationRepository, StockService stockService, TransactionRepository transactionRepository) {
+    public MutationServiceImpl(MutationRepository mutationRepository, StockService stockService, TransactionRepository transactionRepository, LocationService locationService) {
         this.mutationRepository = mutationRepository;
         this.stockService = stockService;
         this.transactionRepository = transactionRepository;
+        this.locationService = locationService;
     }
 
     public SuccessEvaluator<Mutation> getMutations() {
@@ -67,6 +70,7 @@ public class MutationServiceImpl implements MutationService {
                         updatedStockTotalAmount = updateStockArticle.getAmount() + mutation.getAmount();
                         updateStockArticle.setAmount(updatedStockTotalAmount);
                         stockService.saveStock(updateStockArticle);
+                        mutation.setAmount(mutation.getAmount()*mutation.getTransactionType().getTransactionTypeFactor());
                         mutationRepository.save(mutation);
                         isStockPresentOnLocation += 1;
                     } else {
@@ -107,7 +111,9 @@ public class MutationServiceImpl implements MutationService {
                 } else {
                     updateStockArticle.setAmount(updatedStockTotalAmount);
                     stockService.saveStock(updateStockArticle);
+                    mutation.setAmount(mutation.getAmount()*mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
+
                 }
             }
         }
@@ -127,10 +133,11 @@ public class MutationServiceImpl implements MutationService {
     }
 
 
-    public SuccessEvaluator<Mutation> moveStock(Mutation mutation) {
+    public SuccessEvaluator<Mutation> moveStock(Mutation mutation, long targetLocationID) {
         SuccessEvaluator<Mutation> isMoveStockSuccessful = new SuccessEvaluator<>();
         SuccessEvaluator<Mutation> isRemoveStockSuccessful = removeStock(mutation);
         if (isRemoveStockSuccessful.getIsSuccessfull()) {
+            mutation.setLocation(locationService.findByLocationId(targetLocationID));
             SuccessEvaluator<Mutation> isAddStockSuccessful = addStock(mutation);
             if (!isAddStockSuccessful.getIsSuccessfull()) {
                 isMoveStockSuccessful.setMessage(isAddStockSuccessful.getMessage());
@@ -155,6 +162,7 @@ public class MutationServiceImpl implements MutationService {
                     mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie opboeken").get());
                     updatedStockTotalAmount=stock.getAmount() + amountDifference;
                     stock.setAmount(updatedStockTotalAmount);
+                    mutation.setAmount(mutation.getAmount()*mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
                     stockService.saveStock(stock);
                 } else if (amountDifference < 0) {
@@ -162,6 +170,7 @@ public class MutationServiceImpl implements MutationService {
                     mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie afboeken").get());
                     updatedStockTotalAmount=stock.getAmount() + amountDifference;
                     stock.setAmount(updatedStockTotalAmount);
+                    mutation.setAmount(mutation.getAmount()*mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
                     stockService.saveStock(stock);
                 }

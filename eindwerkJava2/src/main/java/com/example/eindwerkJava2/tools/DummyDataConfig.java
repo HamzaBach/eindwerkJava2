@@ -230,16 +230,16 @@ public class DummyDataConfig {
 
 
             //Dumping dummyData in mutations
-            List<TransactionType> transactionTypeList=new ArrayList<>();
-            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Opboeken").get());
-            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Afboeken").get());
-            List<User> userList=userRepository.findByActiveUser(1);
-            List<Article> articleList=articleRepository.findByActiveArticle(1);
-            List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
-            LocalDateTime startTimeInventory = LocalDateTime.of(2021, Month.JANUARY,1,9,0);
+//            List<TransactionType> transactionTypeList=new ArrayList<>();
+//            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Opboeken").get());
+//            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Afboeken").get());
+//            List<User> userList=userRepository.findByActiveUser(1);
+//            List<Article> articleList=articleRepository.findByActiveArticle(1);
+//            List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
+//            LocalDateTime startTimeInventory = LocalDateTime.of(2021, Month.JANUARY,1,9,0);
 
 
-            if(mutationService.getMutations().getEntities().size()==0){
+            /*if(mutationService.getMutations().getEntities().size()==0){
                 //Initialize Stock to LoadingDock
                 for(Article article:articleList){
                     Mutation mutation = new Mutation(article,100.00,"Initialize Stock",
@@ -253,15 +253,15 @@ public class DummyDataConfig {
 
                 //Move Stock from LoadingDock to store locations
                 //TODO Waiting on Abdeljalil to complete mutations when all the stars align with Venus. (targetLocation for moveStock method is missing)
-/*                List<Mutation> mutationList=mutationService.getMutations().getEntities();
+*//*                List<Mutation> mutationList=mutationService.getMutations().getEntities();
                 for(int i=0;i>mutationList.size();i++){
                     mutationService.moveStock(mutationList.get(i));
-                }*/
+                }*//*
 
                 //Start selling
 
 
-            }
+            }*/
 
             //Start moving and selling and buying
 

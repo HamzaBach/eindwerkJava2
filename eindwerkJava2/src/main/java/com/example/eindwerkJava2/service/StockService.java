@@ -47,6 +47,11 @@ public class StockService {
     public List<Stock> findStocksByLocation(Location location){
         return this.stockRepository.findByLocation(location);
     }
+
+    public int countArticlesOnLocation(long locationId){
+        return this.stockRepository.countArticlesPerLocation(locationId);
+    }
+
     public Optional<Stock> findStockByArticleIdAndLocationId(Long articleId, Long locationId){
         return stockRepository.findStockByArticleIdAndLocationId(articleId,locationId);
     }

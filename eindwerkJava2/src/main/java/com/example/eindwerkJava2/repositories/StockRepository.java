@@ -24,4 +24,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     boolean existsStockByLocation(Location location);
     @Query(value="SELECT * FROM Stock WHERE article_id = ?1 AND location_id = ?2 ",nativeQuery = true)
     Optional<Stock> findStockByArticleIdAndLocationId(long articleId, long locationId);
+    @Query(value = "SELECT COUNT(*) FROM Stock WHERE location_id=?1", nativeQuery = true)
+    int countArticlesPerLocation(long locationId);
 }

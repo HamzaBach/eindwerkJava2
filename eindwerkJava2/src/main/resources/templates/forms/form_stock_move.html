@@ -14,54 +14,52 @@
 
 
 <div align="center" style="margin: 100px">
-
-    <div align="left">
-        <a th:href="@{/stock}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
-    </div>
-
-    <div th:if="${stock.stockId == null}">
+    <div th:if="${stockDto.stockId == null}">
         <h1>New stock</h1>
     </div>
-    <div th:unless="${stock.stockId == null}">
-        <h1>Edit Stock</h1>
+    <div th:unless="${stockDto.stockId == null}">
+        <h1>Move Stock</h1>
     </div>
     <div th:include="fragments/header::errorMessaging"/>
 
-
+    <form th:action="@{/move/Stock}" th:object="${stockDto}" , method="post">
         <div class="row">
             <div class="col-xl-4"></div>
             <div class="col-xl-4">
                 <div class="mb-3 form-group text-start">
-                    <input type="hidden" th:field="*{stockId}" th:value="${stock.stockId}" class="form-control"/>
+                    <input type="hidden" th:field="*{stockId}"  class="form-control"/>
                     <!--        <input type="text" th:field="*{stockId}" placeholder="StockID" class="form-control">-->
                     <!--        <input type="text" th:field="*{locationId}" placeholder="LocationId" class="form-control">-->
 
-                    <div class="row">
-                        <div class="col-xl-11" id="category">
-                            <div class="mb-3 form-group text-start">
-                                <label class="form-label fw-bold"> Article </label>
-                                <input disabled th:value="${stock.article.articleName}" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="col-xl-1">
-                            <a th:href="@{/category}" class="btn btn-outline-primary">
-                                <i class="bi bi-collection"></i></a>
-                        </div>
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> Article </label>
+                        <input hidden th:field="*{article}">
+                        <input readonly  th:value="${stockDto.article.articleName}"  class="form-control">
+                    </div>
+
+                    <div class="mb-3 form-group text-start">
+                        <label class="form-label fw-bold"> From Location </label>
+                        <input hidden th:field="*{location}">
+                        <input readonly th:value="${stockDto.location.locationName}" class="form-control">
                     </div>
 
                     <div class="mb-3 form-group text-start">
                         <label class="form-label fw-bold"> Amount</label>
                         <input type="text" th:field="*{amount}" placeholder="Amount" class="form-control" required>
                     </div>
+
+
+
                     <div class="mb-3 form-group text-start">
-                        <label class="form-label fw-bold"> Location</label>
-                        <select class="form-control" id="location" name="location" th:field="*{location}" required>
+                        <label class="form-label fw-bold"> To Location</label>
+                        <select class="form-control" id="locationto" name="location" th:field="*{locationto}" required>
                             <option value="" selected="selected" hidden="hidden">Choose the location..</option>
                             <option th:each="location : ${locationList}"
                                     th:value="${location.locationId}"
                                     th:text="${location.locationName}"></option>
                         </select>
                     </div>
+
                 </div>
                 <!--<div class="mb-3 form-group text-start">
                     <label class="form-label fw-bold"> Article</label>
@@ -73,12 +71,16 @@
                     </select>
                 </div>-->
 
-
+                <div class="text-center mb-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                </div>
             </div>
 
         </div>
 
-
+    </form>
 </div>
 
 

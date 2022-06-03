@@ -19,15 +19,10 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
-
-    <div align="left">
-        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
-    </div>
-
     <h1>Inventory</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <div align="center" style="margin-bottom: -3px;" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
-<!--        <a th:href="@{/new/stock}" class="btn btn-primary btn-lg" style="margin:20px">New Inventory</a>-->
+        <a th:href="@{/new/stock}" class="btn btn-primary btn-lg" style="margin:20px">New Inventory</a>
 
 
   
@@ -36,12 +31,13 @@
 
     <table class="table table-striped table-hover dataTable" id="stockOverview">
         <thead>
-        <tr>
-        <th class="col-3">Article</th>
-        <th class="col-3">Amount</th>
-        <th class="col-3">Warehouse</th>
-        <th class="col-3">Location</th>
-        </tr>
+        <!--        <th scope ="col">Id</th>-->
+        <th scope="col">Article</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Warehouse</th>
+        <th scope="col">Location</th>
+        <th scope="col"></th>
+<!--        <th scope="col"></th>-->
         </thead>
         <tbody>
         <tr th:each="Stock:${stockList}">
@@ -50,9 +46,12 @@
             <td th:text="${Stock.amount}"></td>
             <td th:text="${Stock.location.warehouse.warehouseName}"></td>
             <td th:text="${Stock.location.locationName}"></td>
-<!--            <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"-->
-<!--                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
-<!--                <i class="bi bi-pencil-square"></i> Edit</a></td>-->
+            <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <i class="bi bi-pencil-square"></i> Edit</a>
+            <a th:href="@{'/move/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <i class="bi bi-pencil-square"></i> Move</a></td>
 <!--            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger"-->
 <!--                   sec:authorize="hasAuthority('ADMIN')">-->
 <!--                <i class="bi bi-trash"></i> Delete </a></td>-->

@@ -70,7 +70,7 @@ public class OrderSupplierDetailService {
             mutation.setAmount(orderReceiveDTO.getReceivedQuantity());
             mutation.setArticle(orderSupplierDetail.getArticle());
             mutation.setLocalDateTime(LocalDateTime.now());
-            mutation.setComment(orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
+            mutation.setComment("Order number: "+orderSupplierDetail.getOrderSupplierHeader().getOrderNumber());
             mutation.setLocation(orderReceiveDTO.getLocation());
             mutation.setUser(orderReceiveDTO.getUser());
             mutationServiceImpl.addStock(mutation);
