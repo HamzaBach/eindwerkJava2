@@ -171,7 +171,7 @@ public class MutationServiceImpl implements MutationService {
         List<Stock> stocksOnLocation = stockService.findStocksByLocation(mutation.getLocation());
         for (Stock stock : stocksOnLocation) {
             if (stock.getArticle() == mutation.getArticle()) {
-                Double amountDifference = mutation.getAmount() - stock.getAmount();
+                double amountDifference = mutation.getAmount() - stock.getAmount();
                 if (amountDifference > 0) {
                     mutation.setAmount(amountDifference);
                     mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie opboeken").get());
@@ -181,7 +181,7 @@ public class MutationServiceImpl implements MutationService {
                     mutationRepository.save(mutation);
                     stockService.saveStock(stock);
                 } else if (amountDifference < 0) {
-                    mutation.setAmount(amountDifference);
+                    mutation.setAmount(Math.abs(amountDifference));
                     mutation.setTransactionType(transactionRepository.findByTransactionTypeName("Correctie afboeken").get());
                     updatedStockTotalAmount=stock.getAmount() + amountDifference;
                     stock.setAmount(updatedStockTotalAmount);

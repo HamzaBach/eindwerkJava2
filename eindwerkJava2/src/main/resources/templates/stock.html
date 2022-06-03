@@ -46,12 +46,12 @@
             <td th:text="${Stock.amount}"></td>
             <td th:text="${Stock.location.warehouse.warehouseName}"></td>
             <td th:text="${Stock.location.locationName}"></td>
-            <td><a th:href="@{'/edit/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
+            <td><a th:href="@{'/correct/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
-                <i class="bi bi-pencil-square"></i> Edit</a>
+                <i class="bi bi-pencil-square"></i> Correct</a>
             <a th:href="@{'/move/stock/' + ${Stock.stockId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
-                <i class="bi bi-pencil-square"></i> Move</a></td>
+                <i class="bi bi-arrow-left-right"></i> Move</a></td>
 <!--            <td><a th:href="@{'/delete/stock/' + ${Stock.stockId}}" class="btn btn-outline-danger"-->
 <!--                   sec:authorize="hasAuthority('ADMIN')">-->
 <!--                <i class="bi bi-trash"></i> Delete </a></td>-->
