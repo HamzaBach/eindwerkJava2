@@ -13,6 +13,11 @@
 
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/article_supplier}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
+
     <div th:if="${articleSupplier.articleSupplierId == 0}">
         <h1>New Article Supplier</h1>
     </div>

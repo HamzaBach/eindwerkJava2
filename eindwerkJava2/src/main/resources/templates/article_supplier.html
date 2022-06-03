@@ -13,7 +13,7 @@
     {
         $("#articlesSupplierOverview").dataTable({
            "aoColumnDefs": [
-              { 'bSortable': false, 'aTargets': [ 4,5 ] }
+              { 'bSortable': false, 'aTargets': [ 5 ] }
            ]
         });
     });</script>
@@ -24,6 +24,11 @@
 
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
     <h1>Article Supplier</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <a th:href="@{/new/articleSupplier}" class="btn btn-primary btn-lg" style="margin:20px"
@@ -33,13 +38,13 @@
     <table class="table table-striped table-hover" style="margin:20px" id="articlesSupplierOverview">
         <thead>
         <tr>
-            <th>Article</th>
-            <th>Supplier</th>
-            <th>Purchase Price</th>
-            <th>Sales Price</th>
-            <th>Partnr</th>
-            <th></th>
-            <th></th>
+            <th scope="col">Article</th>
+            <th scope="col">Supplier</th>
+            <th scope="col">Purchase Price</th>
+            <th scope="col">Sales Price</th>
+            <th scope="col">Partnr</th>
+            <th scope="col">Actions</th>
+
         </tr>
         </thead>
         <tbody>
@@ -55,11 +60,12 @@
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
-            </td>
-            <td><a th:href="@{'/delete/articleSupplier/' + ${artSupp.articleSupplierId}}" class="btn btn-outline-danger"
+
+                <a th:href="@{'/delete/articleSupplier/' + ${artSupp.articleSupplierId}}" class="btn btn-outline-danger"
                    sec:authorize="hasAuthority('ADMIN')">
-                <i class="bi bi-trash"></i> Delete
-            </a>
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+
             </td>
         </tr>
         </tbody>

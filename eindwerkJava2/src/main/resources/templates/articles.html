@@ -30,6 +30,11 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
     <h1>Articles</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
@@ -44,9 +49,8 @@
         <th scope="col">Description</th>
         <th scope="col">Category</th>
         <th scope="col">Barcode</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col">Actions</th>
+
         </thead>
         <tbody>
         <tr th:each="article: ${articlesList}">
@@ -56,24 +60,26 @@
             <td th:text="${article.articleDescription}"></td>
             <td th:text="${article.category.categoryName}"></td>
             <td th:text="${article.articleBarcode}"></td>
+
             <td>
                 <a th:href="@{'/view/article/' + ${article.articleId}}" class="btn btn-outline-info"
                    sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EDITOR', 'CREATOR')">
                     <i class="bi bi-eyeglasses"></i> View
                 </a>
-            </td>
-            <td>
+
                 <a th:href="@{'/edit/article/' + ${article.articleId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
-            </td>
-            <td>
+
+
                 <a th:href="@{'/delete/article/' + ${article.articleId}}" class="btn btn-outline-danger"
                    sec:authorize="hasAuthority('ADMIN')">
                     <i class="bi bi-trash"></i> Delete
                 </a>
             </td>
+
+
         </tr>
         </tbody>
     </table>

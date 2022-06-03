@@ -18,7 +18,7 @@
     {
         $("#warehousesOverview").dataTable({
            "aoColumnDefs": [
-              { 'bSortable': false, 'aTargets': [ 1,2 ] }
+              { 'bSortable': false, 'aTargets': [ 1 ] }
            ]
         });
     });</script>
@@ -28,6 +28,11 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
     <h1>Warehouses</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <div align="center" style="mb-3" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
@@ -38,22 +43,26 @@
     <table class="table table-striped table-hover" id="warehousesOverview">
         <thead>
 <!--        <th scope="col">Id</th>-->
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <
+        <th class="col-6">Name</th>
+        <th class="col-2">Actions</th>
+
         </thead>
         <tbody>
         <tr th:each="warehouse : ${listWarehouses}">
 <!--            <td th:text="${warehouse.warehouseId}"></td>-->
+
             <td th:text="${warehouse.warehouseName}"></td>
             <td><a th:href="@{'/edit/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                 <i class="bi bi-pencil-square"></i> Edit
-            </a></td>
-            <td><a th:href="@{'/delete/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger"
+            </a>
+                <a th:href="@{'/delete/warehouse/' + ${warehouse.warehouseId}}" class="btn btn-outline-danger"
                    sec:authorize="hasAuthority('ADMIN')">
-                <i class="bi bi-trash"></i> Delete
-            </a></td>
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </td>
+
         </tr>
         </tbody>
     </table>

@@ -14,6 +14,11 @@
 
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/stock}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Back to overview</a>
+    </div>
+
     <div th:if="${stock.stockId == null}">
         <h1>New stock</h1>
     </div>

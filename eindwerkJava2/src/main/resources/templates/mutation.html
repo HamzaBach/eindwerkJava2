@@ -9,15 +9,7 @@
 
     <!--    Datatable -->
     <div th:include="fragments/header::dataTableJquery"/>
-    <script type="text/javascript" class="init">
-    $(document).ready(function()
-    {
-        $("#mutationOverview").dataTable({
-           "aoColumnDefs": [
-              { 'bSortable': false, 'aTargets': [ 3,4 ] }
-           ]
-        });
-    });</script>
+
 
     <title>Mutations</title>
 
@@ -27,6 +19,10 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
 
     <h1>Mutations</h1>
     <div th:include="fragments/header::errorMessaging"/>
