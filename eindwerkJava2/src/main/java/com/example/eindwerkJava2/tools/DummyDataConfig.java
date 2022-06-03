@@ -221,6 +221,8 @@ public class DummyDataConfig {
                 defaultTransType.add(afboeken);
                 defaultTransType.add(correctieOpboeken);
                 defaultTransType.add(correctieAfboeken);
+                defaultTransType.add(intern_opboeken);
+                defaultTransType.add(intern_afboeken);
 
                 for(TransactionType trans:defaultTransType){
                     if(!transactionRepository.existsByTransactionTypeName(trans.getTransactionTypeName())){
