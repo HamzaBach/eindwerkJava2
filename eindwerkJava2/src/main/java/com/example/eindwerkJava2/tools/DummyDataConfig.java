@@ -214,6 +214,8 @@ public class DummyDataConfig {
                 TransactionType afboeken = new TransactionType("Afboeken",-1d);
                 TransactionType correctieOpboeken = new TransactionType("Correctie opboeken",1d);
                 TransactionType correctieAfboeken = new TransactionType("Correctie afboeken",-1d);
+                TransactionType intern_opboeken = new TransactionType("Intern opboeken",1d);
+                TransactionType intern_afboeken = new TransactionType("Intern afboeken",-1d);
                 List<TransactionType> defaultTransType = new ArrayList<>();
                 defaultTransType.add(opboeken);
                 defaultTransType.add(afboeken);
