@@ -76,7 +76,6 @@ public class StockController {
         stockdto.convertStocktoDto(stock);
         model.addAttribute("stockDto", stockdto);
         model.addAttribute("locationList", locationService.getAllLocations());
-        model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
 
         return "/forms/form_stock_move";
     }
@@ -103,6 +102,34 @@ public class StockController {
     {
         Stock stock = stockService.findStockById(stockId);
         this.stockService.deleteStock(stock);
+        return "redirect:/stock";
+    }
+
+    @GetMapping("/correct/stock/{stockId}")
+    public String correctionStockForm(@PathVariable("stockId")Long stockId, Model model)
+    {
+        Stock stock = stockService.findStockById(stockId);
+        StockDto stockdto = new StockDto();
+        stockdto.convertStocktoDto(stock);
+        model.addAttribute("stockDto", stockdto);
+
+        return "/forms/form_stock_correct";
+    }
+
+    @PostMapping("/correct/stock")
+    public String correctStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser)
+    {
+        User user = userRepository.findByUserName(currentUser.getUsername());
+        Mutation mutation = new Mutation();
+        mutation.setAmount(stockdto.getAmount());
+        mutation.setLocation(stockdto.getLocation());
+        mutation.setArticle(stockdto.getArticle());
+        mutation.setUser(user);
+        mutation.setLocalDateTime(LocalDateTime.now());
+        mutation.setComment(stockdto.getComment());
+
+        this.mutationService.correctStockAmount(mutation);
+
         return "redirect:/stock";
     }
 

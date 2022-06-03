@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Bootstrap CSS & icons-->
+  <div th:include="fragments/header::bootstrapCssAndIcons"/>
+  <title>New Stock</title>
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+
+
+<div align="center" style="margin: 100px">
+  <h1>Stock correction</h1>
+  <div th:include="fragments/header::errorMessaging"/>
+
+  <form th:action="@{/correct/stock}" th:object="${stockDto}" , method="post">
+    <div class="row">
+      <div class="col-xl-4"></div>
+      <div class="col-xl-4">
+        <div class="mb-3 form-group text-start">
+          <input type="hidden" th:field="*{stockId}"  class="form-control"/>
+          <!--        <input type="text" th:field="*{stockId}" placeholder="StockID" class="form-control">-->
+          <!--        <input type="text" th:field="*{locationId}" placeholder="LocationId" class="form-control">-->
+
+          <div class="mb-3 form-group text-start">
+            <label class="form-label fw-bold"> Article </label>
+            <input hidden th:field="*{article}">
+            <input readonly  th:value="${stockDto.article.articleName}"  class="form-control">
+          </div>
+
+          <div class="mb-3 form-group text-start">
+            <label class="form-label fw-bold"> Location </label>
+            <input hidden th:field="*{location}">
+            <input readonly th:value="${stockDto.location.locationName}" class="form-control">
+          </div>
+
+          <div class="mb-3 form-group text-start">
+            <label class="form-label fw-bold"> Amount</label>
+            <input type="text" th:field="*{amount}" placeholder="Amount" class="form-control" required>
+          </div>
+
+          <div class="mb-3 form-group text-start">
+            <label class="form-label fw-bold"> Comment</label>
+            <textarea th:field="*{comment}" type="text" rows="4" class="form-control" required >
+
+            </textarea>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="text-center mb-3">
+          <button type="submit" class="btn btn-success btn-lg">
+            <i class="bi bi-save"></i> Save
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<div th:include="fragments/header::Jquery"/>
+</body>
+</html>

@@ -13,6 +13,7 @@ import lombok.Setter;
 public class StockDto extends Stock {
 
     private Location locationto;
+    private String comment;
 
     public void convertStocktoDto(Stock stock){
        setLocation(stock.getLocation());

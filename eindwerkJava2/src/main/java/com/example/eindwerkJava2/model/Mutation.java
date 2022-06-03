@@ -20,6 +20,7 @@ public class Mutation {
     @JoinColumn(name="articleId")
     private Article article;
     private Double amount;
+    @Lob //Added for solving issues for too long strings.
     private String comment;
 
     @ManyToOne
