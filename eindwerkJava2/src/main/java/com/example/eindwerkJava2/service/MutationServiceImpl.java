@@ -114,6 +114,7 @@ public class MutationServiceImpl implements MutationService {
                     mutation.setAmount(mutation.getAmount()*mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
 
+
                 }
             }
         }
@@ -137,8 +138,10 @@ public class MutationServiceImpl implements MutationService {
         SuccessEvaluator<Mutation> isMoveStockSuccessful = new SuccessEvaluator<>();
         SuccessEvaluator<Mutation> isRemoveStockSuccessful = removeStock(mutation);
         if (isRemoveStockSuccessful.getIsSuccessfull()) {
-            mutation.setLocation(locationService.findByLocationId(targetLocationID));
-            SuccessEvaluator<Mutation> isAddStockSuccessful = addStock(mutation);
+            Mutation copiedMutation = createCopyOfMutation(mutation);
+            copiedMutation.setAmount(Math.abs(copiedMutation.getAmount()));
+            copiedMutation.setLocation(locationService.findByLocationId(targetLocationID));
+            SuccessEvaluator<Mutation> isAddStockSuccessful = addStock(copiedMutation);
             if (!isAddStockSuccessful.getIsSuccessfull()) {
                 isMoveStockSuccessful.setMessage(isAddStockSuccessful.getMessage());
             }
@@ -147,6 +150,18 @@ public class MutationServiceImpl implements MutationService {
             isMoveStockSuccessful.setMessage(isRemoveStockSuccessful.getMessage());
         }
         return isMoveStockSuccessful;
+    }
+
+    private Mutation createCopyOfMutation(Mutation mutation){
+        Mutation copiedMutation = new Mutation();
+        copiedMutation.setAmount(mutation.getAmount());
+        copiedMutation.setTransactionType(mutation.getTransactionType());
+        copiedMutation.setLocation(mutation.getLocation());
+        copiedMutation.setArticle(mutation.getArticle());
+        copiedMutation.setUser(mutation.getUser());
+        copiedMutation.setComment(mutation.getComment());
+        copiedMutation.setLocalDateTime(mutation.getLocalDateTime());
+        return copiedMutation;
     }
 
     public SuccessEvaluator<Mutation> correctStockAmount(Mutation mutation) {
