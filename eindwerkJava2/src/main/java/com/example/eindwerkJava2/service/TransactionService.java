@@ -22,8 +22,28 @@ public class TransactionService {
         return this.transactionRepository.findAll();
     }
 
-    public TransactionType getSaleType(){
+    public TransactionType getOutboundTransactionType(){
+        return transactionRepository.findByTransactionTypeName("Afboeken").get();
+    }
+
+    public TransactionType getInboundTransactionType(){
         return transactionRepository.findByTransactionTypeName("Opboeken").get();
+    }
+
+    public TransactionType getInternalRemovalTransactionType(){
+        return transactionRepository.findByTransactionTypeName("Intern afboeken").get();
+    }
+
+    public TransactionType getInternalAdditionTransactionType(){
+        return transactionRepository.findByTransactionTypeName("Intern opboeken").get();
+    }
+
+    public TransactionType getCorrectionAdditionTransactionType(){
+        return transactionRepository.findByTransactionTypeName("Correctie opboeken").get();
+    }
+
+    public TransactionType getCorrectionRemovalTransactionType(){
+        return transactionRepository.findByTransactionTypeName("Correctie afboeken").get();
     }
 
 
