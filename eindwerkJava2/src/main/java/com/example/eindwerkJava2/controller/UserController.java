@@ -199,7 +199,7 @@ public class UserController {
     public String showNewUserForm(Model model, RedirectAttributes redirAttrs) {
         SuccessEvaluator<Role> rolesSuccess = rolesService.getAllRoles();
         if (rolesSuccess.getIsSuccessfull()) {
-            model.addAttribute("isDisabled","true");
+            model.addAttribute("isDisabled","false");
             User user = new User();
             UserDto userDto =new UserDto();
             userDto.convertUserToDTO(user);

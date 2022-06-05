@@ -5,6 +5,7 @@ import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.model.dto.StockDto;
 import com.example.eindwerkJava2.repositories.UserRepository;
 import com.example.eindwerkJava2.service.*;
+import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 
@@ -81,7 +83,7 @@ public class StockController {
     }
 
     @PostMapping("/move/Stock")
-    public String moveStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser)
+    public String moveStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirAttrs, Model model)
     {
         User user = userRepository.findByUserName(currentUser.getUsername());
         Mutation mutation = new Mutation();
@@ -91,10 +93,14 @@ public class StockController {
         mutation.setUser(user);
         mutation.setLocalDateTime(LocalDateTime.now());
 
-
-        this.mutationService.moveStock(mutation,stockdto.getLocationto().getLocationId());
-
-        return "redirect:/stock";
+        SuccessEvaluator<Mutation> isMoveSuccess =this.mutationService.moveStock(mutation,stockdto.getLocationto().getLocationId());
+        if(isMoveSuccess.getIsSuccessfull()){
+            redirAttrs.addFlashAttribute("success",isMoveSuccess.getMessage());
+            return "redirect:/stock";
+        } else {
+            model.addAttribute("error",isMoveSuccess.getMessage());
+            return "/forms/form_stock_move";
+        }
     }
 
     @GetMapping("/delete/stock/{stockId}")
@@ -112,12 +118,11 @@ public class StockController {
         StockDto stockdto = new StockDto();
         stockdto.convertStocktoDto(stock);
         model.addAttribute("stockDto", stockdto);
-
         return "/forms/form_stock_correct";
     }
 
     @PostMapping("/correct/stock")
-    public String correctStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser)
+    public String correctStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirAtts, Model model)
     {
         User user = userRepository.findByUserName(currentUser.getUsername());
         Mutation mutation = new Mutation();
@@ -128,15 +133,14 @@ public class StockController {
         mutation.setLocalDateTime(LocalDateTime.now());
         mutation.setComment(stockdto.getComment());
 
-        this.mutationService.correctStockAmount(mutation);
-
-        return "redirect:/stock";
+        SuccessEvaluator<Mutation> isCorrectionSuccess = this.mutationService.correctStockAmount(mutation);
+        if(isCorrectionSuccess.getIsSuccessfull()){
+            redirAtts.addFlashAttribute("success",isCorrectionSuccess.getMessage());
+            return "redirect:/stock";
+        } else {
+            model.addAttribute("error",isCorrectionSuccess.getMessage());
+            return "/forms/form_stock_correct";
+        }
     }
-
-
-
-
-
-
 
 }

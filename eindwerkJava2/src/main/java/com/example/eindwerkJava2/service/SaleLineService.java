@@ -59,7 +59,7 @@ public class SaleLineService {
                 (double) createSaleLineDto.getQuantity(),                                 //aantal
                 "Verkocht item",                                                 //comment
                 locationInStore,                                                         //locatie
-                transactionService.getSaleType(),                                       //transactiontype
+                transactionService.getOutboundTransactionType(),                                       //transactiontype
                 userService.getUserByUserName(saleHeader.getNameSalesPerson()),
                 LocalDateTime.now());
 
