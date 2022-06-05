@@ -9,7 +9,13 @@
 
     <!--    Datatable -->
     <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#mutationOverview").dataTable();
+    });
 
+    </script>
 
     <title>Mutations</title>
 
