@@ -61,6 +61,9 @@ public class MutationServiceImpl implements MutationService {
             stockService.saveStock(newStockOnLocation);
             mutationRepository.save(mutation);
             updatedStockTotalAmount = mutation.getAmount();
+            isAddStockSuccessfull.setIsSuccessfull(true);
+            isAddStockSuccessfull.setMessage("Article "+mutation.getArticle().getArticleName()+" has been successfully added to location "+mutation.getLocation().getLocationName()+"" +
+                    " with an amount of "+mutation.getAmount()+".");
         } else {
             int isStockPresentOnLocation = 0;
             List<Stock> stocksOnLocation = stockService.findStocksByLocation(mutation.getLocation());
@@ -70,11 +73,16 @@ public class MutationServiceImpl implements MutationService {
                     // multiple articles on same location use case OR singleStorage with only 1 article on location -> update article if it is the same as the one from mutations
                     if (!updateStockArticle.getLocation().getLocationType().isSingleStorage() || amountOfArticlesOnLocation <= 1) {
                         updatedStockTotalAmount = updateStockArticle.getAmount() + mutation.getAmount();
+                        double initialStockAmount = updateStockArticle.getAmount();
+                        double deltaAmount = mutation.getAmount();
                         updateStockArticle.setAmount(updatedStockTotalAmount);
                         stockService.saveStock(updateStockArticle);
                         mutation.setAmount(mutation.getAmount() * mutation.getTransactionType().getTransactionTypeFactor());
                         mutationRepository.save(mutation);
                         isStockPresentOnLocation += 1;
+                        isAddStockSuccessfull.setIsSuccessfull(true);
+                        isAddStockSuccessfull.setMessage("Article "+mutation.getArticle().getArticleName()+" has been successfully updated on location "+mutation.getLocation().getLocationName()+"" +
+                                " from an amount of "+initialStockAmount+" to an amount of "+updateStockArticle.getAmount()+" (delta = "+deltaAmount+").");
                     } else {
                         isAddStockSuccessfull.setIsSuccessfull(false);
                         isAddStockSuccessfull.setMessage("Cannot add a different article to a single storage location!");
@@ -88,6 +96,9 @@ public class MutationServiceImpl implements MutationService {
                 stockService.saveStock(newArticleOnSameLocation);
                 mutationRepository.save(mutation);
                 updatedStockTotalAmount = mutation.getAmount();
+                isAddStockSuccessfull.setIsSuccessfull(true);
+                isAddStockSuccessfull.setMessage("Article "+mutation.getArticle().getArticleName()+" has been successfully added to location "+mutation.getLocation().getLocationName()+"" +
+                        " with an amount of "+updatedStockTotalAmount+".");
             }
         }
         //Retrieve saved article on location and compare the amount in order to determine whether the save was successful.
@@ -117,6 +128,9 @@ public class MutationServiceImpl implements MutationService {
                     stockService.saveStock(updateStockArticle);
                     mutation.setAmount(mutation.getAmount() * mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
+                    isRemoveStockSuccessfull.setIsSuccessfull(true);
+                    isRemoveStockSuccessfull.setMessage("The article "+mutation.getArticle().getArticleName()+" has been successfully removed from the stock " +
+                            "(removed amount = "+mutation.getAmount()+") on location "+mutation.getLocation().getLocationName()+", current stock on that location is "+updatedStockTotalAmount+".");
                 }
             }
         }
@@ -141,6 +155,7 @@ public class MutationServiceImpl implements MutationService {
         mutation.setTransactionType(transactionService.getInternalRemovalTransactionType());
         SuccessEvaluator<Mutation> isRemoveStockSuccessful = removeStock(mutation);
         if (isRemoveStockSuccessful.getIsSuccessfull()) {
+            isMoveStockSuccessful.setMessage(isRemoveStockSuccessful.getMessage());//Forwarding successMessages from remove action
             Mutation copiedMutation = createCopyOfMutation(mutation);//Copy is needed in order to prevent overwriting the same object in db, a new record is needed!
             copiedMutation.setAmount(Math.abs(copiedMutation.getAmount()));
             copiedMutation.setLocation(locationService.findByLocationId(targetLocationID));
@@ -148,6 +163,8 @@ public class MutationServiceImpl implements MutationService {
             SuccessEvaluator<Mutation> isAddStockSuccessful = addStock(copiedMutation);
             if (!isAddStockSuccessful.getIsSuccessfull()) {
                 isMoveStockSuccessful.setMessage(isAddStockSuccessful.getMessage());
+            }else{
+                isMoveStockSuccessful.setMessage(isAddStockSuccessful.getMessage());//Forwarding successMessages from add action
             }
         } else {
             isMoveStockSuccessful.setIsSuccessfull(false);
@@ -175,22 +192,31 @@ public class MutationServiceImpl implements MutationService {
         for (Stock stock : stocksOnLocation) {
             if (stock.getArticle() == mutation.getArticle()) {
                 double amountDifference = mutation.getAmount() - stock.getAmount();
+                double initialStockAmount = stock.getAmount();
                 if (amountDifference > 0) {
                     mutation.setAmount(amountDifference);
                     mutation.setTransactionType(transactionService.getCorrectionAdditionTransactionType());
                     updatedStockTotalAmount = stock.getAmount() + amountDifference;
                     stock.setAmount(updatedStockTotalAmount);
+                    double newStockAmount=stock.getAmount();
                     mutation.setAmount(mutation.getAmount() * mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
                     stockService.saveStock(stock);
+                    isCorrectionSuccessful.setIsSuccessfull(true);
+                    isCorrectionSuccessful.setMessage("A stock correction ("+mutation.getArticle().getArticleName()+") on location ("+mutation.getLocation().getLocationName()+") has" +
+                            "been successfully increased from "+initialStockAmount+" to "+newStockAmount+".");
                 } else if (amountDifference < 0) {
                     mutation.setAmount(Math.abs(amountDifference));
                     mutation.setTransactionType(transactionService.getCorrectionRemovalTransactionType());
                     updatedStockTotalAmount = stock.getAmount() + amountDifference;
                     stock.setAmount(updatedStockTotalAmount);
+                    double newStockAmount=stock.getAmount();
                     mutation.setAmount(mutation.getAmount() * mutation.getTransactionType().getTransactionTypeFactor());
                     mutationRepository.save(mutation);
                     stockService.saveStock(stock);
+                    isCorrectionSuccessful.setIsSuccessfull(true);
+                    isCorrectionSuccessful.setMessage("A stock correction ("+mutation.getArticle().getArticleName()+") on location ("+mutation.getLocation().getLocationName()+") has" +
+                            "been successfully decreased from "+initialStockAmount+" to "+newStockAmount+".");
                 }
             }
         }
