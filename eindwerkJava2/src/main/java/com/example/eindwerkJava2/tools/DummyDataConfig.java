@@ -245,29 +245,29 @@ public class DummyDataConfig {
             List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
             List<Location> nonSingleStorageLocationsList = locationRepository.getNonSingleStorageLocations();
             LocalDateTime startTimeInventory = LocalDateTime.of(2021, Month.JANUARY, 1, 9, 0);
-            boolean isThisAFreshRun = false;
 
 
             if (mutationService.getMutations().getEntities().size() == 0) {
-                isThisAFreshRun = true;
                 //Initialize Stock to LoadingDock
+                int targetLocationIndex =0;
+                LocalDateTime movementDay=startTimeInventory;
                 for (Article article : articleList) {
                     Mutation mutation = new Mutation(article, 100.00, "Initialize Stock",
                             nonSingleStorageLocationsList.get(0),
                             transactionRepository.findByTransactionTypeName("Opboeken").get(),
                             userList.get(randomNumberGenerator(0, userList.size()-1)), startTimeInventory);
                     mutationService.addStock(mutation);
+                    // Move stock
+                    mutation.setUser(userList.get(randomNumberGenerator(0,userList.size()-1)));
+                    long targetLocationId=singleStorageLocationsList.get(targetLocationIndex).getLocationId();
+                    mutation.setComment("Dummy movement");
+                    mutation.setLocalDateTime(movementDay);
+                    mutationService.moveStock(mutationService.createCopyOfMutation(mutation),targetLocationId);
+                    targetLocationIndex++;
+                    movementDay = movementDay.plusDays(1);
                 }
-
             }
-            /*if(isThisAFreshRun){
-                //Move Stock from LoadingDock to store locations
-                List<Stock> stockList = stockService.findStocksByLocation(nonSingleStorageLocationsList.get(0));
-                List<Mutation> mutationList = mutationService.getMutations().getEntities();
-                for (int i = 0; i < mutationList.size(); i++) {
-                    mutationService.moveStock(mutationList.get(i),singleStorageLocationsList.get(i).getLocationId());
-                }
-            }*/
+
 
 
             //Start selling

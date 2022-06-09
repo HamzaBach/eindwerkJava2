@@ -115,7 +115,7 @@ public class MutationServiceImpl implements MutationService {
             mutation.setTransactionType(transactionService.getOutboundTransactionType());//For real outbound (sold items), else it is internal movement across locations.
         }
         for (Stock updateStockArticle : stocksOnLocation) {
-            if (updateStockArticle.getArticle() == mutation.getArticle()) {
+            if (updateStockArticle.getArticle().getArticleId() == mutation.getArticle().getArticleId()) {
                 // multiple articles on same location use case -> update article if it is the same as the one from mutations
                 updatedStockTotalAmount = updateStockArticle.getAmount() - mutation.getAmount();
 
@@ -173,7 +173,7 @@ public class MutationServiceImpl implements MutationService {
         return isMoveStockSuccessful;
     }
 
-    private Mutation createCopyOfMutation(Mutation mutation) {
+    public Mutation createCopyOfMutation(Mutation mutation) {
         Mutation copiedMutation = new Mutation();
         copiedMutation.setAmount(mutation.getAmount());
         copiedMutation.setTransactionType(mutation.getTransactionType());
