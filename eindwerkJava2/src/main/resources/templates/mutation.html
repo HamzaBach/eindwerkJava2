@@ -12,7 +12,8 @@
     <script type="text/javascript" class="init">
     $(document).ready(function()
     {
-        $("#mutationOverview").dataTable();
+        $("#mutationOverview").dataTable({"order": [ 5, 'desc' ],
+        "pageLength": 20});
     });
 
     </script>
