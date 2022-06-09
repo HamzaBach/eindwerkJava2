@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <title>Users overview</title>
-
     <!-- Bootstrap CSS & icons-->
     <div th:include="fragments/header::bootstrapCssAndIcons"/>
 
@@ -15,9 +13,9 @@
     <div th:include="fragments/header::dataTableJquery"/>
     <script type="text/javascript" class="init">$(document).ready(function() {
     	$('#usersOverview').DataTable();} );
-
-
     </script>
+    <style th:include="fragments/header::background"></style>
+    <title>Users overview</title>
 </head>
 <body>
 <!--Navbar component-->
