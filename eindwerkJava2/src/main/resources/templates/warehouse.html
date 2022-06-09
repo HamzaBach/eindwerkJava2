@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <title>Warehouses</title>
-
     <!-- Bootstrap CSS & icons-->
     <div th:include="fragments/header::bootstrapCssAndIcons"/>
 
@@ -22,7 +20,8 @@
            ]
         });
     });</script>
-
+    <style th:include="fragments/header::background"></style>
+    <title>Warehouses</title>
 </head>
 <body>
 <div th:include="fragments/header::navbar"/>
@@ -43,7 +42,6 @@
     <table class="table table-striped table-hover" id="warehousesOverview">
         <thead>
 <!--        <th scope="col">Id</th>-->
-        <
         <th class="col-6">Name</th>
         <th class="col-2">Actions</th>
 

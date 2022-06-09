@@ -25,6 +25,12 @@
         <script type="text/javascript" charset="utf8"
                 src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
     </div>
+    <style th:fragment="background" th:inline="text">
+        body{
+            background: url("[[@{/}]]img/background_1.jpg");
+            background-size: cover;
+        }
+    </style>
 </head>
 <body>
 <section th:fragment="errorMessaging">
@@ -33,11 +39,12 @@
     <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}">
     </div>
 </section>
-<div th:fragment="navbar">
-    <nav class="navbar navbar-expand-xl bg-dark navbar-dark fixed-top py-3">
+
+<header  th:fragment="navbar" >
+    <nav class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top bg-dark text-light">
         <div class="container">
             <a th:href="@{/home}" class="navbar-brand">
-                <img class="img-fluid w-25 d-none d-sm-block" th:src="@{/img/PXL-Syntra_logo.jpg}" alt="Image missing..."/></a>
+                <i class="bi bi-house-door"></i> Home page</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
                 <span class="navbar-toggler-icon"></span>
@@ -104,7 +111,7 @@
             </div>
         </div>
     </nav>
-</div>
+</header>
 
 <div th:fragment="Jquery">
     <!-- Optional JavaScript -->

@@ -11,7 +11,6 @@
     <!--    Datatable -->
     <div th:include="fragments/header::dataTableJquery"/>
     <script>
-
     $(document).ready(function(){
          $('[data-toggle="tooltip"]').tooltip();
     });
@@ -20,17 +19,11 @@
         var div = document.getElementById(id);
         div.style.display = div.style.display == "none" ? "block" : "none";
     }
-
-
-
     </script>
     <style>
         #changePassword{display:none;}
-
-
-
     </style>
-
+    <style th:include="fragments/header::background"></style>
 </head>
 <body>
 <!--Navbar component-->
