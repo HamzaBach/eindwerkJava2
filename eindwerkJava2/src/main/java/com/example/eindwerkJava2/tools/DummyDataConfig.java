@@ -4,6 +4,7 @@ import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.*;
 import com.example.eindwerkJava2.service.MutationServiceImpl;
 import com.example.eindwerkJava2.service.StockService;
+import com.example.eindwerkJava2.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,7 @@ public class DummyDataConfig {
                                         LocationTypeRepository locationTypeRepository,
                                         TransactionRepository transactionRepository,
                                         MutationServiceImpl mutationService,
-                                        StockService stockService) {
+                                        TransactionService transactionService) {
         return args -> {
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category("Smartphone", "SMTPH");
@@ -237,9 +238,6 @@ public class DummyDataConfig {
 
 
             //Dumping dummyData in mutations
-            List<TransactionType> transactionTypeList = new ArrayList<>();
-            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Opboeken").get());
-            transactionTypeList.add(transactionRepository.findByTransactionTypeName("Afboeken").get());
             List<User> userList = userRepository.findByActiveUser(1);
             List<Article> articleList = articleRepository.findByActiveArticle(1);
             List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
@@ -250,27 +248,38 @@ public class DummyDataConfig {
             if (mutationService.getMutations().getEntities().size() == 0) {
                 //Initialize Stock to LoadingDock
                 int targetLocationIndex =0;
-                LocalDateTime movementDay=startTimeInventory;
+
                 for (Article article : articleList) {
                     Mutation mutation = new Mutation(article, 100.00, "Initialize Stock",
                             nonSingleStorageLocationsList.get(0),
-                            transactionRepository.findByTransactionTypeName("Opboeken").get(),
-                            userList.get(randomNumberGenerator(0, userList.size()-1)), startTimeInventory);
+                            transactionService.getInboundTransactionType(),
+                            userList.get(randomNumberGenerator(0, userList.size()-1)), startTimeInventory.plusHours(randomNumberGenerator(0,8)).plusMinutes(randomNumberGenerator(0,59)));
                     mutationService.addStock(mutation);
                     // Move stock
                     mutation.setUser(userList.get(randomNumberGenerator(0,userList.size()-1)));
                     long targetLocationId=singleStorageLocationsList.get(targetLocationIndex).getLocationId();
                     mutation.setComment("Dummy movement");
-                    mutation.setLocalDateTime(movementDay);
+                    mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0,5)).plusMinutes(randomNumberGenerator(0,59)));
                     mutationService.moveStock(mutationService.createCopyOfMutation(mutation),targetLocationId);
                     targetLocationIndex++;
-                    movementDay = movementDay.plusDays(1);
+                    //Start selling
+                    double currentAmountForSale = mutation.getAmount();
+                    mutation.setLocation(locationRepository.findByLocationId(targetLocationId));
+                    while (mutation.getAmount()>=5){
+                        mutation.setComment("Dummy sale");
+                        mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0,2)).plusHours(randomNumberGenerator(0,3)).plusMinutes(randomNumberGenerator(0,59)));
+                        mutation.setAmount((double) randomNumberGenerator(1,3));
+                        currentAmountForSale-=mutation.getAmount();
+                        mutationService.removeStock(mutationService.createCopyOfMutation(mutation));
+                        mutation.setAmount(currentAmountForSale);
+                    }
+
                 }
             }
 
 
 
-            //Start selling
+
 
 
             //Start moving and selling and buying

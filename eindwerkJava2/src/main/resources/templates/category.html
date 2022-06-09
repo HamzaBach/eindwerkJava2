@@ -13,9 +13,7 @@
     $(document).ready(function()
     {
         $("#categoriesOverview").dataTable({
-           "aoColumnDefs": [
-              { 'bSortable': false, 'aTargets': [ 1,2 ] }
-           ]
+           "order": [ 0, 'asc' ]
         });
     });</script>
     <style th:include="fragments/header::background"></style>
