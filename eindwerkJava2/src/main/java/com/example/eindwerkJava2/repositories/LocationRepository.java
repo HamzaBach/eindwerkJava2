@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.repositories;
 
+import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,6 +47,9 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query(value = "SELECT * from location WHERE active=1 AND location_type_id IN (SELECT location_type_id FROM location_type where single_storage = 1)", nativeQuery = true)
     List<Location> getSingleStorageLocations();
+
+    @Query(value = "SELECT * from location WHERE active=1 AND warehouse_id =?1", nativeQuery = true)
+    List<Location> findByWarehouse(long warehouseId);
 
 
 }

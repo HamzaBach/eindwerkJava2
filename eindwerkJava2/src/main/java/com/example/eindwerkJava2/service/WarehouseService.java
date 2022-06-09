@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.service;
 
+import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.Warehouse;
 import com.example.eindwerkJava2.repositories.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -20,6 +20,8 @@ public class WarehouseController {
 
     @Autowired
     private WarehouseService warehouseService;
+    @Autowired
+    private LocationService locationService;
 
 
     /**
@@ -75,6 +77,7 @@ public class WarehouseController {
     public String editWarehouse(@PathVariable("warehouseId") Long warehouseId, Model model) throws Exception {
         Warehouse warehouse = warehouseService.findWarehouse(warehouseId);
         model.addAttribute("warehouse",warehouse);
+        model.addAttribute("locationsInWarehouse",locationService.getLocationsOfWarehouse(warehouseId));
     return "/forms/form_warehouse";
     }
 

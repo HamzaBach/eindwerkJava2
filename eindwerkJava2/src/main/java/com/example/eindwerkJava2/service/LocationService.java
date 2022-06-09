@@ -84,6 +84,14 @@ public class LocationService {
         return this.locationRepository.activeLocations();
     }
 
+    /**
+     * Returns all locations associated with the warehouse
+     * @param warehouseId The warehouse from which you want to retrieve all locations.
+     * @return all locations associated with the warehouse
+     */
+    public List<Location> getLocationsOfWarehouse(long warehouseId) {
+        return this.locationRepository.findByWarehouse(warehouseId);
+    }
 
 }
 
