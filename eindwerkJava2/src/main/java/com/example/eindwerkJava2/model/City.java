@@ -22,8 +22,12 @@ public class City {
     @Column(name = "city_name")
     private String cityName;
 
-    @Column(name = "city_province")
-    private String cityProvince;
+//    @Column(name = "city_province")
+//    private String cityProvince;
+
+    @ManyToOne
+    @JoinColumn(name = "stateId")
+    private State state;
 
     /**
      *
@@ -32,10 +36,9 @@ public class City {
     }
 
 
-    public City(int cityZipcode, String cityName, String cityProvince) {
+    public City(int cityZipcode, String cityName) {
         this.cityZipcode = cityZipcode;
         this.cityName = cityName;
-        this.cityProvince = cityProvince;
     }
 
     @Override

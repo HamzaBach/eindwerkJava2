@@ -1,11 +1,14 @@
 package com.example.eindwerkJava2.tools;
 
+import com.example.eindwerkJava2.api.geo.ApiCountriesCities;
+import com.example.eindwerkJava2.api.geo.json_model.City_json;
+import com.example.eindwerkJava2.api.geo.json_model.Country_json;
+import com.example.eindwerkJava2.api.geo.json_model.State_json;
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.*;
 import com.example.eindwerkJava2.service.MutationServiceImpl;
-import com.example.eindwerkJava2.service.StockService;
+import com.example.eindwerkJava2.service.StateService;
 import com.example.eindwerkJava2.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 public class DummyDataConfig {
@@ -30,6 +34,7 @@ public class DummyDataConfig {
                                         CategoryRepository categoryRepository,
                                         CitiesRepository citiesRepository,
                                         CountriesRepository countriesRepository,
+                                        StateService stateService,
                                         SupplierRepository supplierRepository,
                                         WarehouseRepository warehouseRepository,
                                         LocationRepository locationRepository,
@@ -53,36 +58,88 @@ public class DummyDataConfig {
                 }
             }
 
-            List<City> dummyCities = new ArrayList<City>();
-            City Genk = new City(3600, "Genk", "Limburg");
-            City Koln = new City(4235, "Köln", "NordRhein-Westfalen");
-            City Stockholm = new City(1000, "Stockholm", "Stockholm");
-            dummyCities.add(Genk);
-            dummyCities.add(Koln);
-            dummyCities.add(Stockholm);
-            for (City city : dummyCities) {
-                if (!citiesRepository.existsCityByCityName(city.getCityName())) {
-                    citiesRepository.save(city);
+
+
+            if(!(citiesRepository.findAll().size() >0)){
+                ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
+                List<Country_json> countries = apiCountriesCities.getCountries();
+                for(Country_json country_json:countries){
+                    Country Belgium = country_json.convertToCountry();
+                    countriesRepository.save(Belgium);
+                }
+                List<State_json> states = apiCountriesCities.getStates("Belgium");
+
+                for(State_json state_json:states){
+                    State state = state_json.convertToState();
+                    state.setCountry(countriesRepository.findByCountryName("Belgium"));
+                    stateService.save(state);
+                }
+
+                List<City_json> cities = apiCountriesCities.getCities("Limburg");
+
+                for(City_json city_json:cities){
+                    City city1 = city_json.convertToCity();
+                    State state = stateService.findByStateName("Limburg");
+                    city1.setState(state);
+                    citiesRepository.save(city1);
                 }
             }
 
-            List<Country> dummyCountries = new ArrayList<Country>();
-            Country Belgium = new Country("Belgium", "BE");
-            Country Germany = new Country("Germany", "DE");
-            Country Sweden = new Country("Sweden", "SV");
-            dummyCountries.add(Belgium);
+
+
+
+//            List<City> dummyCities = new ArrayList<City>();
+//            City Genk = citiesRepository.findByCityName("Genk");
+//            City Hasselt = citiesRepository.findByCityName("Hasselt");
+//            City As = citiesRepository.findByCityName("As");
+//            dummyCities.add(Genk);
+//            dummyCities.add(Hasselt);
+//            dummyCities.add(As);
+//            for (City city : dummyCities) {
+//                if (!citiesRepository.existsCityByCityName(city.getCityName())) {
+//                    citiesRepository.save(city);
+//                }
+//            }
+
+            //List<Country> dummyCountries = new ArrayList<Country>();
+//            Country Belgium = countriesRepository.findByCountryName("Belgium");
+//            Country Germany = countriesRepository.findByCountryName("Germany");
+//            Country Sweden = countriesRepository.findByCountryName("Sweden");
+            /*dummyCountries.add(Belgium);
             dummyCountries.add(Germany);
             dummyCountries.add(Sweden);
             for (Country country : dummyCountries) {
                 if (!countriesRepository.existsCountriesByCountryName(country.getCountryName())) {
                     countriesRepository.save(country);
                 }
-            }
+            }*/
+
+            /*for(Country_json country_json:countries){
+                countriesRepository.save(country_json.convertToCountry());
+                List<State_json> states = apiCountriesCities.getStates(country_json.getCountry_name());
+                for(State_json state_json:states){
+                    State state = state_json.convertToState();
+                    state.setCountry(countriesRepository.findById(countriesRepository.getLastRecord()).get());
+                    stateService.save(state);
+                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
+                    if(cities.size()>0){
+                        for (City_json city:cities){
+                            City city1 = city.convertToCity();
+                            city1.setState(stateService.getLastRecord());
+                            citiesRepository.save(city1);
+                        }
+                    }
+                }
+            }*/
 
             List<Supplier> dummySuppliers = new ArrayList<Supplier>();
+            Country Belgium = countriesRepository.findByCountryName("Belgium");
+            City Genk = citiesRepository.findByCityName("Genk");
+            City Hasselt = citiesRepository.findByCityName("Hasselt");
+            City As = citiesRepository.findByCityName("As");
             Supplier Apple = new Supplier("Apple", "Nieuwstraat 14", Genk, Belgium, 1);
-            Supplier Motorola = new Supplier("Motorola", "NeuStrasse 14", Koln, Germany, 1);
-            Supplier Nokia = new Supplier("Nokia", "Ragnarstreet 12", Stockholm, Sweden, 1);
+            Supplier Motorola = new Supplier("Motorola", "NeuStrasse 14", Hasselt, Belgium, 1);
+            Supplier Nokia = new Supplier("Nokia", "Ragnarstreet 12", As, Belgium, 1);
             dummySuppliers.add(Apple);
             dummySuppliers.add(Motorola);
             dummySuppliers.add(Nokia);
