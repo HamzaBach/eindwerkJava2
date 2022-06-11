@@ -286,6 +286,7 @@ public class DummyDataConfig {
 
 
             if(!(citiesRepository.findAll().size() >0)){
+                System.out.println("****HOLD YOUR HORSES, ADDING COUNTRIES+BELGIAN STATES+BELGIAN CITIES TO THE DB (Approx a few seconds)****");
                 ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
                 List<Country_json> countries = apiCountriesCities.getCountries();
                 for(Country_json country_json:countries){
