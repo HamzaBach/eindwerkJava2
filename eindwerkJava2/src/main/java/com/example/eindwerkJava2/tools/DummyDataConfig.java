@@ -9,6 +9,7 @@ import com.example.eindwerkJava2.repositories.*;
 import com.example.eindwerkJava2.service.MutationServiceImpl;
 import com.example.eindwerkJava2.service.StateService;
 import com.example.eindwerkJava2.service.TransactionService;
+import com.example.eindwerkJava2.service.VatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Configuration
 public class DummyDataConfig {
@@ -43,12 +43,28 @@ public class DummyDataConfig {
                                         LocationTypeRepository locationTypeRepository,
                                         TransactionRepository transactionRepository,
                                         MutationServiceImpl mutationService,
-                                        TransactionService transactionService) {
+                                        TransactionService transactionService,
+                                        StateRepository stateRepository,
+                                        VatService vatService) {
         return args -> {
+            //Define vatRates (BTW):
+            List<Vat> vatRateList = new ArrayList<>();
+            Vat zesPct = new Vat(0.06);
+            Vat negentienPct = new Vat(0.19);
+            Vat eenentwintigPct = new Vat(0.21);
+            vatRateList.add(zesPct);vatRateList.add(negentienPct);vatRateList.add(eenentwintigPct);
+            for(Vat vat:vatRateList){
+                if(!vatService.existsVatrate(vat)){
+                    vatService.save(vat);
+                }
+            }
             List<Category> dummyCategories = new ArrayList<Category>();
             Category smartphone = new Category("Smartphone", "SMTPH");
+            smartphone.setVat(eenentwintigPct);
             Category smartphoneAccessoires = new Category("Smartphone Accessoires", "SMTPH-ACC");
+            smartphoneAccessoires.setVat(eenentwintigPct);
             Category laptopAccesoires = new Category("Laptops", "LPTP");
+            laptopAccesoires.setVat(negentienPct);
             dummyCategories.add(smartphone);
             dummyCategories.add(smartphoneAccessoires);
             dummyCategories.add(laptopAccesoires);
@@ -64,8 +80,8 @@ public class DummyDataConfig {
                 ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
                 List<Country_json> countries = apiCountriesCities.getCountries();
                 for(Country_json country_json:countries){
-                    Country Belgium = country_json.convertToCountry();
-                    countriesRepository.save(Belgium);
+                    Country country = country_json.convertToCountry();
+                    countriesRepository.save(country);
                 }
                 List<State_json> states = apiCountriesCities.getStates("Belgium");
 
@@ -73,16 +89,23 @@ public class DummyDataConfig {
                     State state = state_json.convertToState();
                     state.setCountry(countriesRepository.findByCountryName("Belgium"));
                     stateService.save(state);
+
+                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
+                    for(City_json city:cities){
+                        City city1 = city.convertToCity();
+                        city1.setState(stateRepository.findByStateName(state.getStateName()));
+                        citiesRepository.save(city1);
+                    }
                 }
 
-                List<City_json> cities = apiCountriesCities.getCities("Limburg");
+                /*List<City_json> cities = apiCountriesCities.getCities("Limburg");
 
                 for(City_json city_json:cities){
                     City city1 = city_json.convertToCity();
                     State state = stateService.findByStateName("Limburg");
                     city1.setState(state);
                     citiesRepository.save(city1);
-                }
+                }*/
             }
 
 
