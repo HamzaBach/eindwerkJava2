@@ -61,7 +61,7 @@ public class ApiCountriesCities {
     public List<State_json> getStates(String country) throws IOException, InterruptedException {
 
         HttpClient client = HttpClient.newHttpClient();
-        String API_URL_GET_CITIES = "https://www.universal-tutorial.com/api/states/"+country;
+        String API_URL_GET_CITIES = "https://www.universal-tutorial.com/api/states/"+country.replaceAll(" ","%20");
 
         AuthToken_json bearerToken = getBearerToken();
 
