@@ -25,33 +25,43 @@
     </div>
     <div th:include="fragments/header::errorMessaging"/>
 
-    <form action="#" th:action="@{/saveCategory}" th:object="${category}", method="POST" >
+    <form action="#" th:action="@{/saveCategory}" th:object="${category}" , method="POST">
         <div class="row">
             <div class="col-xl-4"></div>
 
             <div class="col-xl-4">
-            <div class="mb-3 form-group text-start">
-                <input type="hidden" th:field="*{categoryId}" th:value="${category.categoryId}" class="form-control"/>
-                <label class="form-label fw-bold"> Name</label>
-                <input th:field="*{categoryName}" type="text" placeholder="input the category name" class="form-control" required>
-            </div>
-            <div class="mb-3 form-group text-start">
-                <label class="form-label fw-bold"> Abbreviation</label>
-                <input th:field="*{categoryAbbreviation}" type="text" placeholder="input the category abbreviation" class="form-control" required>
-            </div>
-            <div class="mb-3 form-group text-center" >
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-save"></i> Save
-                </button>
-            </div>
+                <div class="mb-3 form-group text-start">
+                    <input type="hidden" th:field="*{categoryId}" th:value="${category.categoryId}"
+                           class="form-control"/>
+                    <label class="form-label fw-bold"> Name</label>
+                    <input th:field="*{categoryName}" type="text" placeholder="input the category name"
+                           class="form-control" required>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label class="form-label fw-bold"> Abbreviation</label>
+                    <input th:field="*{categoryAbbreviation}" type="text" placeholder="input the category abbreviation"
+                           class="form-control" required>
+                </div>
+                <div class="mb-3 form-group text-start">
+                    <label class="form-label fw-bold"> Vat rate</label>
+                    <select th:field="*{vat}" class="form-select" id="vatRateCategory" required
+                            th:disabled="${isDisabled}">
+                        <option value="" selected="selected" hidden="hidden">Select VAT rate...</option>
+                        <option th:each="vat : ${vatList}"
+                                th:text="${vat.vatRate}"
+                                th:value="${vat.vatId}">
+                    </select>
+                </div>
+                <div class="mb-3 form-group text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                </div>
             </div>
         </div>
 
 
-
     </form>
-
-
 
 
 </div>

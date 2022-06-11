@@ -30,7 +30,7 @@ class OrderSupplierHeaderRepositoryTest {
     @BeforeEach
     void setUp() {
         //Given
-        City Genk = new City(3600, "Genk", "Limburg");
+        City Genk = new City(3600, "Genk");
         citiesRepositoryTest.save(Genk);
         Country Belgium = new Country("Belgium", "BE");
         countriesRepositoryTest.save(Belgium);

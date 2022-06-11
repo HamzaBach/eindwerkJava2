@@ -3,10 +3,11 @@ package com.example.eindwerkJava2.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -20,13 +21,19 @@ public class Category {
     private String categoryAbbreviation;
     private int active = 1;
 
-    public Category() {
+    @ManyToOne
+    @JoinColumn(name = "vatId")
+    private Vat vat;
 
-    }
 
     public Category(String categoryName, String categoryAbbreviation) {
         this.categoryName = categoryName;
         this.categoryAbbreviation = categoryAbbreviation;
+    }
+    public Category(String categoryName, String categoryAbbreviation,Vat vat) {
+        this.categoryName = categoryName;
+        this.categoryAbbreviation = categoryAbbreviation;
+        this.vat=vat;
     }
 
 

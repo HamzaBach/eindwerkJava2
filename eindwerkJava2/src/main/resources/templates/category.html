@@ -40,16 +40,18 @@
         <tr>
             <th class="col-5">Name</th>
             <th class="col-5">Abbreviation</th>
+            <th class="col-5">Vat rate</th>
             <th class="col-2">Actions</th>
 
         </tr>
         </thead>
         <tbody>
         <tr th:each="category : ${categoriesList}">
-            <td class="col-5" th:text="${category.categoryName}"></td>
-            <td class="col-5" th:text="${category.categoryAbbreviation}"></td>
+            <td class="col-3" th:text="${category.categoryName}"></td>
+            <td class="col-3" th:text="${category.categoryAbbreviation}"></td>
+            <td class="col-3" th:text="${category.vat.vatRate}"></td>
 
-            <td class="col-2" >
+            <td class="col-3" >
 
                 <a th:href="@{'/edit/category/' + ${category.categoryId}}" class="btn btn-outline-primary"
                    sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">

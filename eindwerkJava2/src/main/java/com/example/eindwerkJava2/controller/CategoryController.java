@@ -2,6 +2,7 @@ package com.example.eindwerkJava2.controller;
 
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.service.CategoryService;
+import com.example.eindwerkJava2.service.VatService;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 
 public class CategoryController {
-    private final CategoryService categoryService;
-
     @Autowired
-    public CategoryController(CategoryService categoryService){
+    private final CategoryService categoryService;
+    @Autowired
+    private final VatService vatService;
+
+
+    public CategoryController(CategoryService categoryService, VatService vatService){
         this.categoryService=categoryService;
+        this.vatService=vatService;
     }
 
 
@@ -36,6 +41,7 @@ public class CategoryController {
     @GetMapping("/new/category")
     public String showNewCategoryForm(Model model){
         model.addAttribute("category", new Category());
+        model.addAttribute("vatList", vatService.getAllActiveVats());
         return "/forms/form_category";
     }
 
@@ -58,6 +64,7 @@ public class CategoryController {
         if(success.getIsSuccessfull()){
             Category category = success.getEntity();
             model.addAttribute("category", category);
+            model.addAttribute("vatList", vatService.getAllActiveVats());
         } else {
             model.addAttribute("error", success.getMessage());
         }

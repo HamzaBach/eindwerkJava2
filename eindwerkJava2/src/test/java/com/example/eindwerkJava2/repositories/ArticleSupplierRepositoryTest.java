@@ -55,9 +55,9 @@ class ArticleSupplierRepositoryTest {
         articleRepositoryTest.save(article4);
         articleRepositoryTest.save(article5);
 
-        City Genk = new City(3600, "Genk", "Limburg");
-        City Koln = new City(4235, "Köln", "NordRhein-Westfalen");
-        City Stockholm = new City(1000, "Stockholm", "Stockholm");
+        City Genk = new City(3600, "Genk");
+        City Koln = new City(4235, "Köln");
+        City Stockholm = new City(1000, "Stockholm");
         citiesRepositoryTest.save(Genk);
         citiesRepositoryTest.save(Koln);
         citiesRepositoryTest.save(Stockholm);

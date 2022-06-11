@@ -24,9 +24,9 @@ class SupplierRepositoryTest {
     void setUp() {
         //Given
         ////Adding cities:
-        City Genk = new City(3600, "Genk", "Limburg");
-        City Koln = new City(4235, "Köln", "NordRhein-Westfalen");
-        City Stockholm = new City(1000, "Stockholm", "Stockholm");
+        City Genk = new City(3600, "Genk");
+        City Koln = new City(4235, "Köln");
+        City Stockholm = new City(1000, "Stockholm");
         ////Adding countries:
         Country Belgium = new Country("Belgium", "BE");
         Country Germany = new Country("Germany", "DE");

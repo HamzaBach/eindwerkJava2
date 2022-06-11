@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -79,7 +80,7 @@ public class ApiCountriesCities {
     public List<City_json> getCities(String state) throws IOException, InterruptedException {
 
         HttpClient client = HttpClient.newHttpClient();
-        String API_URL_GET_CITIES = "https://www.universal-tutorial.com/api/cities/"+state;
+        String API_URL_GET_CITIES = "https://www.universal-tutorial.com/api/cities/"+state.replaceAll(" ","%20");
 
         AuthToken_json bearerToken = getBearerToken();
 
