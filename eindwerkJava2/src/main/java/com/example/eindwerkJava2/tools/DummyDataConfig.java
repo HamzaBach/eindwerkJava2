@@ -69,14 +69,35 @@ public class DummyDataConfig {
             dummyCategories.add(smartphoneAccessoires);
             dummyCategories.add(laptopAccesoires);
             for (Category category : dummyCategories) {
-                if (!categoryRepository.existsCategoryByCategoryName(category.getCategoryName())) {
+                if (!categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(),1)) {
                     categoryRepository.save(category);
                 }
             }
 
+            if(!(citiesRepository.findAll().size() >0)){
+                System.out.println("****HOLD YOUR HORSES, ADDING COUNTRIES+BELGIAN STATES+BELGIAN CITIES TO THE DB (Approx a few seconds)****");
+                ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
+                List<Country_json> countries = apiCountriesCities.getCountries();
+                for(Country_json country_json:countries){
+                    Country country = country_json.convertToCountry();
+                    countriesRepository.save(country);
+                }
+                List<State_json> states = apiCountriesCities.getStates("Belgium");
 
+                for(State_json state_json:states){
+                    State state = state_json.convertToState();
+                    state.setCountry(countriesRepository.findByCountryName("Belgium"));
+                    stateService.save(state);
 
-
+                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
+                    for(City_json city:cities){
+                        City city1 = city.convertToCity();
+                        city1.setState(stateRepository.findByStateName(state.getStateName()));
+                        citiesRepository.save(city1);
+                    }
+                }
+                System.out.println("****Import of Countries/States/Cities is done.****");
+            }
 
             List<Supplier> dummySuppliers = new ArrayList<Supplier>();
             Country Belgium = countriesRepository.findByCountryName("Belgium");
@@ -90,7 +111,7 @@ public class DummyDataConfig {
             dummySuppliers.add(Motorola);
             dummySuppliers.add(Nokia);
             for (Supplier supplier : dummySuppliers) {
-                if (!supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName())) {
+                if (!supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(),1)) {
                     supplierRepository.save(supplier);
                 }
             }
@@ -121,7 +142,7 @@ public class DummyDataConfig {
             dummyArticles.add(article4);
             dummyArticles.add(article5);
             for (Article article : dummyArticles) {
-                if (!articleRepository.existsArticleByArticleName(article.getArticleName())) {
+                if (!articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(),1)) {
                     articleRepository.save(article);
                 }
             }
@@ -171,12 +192,12 @@ public class DummyDataConfig {
             dummyUsers.add(user4);
             dummyUsers.add(user5);
             for (User user : dummyUsers) {
-                if (!userRepository.existsUserByUserName(user.getUserName())) {
+                if (!userRepository.existsUserByUserNameAndActiveUser(user.getUserName(),1)) {
                     userRepository.save(user);
                 }
             }
             for (User user : dummyUsers) {
-                if (userRepository.findByUserName(user.getUserName()).getRoles().isEmpty()) {
+                if (userRepository.findByUserNameAndActiveUser(user.getUserName(),1).getRoles().isEmpty()) {
                     user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
                 }
@@ -279,92 +300,6 @@ public class DummyDataConfig {
 
                 }
             }
-
-
-
-
-
-
-            if(!(citiesRepository.findAll().size() >0)){
-                System.out.println("****HOLD YOUR HORSES, ADDING COUNTRIES+BELGIAN STATES+BELGIAN CITIES TO THE DB (Approx a few seconds)****");
-                ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
-                List<Country_json> countries = apiCountriesCities.getCountries();
-                for(Country_json country_json:countries){
-                    Country country = country_json.convertToCountry();
-                    countriesRepository.save(country);
-                }
-                List<State_json> states = apiCountriesCities.getStates("Belgium");
-
-                for(State_json state_json:states){
-                    State state = state_json.convertToState();
-                    state.setCountry(countriesRepository.findByCountryName("Belgium"));
-                    stateService.save(state);
-
-                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
-                    for(City_json city:cities){
-                        City city1 = city.convertToCity();
-                        city1.setState(stateRepository.findByStateName(state.getStateName()));
-                        citiesRepository.save(city1);
-                    }
-                }
-
-                /*List<City_json> cities = apiCountriesCities.getCities("Limburg");
-
-                for(City_json city_json:cities){
-                    City city1 = city_json.convertToCity();
-                    State state = stateService.findByStateName("Limburg");
-                    city1.setState(state);
-                    citiesRepository.save(city1);
-                }*/
-            }
-
-
-
-
-//            List<City> dummyCities = new ArrayList<City>();
-//            City Genk = citiesRepository.findByCityName("Genk");
-//            City Hasselt = citiesRepository.findByCityName("Hasselt");
-//            City As = citiesRepository.findByCityName("As");
-//            dummyCities.add(Genk);
-//            dummyCities.add(Hasselt);
-//            dummyCities.add(As);
-//            for (City city : dummyCities) {
-//                if (!citiesRepository.existsCityByCityName(city.getCityName())) {
-//                    citiesRepository.save(city);
-//                }
-//            }
-
-            //List<Country> dummyCountries = new ArrayList<Country>();
-//            Country Belgium = countriesRepository.findByCountryName("Belgium");
-//            Country Germany = countriesRepository.findByCountryName("Germany");
-//            Country Sweden = countriesRepository.findByCountryName("Sweden");
-            /*dummyCountries.add(Belgium);
-            dummyCountries.add(Germany);
-            dummyCountries.add(Sweden);
-            for (Country country : dummyCountries) {
-                if (!countriesRepository.existsCountriesByCountryName(country.getCountryName())) {
-                    countriesRepository.save(country);
-                }
-            }*/
-
-            /*for(Country_json country_json:countries){
-                countriesRepository.save(country_json.convertToCountry());
-                List<State_json> states = apiCountriesCities.getStates(country_json.getCountry_name());
-                for(State_json state_json:states){
-                    State state = state_json.convertToState();
-                    state.setCountry(countriesRepository.findById(countriesRepository.getLastRecord()).get());
-                    stateService.save(state);
-                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
-                    if(cities.size()>0){
-                        for (City_json city:cities){
-                            City city1 = city.convertToCity();
-                            city1.setState(stateService.getLastRecord());
-                            citiesRepository.save(city1);
-                        }
-                    }
-                }
-            }*/
-
 
         };
     }

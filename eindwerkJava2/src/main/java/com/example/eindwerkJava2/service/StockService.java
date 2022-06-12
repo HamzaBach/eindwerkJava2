@@ -28,10 +28,6 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public boolean existsStockByLocation(Location location){
-        return stockRepository.existsStockByLocation(location);
-    }
-
     public void saveStock(Stock stock){
         this.stockRepository.save(stock);
     }
@@ -45,7 +41,7 @@ public class StockService {
     }
 
     public List<Stock> findStocksByLocation(Location location){
-        return this.stockRepository.findByLocation(location);
+        return this.stockRepository.findByLocation(location.getLocationId());
     }
 
     public int countArticlesOnLocation(long locationId){
@@ -56,7 +52,7 @@ public class StockService {
         return stockRepository.findStockByArticleIdAndLocationId(articleId,locationId);
     }
 
-    public List<Stock> findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article);};
+    public List<Stock> findStockByArticleId(Article article ){return this.stockRepository.findByArticle(article.getArticleId());};
 
     public void deleteStock(Stock stock)
     {
@@ -67,6 +63,17 @@ public class StockService {
     public List<Stock> activeStock()
     {
         return this.stockRepository.activeStock();
+    }
+
+    public boolean isStockLocationEmpty(Location location){
+        List<Stock> stocksOnLocation = findStocksByLocation(location);
+        double amountOnLocation = 0.0;
+        for(Stock stock:stocksOnLocation){
+            if(stock.getAmount()!=0){
+                amountOnLocation=amountOnLocation+stock.getAmount();
+            }
+        }
+        return amountOnLocation == 0.0;
     }
 
 

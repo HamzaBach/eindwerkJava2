@@ -85,7 +85,7 @@ public class StockController {
     @PostMapping("/move/Stock")
     public String moveStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirAttrs, Model model)
     {
-        User user = userRepository.findByUserName(currentUser.getUsername());
+        User user = userRepository.findByUserNameAndActiveUser(currentUser.getUsername(),1);
         Mutation mutation = new Mutation();
         mutation.setAmount(stockdto.getAmount());
         mutation.setLocation(stockdto.getLocation());
@@ -124,7 +124,7 @@ public class StockController {
     @PostMapping("/correct/stock")
     public String correctStock(@ModelAttribute("stockDto")StockDto stockdto , @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirAtts, Model model)
     {
-        User user = userRepository.findByUserName(currentUser.getUsername());
+        User user = userRepository.findByUserNameAndActiveUser(currentUser.getUsername(),1);
         Mutation mutation = new Mutation();
         mutation.setAmount(stockdto.getAmount());
         mutation.setLocation(stockdto.getLocation());

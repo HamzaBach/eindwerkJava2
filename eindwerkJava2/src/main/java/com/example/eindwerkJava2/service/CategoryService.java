@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.service;
 
-import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Category;
 import com.example.eindwerkJava2.repositories.CategoryRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
@@ -34,9 +33,9 @@ public class CategoryService {
 
     public SuccessEvaluator<Category> addCategory(Category category) {
         SuccessEvaluator<Category> isSaveSuccessful = new SuccessEvaluator<>();
-        boolean existsCategoryByCategoryName = categoryRepository.existsCategoryByCategoryName(category.getCategoryName());
+        boolean existsCategoryByCategoryName = categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(),1);
         if (existsCategoryByCategoryName) {
-            Category categoryWithSameName = categoryRepository.findByCategoryName(category.getCategoryName()).get();
+            Category categoryWithSameName = categoryRepository.findByCategoryNameAndActive(category.getCategoryName(),1).get();
             // use case if a new category gets named to the name of an already present category name -> block!
             if (category.getCategoryId() == null && categoryWithSameName.getActive() == 1) {
                 isSaveSuccessful.setIsSuccessfull(false);
@@ -52,9 +51,9 @@ public class CategoryService {
                 return isSaveSuccessful;
             }
         }
-        boolean existsCategoryAbbreviation = categoryRepository.existsCategoryByCategoryAbbreviation(category.getCategoryAbbreviation());
+        boolean existsCategoryAbbreviation = categoryRepository.existsCategoryByCategoryAbbreviationAndActive(category.getCategoryAbbreviation(),1);
         if (existsCategoryAbbreviation) {
-            Category categoryWithSameAbbreviation = categoryRepository.findByCategoryAbbreviation(category.getCategoryAbbreviation()).get();
+            Category categoryWithSameAbbreviation = categoryRepository.findByCategoryAbbreviationAndActive(category.getCategoryAbbreviation(),1).get();
             // use case if a new category gets named to the name of an already present category abbreviation -> block!
             if (category.getCategoryId() == null
                     && categoryWithSameAbbreviation.getActive() == 1) {

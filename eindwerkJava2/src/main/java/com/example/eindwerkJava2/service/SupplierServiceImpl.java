@@ -58,7 +58,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SuccessObject saveSupplier(Supplier supplier) {
         SuccessObject isSaveSuccessful=new SuccessEvaluator<>();
-        boolean existsSupplierByName = supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName());
+        boolean existsSupplierByName = supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(),1);
         if(existsSupplierByName){
             Supplier supplierWithSameName = supplierRepository.findById(supplier.getSupplierId()).orElse(null);
             // use case if a new supplier gets named to the name of an already present supplier name -> block!

@@ -2,8 +2,6 @@ package com.example.eindwerkJava2.repositories;
 
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.ArticleSupplier;
-import com.example.eindwerkJava2.model.Category;
-import com.example.eindwerkJava2.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,21 +23,21 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * @param articleId This id is used to see whether the article is present or not in the database.
      * @return A boolean is returned to indicate if the article is present or not in the database.
      */
-    boolean existsArticleByArticleId (Long articleId);
+    boolean existsArticleByArticleIdAndActiveArticle(Long articleId,int activeArticle);
 
     /**
      * Method to verify if an article with a particular article name exists in the database.
      * @param articleName This name is used to see whether the article is present or not in the database.
      * @return A boolean is returned to indicate if the article is present or not in the database.
      */
-    boolean existsArticleByArticleName(String articleName);
+    boolean existsArticleByArticleNameAndActiveArticle(String articleName,int activeArticle);
 
     /**
      * Method to verify if an article with a particular article name exists in the database.
      * @param articleAbbreviation This abbreviation is used to see whether an article with same abbreviation is present or not in the database.
      * @return A boolean is returned to indicate if an article is present or not with the same abbreviation in the database.
      */
-    boolean existsArticleByArticleAbbreviation(String articleAbbreviation);
+    boolean existsArticleByArticleAbbreviationAndActiveArticle(String articleAbbreviation,int activeArticle);
 
     /**
      * Method to return all articles in a list that have the same activeArticle value.
@@ -60,6 +58,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * @param articleName
      * @return
      */
+    @Query(value = "select * from article where article_name = ?1 and active_article = 1", nativeQuery = true)
     Optional<Article> findByArticleName(String articleName);
 
     /**
@@ -67,6 +66,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * @param articleAbbreviation
      * @return
      */
+    @Query(value = "select * from article where article_abbreviation = ?1 and active_article = 1", nativeQuery = true)
     Optional<Article> findByArticleAbbreviation(String articleAbbreviation);
 
     /**
@@ -74,9 +74,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * @param barcode
      * @return
      */
+    @Query(value = "select * from article where article_barcode = ?1 and active_article = 1", nativeQuery = true)
     Optional<Article> findByArticleBarcode(String barcode);
 
     boolean existsArticleByArticleSupplier(ArticleSupplier articleSupplier);
-    @Query(value = "select * from article where article_supplier_id in (select article_supplier_id from article_supplier where supplier =?1 and active=1)", nativeQuery = true)
+    @Query(value = "select * from article where article_supplier_id in (select article_supplier_id from article_supplier where supplier = ?1 and active=1)", nativeQuery = true)
     List<Article> getArticlesWhereSupplierIsChosenSupplier(long supplierId);
 }
