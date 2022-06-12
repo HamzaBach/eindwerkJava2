@@ -307,6 +307,7 @@ public class DummyDataConfig {
                         citiesRepository.save(city1);
                     }
                 }
+                System.out.println("****Import of Countries/States/Cities is done.****");
 
                 /*List<City_json> cities = apiCountriesCities.getCities("Limburg");
 

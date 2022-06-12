@@ -62,7 +62,7 @@ class StockRepositoryTest {
         stockRepositoryTest.save(stock2);
 
         //TODO: findByArticle has been changed to list
-        toBeTestedStock = stockRepositoryTest.findByArticle(articleRepositoryTest.findByArticleName("Iphone 12").get());
+        toBeTestedStock = stockRepositoryTest.findByArticle(articleRepositoryTest.findByArticleName("Iphone 12").get().getArticleId());
     }
 
     @AfterEach
@@ -84,7 +84,7 @@ class StockRepositoryTest {
     void findStockByArticleIdAndLocationId_Should_Give_Iphone12() {
         long articleId = toBeTestedStock.get(0).getArticle().getArticleId();
         String articleName = toBeTestedStock.get(0).getArticle().getArticleName();
-        long locationId = stockRepositoryTest.findByArticle(toBeTestedStock.get(0).getArticle()).get(0).getLocation().getLocationId();
+        long locationId = stockRepositoryTest.findByArticle(toBeTestedStock.get(0).getArticle().getArticleId()).get(0).getLocation().getLocationId();
         assertEquals(articleName,stockRepositoryTest.findStockByArticleIdAndLocationId(articleId, locationId).get().getArticle().getArticleName());
     }
 }
