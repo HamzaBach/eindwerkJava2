@@ -121,7 +121,7 @@ public class DummyDataConfig {
             dummyArticles.add(article4);
             dummyArticles.add(article5);
             for (Article article : dummyArticles) {
-                if (!articleRepository.existsArticleByArticleName(article.getArticleName())) {
+                if (!articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(),1)) {
                     articleRepository.save(article);
                 }
             }
