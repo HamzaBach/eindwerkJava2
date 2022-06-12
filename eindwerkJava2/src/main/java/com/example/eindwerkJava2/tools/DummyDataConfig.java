@@ -69,7 +69,7 @@ public class DummyDataConfig {
             dummyCategories.add(smartphoneAccessoires);
             dummyCategories.add(laptopAccesoires);
             for (Category category : dummyCategories) {
-                if (!categoryRepository.existsCategoryByCategoryName(category.getCategoryName())) {
+                if (!categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(),1)) {
                     categoryRepository.save(category);
                 }
             }
@@ -90,7 +90,7 @@ public class DummyDataConfig {
             dummySuppliers.add(Motorola);
             dummySuppliers.add(Nokia);
             for (Supplier supplier : dummySuppliers) {
-                if (!supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName())) {
+                if (!supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(),1)) {
                     supplierRepository.save(supplier);
                 }
             }
@@ -171,12 +171,12 @@ public class DummyDataConfig {
             dummyUsers.add(user4);
             dummyUsers.add(user5);
             for (User user : dummyUsers) {
-                if (!userRepository.existsUserByUserName(user.getUserName())) {
+                if (!userRepository.existsUserByUserNameAndActiveUser(user.getUserName(),1)) {
                     userRepository.save(user);
                 }
             }
             for (User user : dummyUsers) {
-                if (userRepository.findByUserName(user.getUserName()).getRoles().isEmpty()) {
+                if (userRepository.findByUserNameAndActiveUser(user.getUserName(),1).getRoles().isEmpty()) {
                     user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
                 }

@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.controller;
 
-import com.example.eindwerkJava2.model.Location;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
 import com.example.eindwerkJava2.model.User;
@@ -22,9 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class OrderReceiveController {
@@ -55,7 +52,7 @@ public class OrderReceiveController {
 
     @GetMapping(path = "/view/orderReceived/{orderId}")
     public String viewOrder(@PathVariable("orderId") Long orderId, Model model, @AuthenticationPrincipal UserDetails currentUser) {
-        User user = userRepository.findByUserName(currentUser.getUsername());
+        User user = userRepository.findByUserNameAndActiveUser(currentUser.getUsername(),1);
         OrderSupplierHeader orderSupplierHeader = orderSupplierHeaderService.findById(orderId).getEntity();
         List<OrderSupplierDetail> orderSupplierDetailList = orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader);
         OrderReceiveDTO orderReceiveDTO = new OrderReceiveDTO();

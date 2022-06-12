@@ -77,8 +77,8 @@ public class UserService {
      * @return The retrieved user object is returned.
      */
     public User getUserByUserName(String userName) {
-        if (userRepository.existsUserByUserName(userName)) {
-            User retrievedUser = userRepository.findByUserName(userName);
+        if (userRepository.existsUserByUserNameAndActiveUser(userName,1)) {
+            User retrievedUser = userRepository.findByUserNameAndActiveUser(userName,1);
             return retrievedUser;
         } else throw new IllegalStateException("User with username: " + userName + " could not been found.");
     }
@@ -91,9 +91,9 @@ public class UserService {
      */
     public SuccessEvaluator<UserDto> saveUser(UserDto userDto, byte[] userImage) {
         SuccessEvaluator<UserDto> success = new SuccessEvaluator<UserDto>();
-        boolean existsUserName = userRepository.existsUserByUserName(userDto.getUserName());
+        boolean existsUserName = userRepository.existsUserByUserNameAndActiveUser(userDto.getUserName(),1);
         if (existsUserName) {
-            User duplicateUser = userRepository.findByUserName(userDto.getUserName());
+            User duplicateUser = userRepository.findByUserNameAndActiveUser(userDto.getUserName(),1);
             if (userDto.getUserId() == null && duplicateUser.getActiveUser() == 1) {
                 success.setIsSuccessfull(false);
                 success.setMessage("Cannot save this user because a user with user name " + userDto.getUserName() + " already exists!");
@@ -134,8 +134,8 @@ public class UserService {
                 passwordSuccess.setEntity(userDto);
                 return passwordSuccess;
             }
-            if (userRepository.existsUserByUserName(userDto.getUserName())) {
-                User user1 = userRepository.findByUserName(userDto.getUserName());
+            if (userRepository.existsUserByUserNameAndActiveUser(userDto.getUserName(),1)) {
+                User user1 = userRepository.findByUserNameAndActiveUser(userDto.getUserName(),1);
                 if (user1.getUserId() == userDto.getUserId()) {
                     userDto.setRoles(userRepository.findById(userDto.getUserId()).get().getRoles());
                 }

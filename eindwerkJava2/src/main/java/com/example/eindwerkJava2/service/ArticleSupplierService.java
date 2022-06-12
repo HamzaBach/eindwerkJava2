@@ -7,12 +7,9 @@ import com.example.eindwerkJava2.repositories.ArticleSupplierRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import com.example.eindwerkJava2.wrappers.SuccessObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class ArticleSupplierService {
@@ -95,7 +92,7 @@ public class ArticleSupplierService {
     }
 
     public List<ArticleSupplier> getAllSuppliersPerArticle(Article article) {
-        List<ArticleSupplier> suppliersForArticle = articleSupplierRepository.findByArticle(article);
+        List<ArticleSupplier> suppliersForArticle = articleSupplierRepository.findByArticleAndActiveArticleSupplier(article,1);
         Iterator<ArticleSupplier> i = suppliersForArticle.iterator();
         while (i.hasNext()) {
             ArticleSupplier articleSupplier = i.next();
