@@ -27,11 +27,11 @@ public class Supplier {
     private int activeSupplier = 1;
 
     @ManyToOne
-    @JoinColumn(name = "city")
+    @JoinColumn(name = "cityId")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "country")
+    @JoinColumn(name = "countryId")
     private Country country;
 
     public Supplier() {
