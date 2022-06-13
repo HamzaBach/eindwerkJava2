@@ -7,5 +7,7 @@ public interface CitiesService {
     SuccessEvaluator<City> getAllCities();
     //TODO: add logic for saving!
    void saveCity(City city);
-    }
+
+    City findById(Long cityId);
+}
 

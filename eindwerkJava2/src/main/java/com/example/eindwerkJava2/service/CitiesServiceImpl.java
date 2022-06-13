@@ -34,4 +34,9 @@ public class CitiesServiceImpl implements CitiesService {
         citiesRepository.save(city);
     }
 
+    @Override
+    public City findById(Long cityId) {
+        return citiesRepository.findById(cityId).get();
+    }
+
 }
