@@ -175,11 +175,19 @@ public class DummyDataConfig {
             dummyArticleSuppliers.add(appleProduct3);
             dummyArticleSuppliers.add(nokiaProduct1);
             dummyArticleSuppliers.add(motorolaProduct1);
-            for (ArticleSupplier articleSupplier : dummyArticleSuppliers) {
-                if ((articleSupplierRepository.count() < 5)) {
+            if (!(articleSupplierRepository.count() >0)) {
+                for (ArticleSupplier articleSupplier : dummyArticleSuppliers) {
                     articleSupplierRepository.save(articleSupplier);
+                    //Add default supplier to articles.
+                    Article article = articleRepository.findByArticleName(articleSupplier.getArticle().getArticleName()).get();
+                    if(article.getArticleSupplier()==null){
+                        article.setArticleSupplier(articleSupplierRepository.getById(articleSupplier.getArticleSupplierId()));
+                        articleRepository.save(article);
+                    }
+
                 }
             }
+
 
 
             List<Role> defaultRoles = new ArrayList<Role>();
