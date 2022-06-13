@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.tools;
 
+import com.example.eindwerkJava2.api.exchangerate.ApiExchangeRates;
 import com.example.eindwerkJava2.api.geo.ApiCountriesCities;
 import com.example.eindwerkJava2.api.geo.json_model.City_json;
 import com.example.eindwerkJava2.api.geo.json_model.Country_json;
@@ -74,8 +75,6 @@ public class DummyDataConfig {
                 }
             }
 
-
-
             if(!(citiesRepository.findAll().size() >0)){
                 ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
                 List<Country_json> countries = apiCountriesCities.getCountries();
@@ -97,63 +96,7 @@ public class DummyDataConfig {
                         citiesRepository.save(city1);
                     }
                 }
-
-                /*List<City_json> cities = apiCountriesCities.getCities("Limburg");
-
-                for(City_json city_json:cities){
-                    City city1 = city_json.convertToCity();
-                    State state = stateService.findByStateName("Limburg");
-                    city1.setState(state);
-                    citiesRepository.save(city1);
-                }*/
             }
-
-
-
-
-//            List<City> dummyCities = new ArrayList<City>();
-//            City Genk = citiesRepository.findByCityName("Genk");
-//            City Hasselt = citiesRepository.findByCityName("Hasselt");
-//            City As = citiesRepository.findByCityName("As");
-//            dummyCities.add(Genk);
-//            dummyCities.add(Hasselt);
-//            dummyCities.add(As);
-//            for (City city : dummyCities) {
-//                if (!citiesRepository.existsCityByCityName(city.getCityName())) {
-//                    citiesRepository.save(city);
-//                }
-//            }
-
-            //List<Country> dummyCountries = new ArrayList<Country>();
-//            Country Belgium = countriesRepository.findByCountryName("Belgium");
-//            Country Germany = countriesRepository.findByCountryName("Germany");
-//            Country Sweden = countriesRepository.findByCountryName("Sweden");
-            /*dummyCountries.add(Belgium);
-            dummyCountries.add(Germany);
-            dummyCountries.add(Sweden);
-            for (Country country : dummyCountries) {
-                if (!countriesRepository.existsCountriesByCountryName(country.getCountryName())) {
-                    countriesRepository.save(country);
-                }
-            }*/
-
-            /*for(Country_json country_json:countries){
-                countriesRepository.save(country_json.convertToCountry());
-                List<State_json> states = apiCountriesCities.getStates(country_json.getCountry_name());
-                for(State_json state_json:states){
-                    State state = state_json.convertToState();
-                    state.setCountry(countriesRepository.findById(countriesRepository.getLastRecord()).get());
-                    stateService.save(state);
-                    List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
-                    if(cities.size()>0){
-                        for (City_json city:cities){
-                            City city1 = city.convertToCity();
-                            city1.setState(stateService.getLastRecord());
-                            citiesRepository.save(city1);
-                        }
-                    }
-                }
-            }*/
 
             List<Supplier> dummySuppliers = new ArrayList<Supplier>();
             Country Belgium = countriesRepository.findByCountryName("Belgium");
@@ -219,7 +162,6 @@ public class DummyDataConfig {
                     articleSupplierRepository.save(articleSupplier);
                 }
             }
-
 
             List<Role> defaultRoles = new ArrayList<Role>();
             Role role1 = new Role("USER");
@@ -356,6 +298,9 @@ public class DummyDataConfig {
 
                 }
             }
+
+            ApiExchangeRates exchangeRates = new ApiExchangeRates();
+            System.out.println(exchangeRates.getCurrentExchangeValue("EUR","USD"));
 
 
 
