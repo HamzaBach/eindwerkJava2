@@ -54,8 +54,8 @@ public class MutationServiceImpl implements MutationService {
         if(mutation.getTransactionType()!=transactionService.getInternalAdditionTransactionType()){
             mutation.setTransactionType(transactionService.getInboundTransactionType());
         }
-        boolean existsStockByLocation = stockService.existsStockByLocation(mutation.getLocation());
-        if (!existsStockByLocation) {
+        boolean isStockLocationEmpty = stockService.isStockLocationEmpty(mutation.getLocation());
+        if (isStockLocationEmpty) {
             //Empty location use case
             Stock newStockOnLocation = new Stock(mutation.getArticle(), mutation.getAmount(), mutation.getLocation(), 1);
             stockService.saveStock(newStockOnLocation);
@@ -123,7 +123,8 @@ public class MutationServiceImpl implements MutationService {
                     isRemoveStockSuccessfull.setIsSuccessfull(false);
                     isRemoveStockSuccessfull.setMessage("Insufficient amount (" + updateStockArticle.getAmount() + ") while the to be retrieved amount is higher: " + mutation.getAmount() +
                             " on location " + mutation.getLocation());
-                } else {
+                }
+                else {
                     updateStockArticle.setAmount(updatedStockTotalAmount);
                     stockService.saveStock(updateStockArticle);
                     mutation.setAmount(mutation.getAmount() * mutation.getTransactionType().getTransactionTypeFactor());
@@ -131,10 +132,14 @@ public class MutationServiceImpl implements MutationService {
                     isRemoveStockSuccessfull.setIsSuccessfull(true);
                     isRemoveStockSuccessfull.setMessage("The article "+mutation.getArticle().getArticleName()+" has been successfully removed from the stock " +
                             "(removed amount = "+mutation.getAmount()+") on location "+mutation.getLocation().getLocationName()+", current stock on that location is "+updatedStockTotalAmount+".");
+                    stockMovementValidator(mutation, isRemoveStockSuccessfull, updatedStockTotalAmount);
+                    //remove stock if amount on location ==0
+                    if(stockService.isStockLocationEmpty(updateStockArticle.getLocation())){
+                        stockService.deleteStock(updateStockArticle);
+                    }
                 }
             }
         }
-        stockMovementValidator(mutation, isRemoveStockSuccessfull, updatedStockTotalAmount);
         return isRemoveStockSuccessfull;
     }
 

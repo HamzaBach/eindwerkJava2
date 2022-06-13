@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.tools;
 
-import com.example.eindwerkJava2.api.exchangerate.ApiExchangeRates;
 import com.example.eindwerkJava2.api.geo.ApiCountriesCities;
 import com.example.eindwerkJava2.api.geo.json_model.City_json;
 import com.example.eindwerkJava2.api.geo.json_model.Country_json;
@@ -70,12 +69,13 @@ public class DummyDataConfig {
             dummyCategories.add(smartphoneAccessoires);
             dummyCategories.add(laptopAccesoires);
             for (Category category : dummyCategories) {
-                if (!categoryRepository.existsCategoryByCategoryName(category.getCategoryName())) {
+                if (!categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(),1)) {
                     categoryRepository.save(category);
                 }
             }
 
             if(!(citiesRepository.findAll().size() >0)){
+                System.out.println("****HOLD YOUR HORSES, ADDING COUNTRIES+BELGIAN STATES+BELGIAN CITIES TO THE DB (Approx a few seconds)****");
                 ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
                 List<Country_json> countries = apiCountriesCities.getCountries();
                 for(Country_json country_json:countries){
@@ -96,6 +96,7 @@ public class DummyDataConfig {
                         citiesRepository.save(city1);
                     }
                 }
+                System.out.println("****Import of Countries/States/Cities is done.****");
             }
 
             List<Supplier> dummySuppliers = new ArrayList<Supplier>();
@@ -110,7 +111,7 @@ public class DummyDataConfig {
             dummySuppliers.add(Motorola);
             dummySuppliers.add(Nokia);
             for (Supplier supplier : dummySuppliers) {
-                if (!supplierRepository.existsSupplierBySupplierName(supplier.getSupplierName())) {
+                if (!supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(),1)) {
                     supplierRepository.save(supplier);
                 }
             }
@@ -141,7 +142,7 @@ public class DummyDataConfig {
             dummyArticles.add(article4);
             dummyArticles.add(article5);
             for (Article article : dummyArticles) {
-                if (!articleRepository.existsArticleByArticleName(article.getArticleName())) {
+                if (!articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(),1)) {
                     articleRepository.save(article);
                 }
             }
@@ -162,6 +163,7 @@ public class DummyDataConfig {
                     articleSupplierRepository.save(articleSupplier);
                 }
             }
+
 
             List<Role> defaultRoles = new ArrayList<Role>();
             Role role1 = new Role("USER");
@@ -190,12 +192,12 @@ public class DummyDataConfig {
             dummyUsers.add(user4);
             dummyUsers.add(user5);
             for (User user : dummyUsers) {
-                if (!userRepository.existsUserByUserName(user.getUserName())) {
+                if (!userRepository.existsUserByUserNameAndActiveUser(user.getUserName(),1)) {
                     userRepository.save(user);
                 }
             }
             for (User user : dummyUsers) {
-                if (userRepository.findByUserName(user.getUserName()).getRoles().isEmpty()) {
+                if (userRepository.findByUserNameAndActiveUser(user.getUserName(),1).getRoles().isEmpty()) {
                     user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
                 }
@@ -298,17 +300,6 @@ public class DummyDataConfig {
 
                 }
             }
-
-            ApiExchangeRates exchangeRates = new ApiExchangeRates();
-            System.out.println(exchangeRates.getCurrentExchangeValue("EUR","USD"));
-
-
-
-
-
-
-            //Start moving and selling and buying
-
 
         };
     }

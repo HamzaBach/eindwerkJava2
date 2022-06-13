@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param userName The to be verified user name.
      * @return A boolean is returned depending if the user name exists or not.
      */
-    boolean existsUserByUserName(String userName);
+    boolean existsUserByUserNameAndActiveUser(String userName, int activeUser);
 
     /**
      * Method to verify if a user exists by a particular user id.
@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param userName The user name to retrieve the user object.
      * @return The user object based on the inputted user name.
      */
-    User findByUserName(String userName);
+    User findByUserNameAndActiveUser(String userName, int activeUser);
 
     /**
      * Method to obtain all users with a particular activeUer value.

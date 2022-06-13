@@ -41,7 +41,7 @@ public class CategoryController {
     @GetMapping("/new/category")
     public String showNewCategoryForm(Model model){
         model.addAttribute("category", new Category());
-        model.addAttribute("vatList", vatService.getAllActiveVats());
+        model.addAttribute("vatList", vatService.getAllActiveVats().getEntities());
         return "/forms/form_category";
     }
 
@@ -64,7 +64,7 @@ public class CategoryController {
         if(success.getIsSuccessfull()){
             Category category = success.getEntity();
             model.addAttribute("category", category);
-            model.addAttribute("vatList", vatService.getAllActiveVats());
+            model.addAttribute("vatList", vatService.getAllActiveVats().getEntities());
         } else {
             model.addAttribute("error", success.getMessage());
         }

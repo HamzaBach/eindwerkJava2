@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>VAT rates</title>
+    <!-- Bootstrap CSS & icons-->
+    <div th:include="fragments/header::bootstrapCssAndIcons"/>
+
+    <!--    Datatable -->
+    <div th:include="fragments/header::dataTableJquery"/>
+    <script type="text/javascript" class="init">
+    $(document).ready(function()
+    {
+        $("#vatRatesOverview").dataTable({
+           "order": [ 0, 'asc' ]
+        });
+    });</script>
+    <style th:include="fragments/header::background"></style>
+</head>
+<body>
+<!--Navbar component-->
+<div th:include="fragments/header::navbar"/>
+<link rel="stylesheet" href="static/css/style.css">
+
+
+<div align="center" style="margin: 100px" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
+
+    <h1>Vat rates</h1>
+    <div th:include="fragments/header::errorMessaging"/>
+    <a th:href = "@{/new/vat_rate}" class="btn btn-primary btn-lg" style="margin:20px"
+    >New VAT rate</a>
+
+    <table class="table table-striped table-hover dataTable" style="margin:20px" id="vatRatesOverview">
+        <thead>
+        <tr>
+            <th class="col-5">Vat rate</th>
+            <th class="col-2">Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vat : ${vatRatesList}">
+            <td class="col-3" th:text="${vat.vatRate}"></td>
+
+            <td class="col-3" >
+
+                <a th:href="@{'/edit/vat_rate/' + ${vat.vatId}}" class="btn btn-outline-primary"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+
+                <a th:href="@{'/delete/vat_rate/' + ${vat.vatId}}" class="btn btn-outline-danger"
+                   sec:authorize="hasAuthority('ADMIN')">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:include="fragments/header::Jquery"/>
+
+</div>
+</body>
+</html>

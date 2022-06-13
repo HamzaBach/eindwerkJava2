@@ -55,7 +55,7 @@ class RoleRepositoryTest {
 
     @Test
     void getUserNotRoles_Should_Give_Three_And_One() {
-        assertEquals(3, roleRepositoryTest.getUserNotRoles(userRepositoryTest.findByUserName("Hamza").getUserId()).size());
-        assertEquals(1, roleRepositoryTest.getUserNotRoles(userRepositoryTest.findByUserName("Rinaldo").getUserId()).size());
+        assertEquals(3, roleRepositoryTest.getUserNotRoles(userRepositoryTest.findByUserNameAndActiveUser("Hamza",1).getUserId()).size());
+        assertEquals(1, roleRepositoryTest.getUserNotRoles(userRepositoryTest.findByUserNameAndActiveUser("Rinaldo",1).getUserId()).size());
     }
 }

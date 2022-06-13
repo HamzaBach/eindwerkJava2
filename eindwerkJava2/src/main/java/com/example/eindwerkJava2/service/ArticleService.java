@@ -1,7 +1,6 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.Article;
-import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.model.dto.ArticleDto;
 import com.example.eindwerkJava2.repositories.ArticleRepository;
@@ -11,7 +10,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +61,7 @@ public class ArticleService {
 
     public SuccessEvaluator<Article> saveArticle(Article article, byte[] articleImage) {
         SuccessEvaluator<Article> isSaveSuccessful = new SuccessEvaluator<>();
-        boolean existsArticleByName = articleRepository.existsArticleByArticleName(article.getArticleName());
+        boolean existsArticleByName = articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(),1);
         if (existsArticleByName) {
             Article articleWithSameName = articleRepository.findByArticleName(article.getArticleName()).get();
             // use case if a new article gets named to the name of an already present article name -> block!
@@ -82,7 +80,7 @@ public class ArticleService {
                 return isSaveSuccessful;
             }
         }
-        boolean existsArticleAbbreviation = articleRepository.existsArticleByArticleAbbreviation(article.getArticleAbbreviation());
+        boolean existsArticleAbbreviation = articleRepository.existsArticleByArticleAbbreviationAndActiveArticle(article.getArticleAbbreviation(),1);
         if (existsArticleAbbreviation) {
             Article articleWithSameAbbreviation = articleRepository.findByArticleAbbreviation(article.getArticleAbbreviation()).get();
             // use case if a new article gets named to the name of an already present article abbreviation -> block!
@@ -113,7 +111,7 @@ public class ArticleService {
     }
 
     private void articleBarcodeHandler(Article article) {
-        if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
+        if (articleRepository.existsArticleByArticleIdAndActiveArticle(article.getArticleId(),1)) {
             article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + article.getArticleId());
         } else {
             article.setArticleBarcode(article.getCategory().getCategoryAbbreviation() + "-" + article.getArticleAbbreviation() + "-" + String.valueOf(articleRepository.getMaxId() + 1));
@@ -122,7 +120,7 @@ public class ArticleService {
 
     private void articleImageHandler(Article article, byte[] articleImage) {
         if (articleImage.length == 0) {
-            if (articleRepository.existsArticleByArticleId(article.getArticleId())) {
+            if (articleRepository.existsArticleByArticleIdAndActiveArticle(article.getArticleId(),1)) {
                 Article currentArticle = articleRepository.getById(article.getArticleId());
                 article.setArticleImage(currentArticle.getArticleImage());
             }
@@ -139,7 +137,7 @@ public class ArticleService {
      */
     public SuccessEvaluator<Article> findById(Long id) {
         SuccessEvaluator<Article> success = new SuccessEvaluator<>();
-        boolean existsArticle = articleRepository.existsArticleByArticleId(id);
+        boolean existsArticle = articleRepository.existsArticleByArticleIdAndActiveArticle(id,1);
         if (existsArticle) {
             Article article = articleRepository.findById(id).get();
             success.setEntity(article);

@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, NullPointerException {
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUserNameAndActiveUser(username,1);
         if (user == null) {
             throw new UsernameNotFoundException("Could not find user!");
         }

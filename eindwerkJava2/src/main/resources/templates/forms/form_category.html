@@ -43,14 +43,22 @@
                            class="form-control" required>
                 </div>
                 <div class="mb-3 form-group text-start">
-                    <label class="form-label fw-bold"> Vat rate</label>
-                    <select th:field="*{vat}" class="form-select" id="vatRateCategory" required
-                            th:disabled="${isDisabled}">
-                        <option value="" selected="selected" hidden="hidden">Select VAT rate...</option>
-                        <option th:each="vat : ${vatList}"
-                                th:text="${vat.vatRate}"
-                                th:value="${vat.vatId}">
-                    </select>
+                    <label class="form-label fw-bold"> VAT rate</label>
+                    <div class="row">
+                        <div class="col-xl-11" id="vatRate">
+                            <select th:field="*{vat}" class="form-select" id="vatRateCategory" required
+                                    th:disabled="${isDisabled}">
+                                <option value="" selected="selected" hidden="hidden">Select VAT rate...</option>
+                                <option th:each="vat : ${vatList}"
+                                        th:text="${vat.vatRate}"
+                                        th:value="${vat.vatId}">
+                            </select>
+                        </div>
+                        <div class="col-xl-1">
+                            <a th:href="@{/vat_rates}" class="btn btn-outline-primary">
+                                <i class="bi bi-percent"></i></a>
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3 form-group text-center">
                     <button type="submit" class="btn btn-primary btn-lg">

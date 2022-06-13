@@ -18,11 +18,13 @@
 <div th:include="fragments/header::navbar"/>
 
 <div align="center" style="margin: 100px">
+
+    <div align="left">
+        <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm" style="margin:20px">Home page</a>
+    </div>
     <h1>Inventory</h1>
     <div th:include="fragments/header::errorMessaging"/>
     <div align="center" style="margin-bottom: -3px;" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
-        <a th:href="@{/new/stock}" class="btn btn-primary btn-lg" style="margin:20px">New Inventory</a>
-
 
   
 
@@ -31,11 +33,11 @@
     <table class="table table-striped table-hover dataTable" id="stockOverview">
         <thead>
         <!--        <th scope ="col">Id</th>-->
-        <th scope="col">Article</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Warehouse</th>
-        <th scope="col">Location</th>
-        <th scope="col"></th>
+        <th class="col-3">Article</th>
+        <th class="col-2">Amount</th>
+        <th class="col-2">Warehouse</th>
+        <th class="col-3">Location</th>
+        <th class="col-2"></th>
 <!--        <th scope="col"></th>-->
         </thead>
         <tbody>
