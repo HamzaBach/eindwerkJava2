@@ -48,7 +48,6 @@
                             <i class="bi bi-truck"></i></a>
                     </div>
                 </div>
-
             </div>
 
             <div class="mb-3 form-group text-start">
@@ -64,6 +63,21 @@
                     <div class="col-xl-1">
                         <a th:href="@{/articles}" class="btn btn-outline-primary">
                             <i class="bi bi-bag"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 form-group text-start">
+                <div class="row">
+                    <div class="col-xl-2">
+                        <label class="form-label fw-bold"> Currency</label>
+                    </div>
+                    <div class="col-xl-2">
+                        <select th:field="*{currency}" class="form-select">
+                            <th:block th:each="currency : ${currenciesList}">
+                                <option th:text="${currency.currency}" th:value="${currency.currencyId}">
+                            </th:block>
+                        </select>
                     </div>
                 </div>
             </div>

@@ -27,9 +27,9 @@ public class ApiExchangeRates {
         return currentExchangeRates;
     }
 
-    public Double getCurrentExchangeValue(String baseCurrency, String targetCurrency) throws IOException, InterruptedException {
-        ExchangeRates exchangeRates = getExchangeRates(baseCurrency);
-        return exchangeRates.getConversionRates().get(targetCurrency);
+    public Double getCurrentExchangeRateFromTo(String fromCurrency, String toCurrency) throws IOException, InterruptedException {
+        ExchangeRates exchangeRates = getExchangeRates(fromCurrency);
+        return exchangeRates.getConversionRates().get(toCurrency);
     }
 
 }

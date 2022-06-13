@@ -28,6 +28,10 @@ public class ArticleSupplier {
     @Column(name = "partnr")
     private String partnr;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
+
     @Column(name = "sales_price")
     private double salesPrice;
 
@@ -51,6 +55,17 @@ public class ArticleSupplier {
         this.salesPrice = salesPrice;
         this.purchasePrice = purchasePrice;
         this.activeArticleSupplier = activeArticleSupplier;
+    }
+
+    public ArticleSupplier(Article article, Supplier supplier, String partnr,
+                           double salesPrice, double purchasePrice, Currency currency, int activeArticleSupplier) {
+        this.article = article;
+        this.supplier = supplier;
+        this.partnr = partnr;
+        this.salesPrice = salesPrice;
+        this.purchasePrice = purchasePrice;
+        this.activeArticleSupplier = activeArticleSupplier;
+        this.currency = currency;
     }
 
 

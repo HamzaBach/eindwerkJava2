@@ -5,6 +5,7 @@ import com.example.eindwerkJava2.model.ArticleSupplier;
 import com.example.eindwerkJava2.model.Supplier;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
+import com.example.eindwerkJava2.service.CurrencyService;
 import com.example.eindwerkJava2.service.SupplierService;
 import com.example.eindwerkJava2.wrappers.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ArticleSupplierController {
     private ArticleService articleService;
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private CurrencyService currencyService;
 
     @GetMapping("/article_supplier")
     public String viewSuppliers(Model model) {
@@ -45,6 +48,7 @@ public class ArticleSupplierController {
             model.addAttribute("articleSupplier", articleSupplier);
             model.addAttribute("articleList", retrievedArticles.getEntities());
             model.addAttribute("supplierList", supplierSuccess.getEntities());
+            model.addAttribute("currenciesList",currencyService.getAllCurrencies());
         } else {
             model.addAttribute("error", retrievedArticles.getMessage());
         }
@@ -78,6 +82,7 @@ public class ArticleSupplierController {
             model.addAttribute("articleSupplier", articleSupplier);
             model.addAttribute("articleList", articleService.getActiveArticles().getEntities());
             model.addAttribute("supplierList", supplierSuccess.getEntities());
+            model.addAttribute("currenciesList",currencyService.getAllCurrencies());
         } else {
             model.addAttribute("error", success.getMessage());
         }

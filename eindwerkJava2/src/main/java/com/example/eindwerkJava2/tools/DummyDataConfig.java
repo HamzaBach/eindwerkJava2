@@ -1,15 +1,14 @@
 package com.example.eindwerkJava2.tools;
 
+import com.example.eindwerkJava2.api.exchangerate.ApiExchangeRates;
+import com.example.eindwerkJava2.api.exchangerate.ExchangeRates;
 import com.example.eindwerkJava2.api.geo.ApiCountriesCities;
 import com.example.eindwerkJava2.api.geo.json_model.City_json;
 import com.example.eindwerkJava2.api.geo.json_model.Country_json;
 import com.example.eindwerkJava2.api.geo.json_model.State_json;
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.repositories.*;
-import com.example.eindwerkJava2.service.MutationServiceImpl;
-import com.example.eindwerkJava2.service.StateService;
-import com.example.eindwerkJava2.service.TransactionService;
-import com.example.eindwerkJava2.service.VatService;
+import com.example.eindwerkJava2.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class DummyDataConfig {
@@ -45,16 +45,31 @@ public class DummyDataConfig {
                                         MutationServiceImpl mutationService,
                                         TransactionService transactionService,
                                         StateRepository stateRepository,
-                                        VatService vatService) {
+                                        VatService vatService,
+                                        CurrencyService currencyService) {
         return args -> {
+            //Define currencies:
+            if (!(currencyService.getAllCurrencies().size() > 0)) {
+                ApiExchangeRates apiExchangeRates = new ApiExchangeRates();
+                ExchangeRates exchangeRates = apiExchangeRates.getExchangeRates("EUR");
+                Set<String> currencies = exchangeRates.getConversionRates().keySet();
+                for (String currency : currencies) {
+                    Currency currency1 = new Currency();
+                    currency1.setCurrency(currency);
+                    currencyService.saveCurrency(currency1);
+                }
+            }
+
             //Define vatRates (BTW):
             List<Vat> vatRateList = new ArrayList<>();
             Vat zesPct = new Vat(0.06);
             Vat negentienPct = new Vat(0.19);
             Vat eenentwintigPct = new Vat(0.21);
-            vatRateList.add(zesPct);vatRateList.add(negentienPct);vatRateList.add(eenentwintigPct);
-            for(Vat vat:vatRateList){
-                if(!vatService.existsVatrate(vat)){
+            vatRateList.add(zesPct);
+            vatRateList.add(negentienPct);
+            vatRateList.add(eenentwintigPct);
+            for (Vat vat : vatRateList) {
+                if (!vatService.existsVatrate(vat)) {
                     vatService.save(vat);
                 }
             }
@@ -69,28 +84,28 @@ public class DummyDataConfig {
             dummyCategories.add(smartphoneAccessoires);
             dummyCategories.add(laptopAccesoires);
             for (Category category : dummyCategories) {
-                if (!categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(),1)) {
+                if (!categoryRepository.existsCategoryByCategoryNameAndActive(category.getCategoryName(), 1)) {
                     categoryRepository.save(category);
                 }
             }
 
-            if(!(citiesRepository.findAll().size() >0)){
+            if (!(citiesRepository.findAll().size() > 0)) {
                 System.out.println("****HOLD YOUR HORSES, ADDING COUNTRIES+BELGIAN STATES+BELGIAN CITIES TO THE DB (Approx a few seconds)****");
                 ApiCountriesCities apiCountriesCities = new ApiCountriesCities();
                 List<Country_json> countries = apiCountriesCities.getCountries();
-                for(Country_json country_json:countries){
+                for (Country_json country_json : countries) {
                     Country country = country_json.convertToCountry();
                     countriesRepository.save(country);
                 }
                 List<State_json> states = apiCountriesCities.getStates("Belgium");
 
-                for(State_json state_json:states){
+                for (State_json state_json : states) {
                     State state = state_json.convertToState();
                     state.setCountry(countriesRepository.findByCountryName("Belgium"));
                     stateService.save(state);
 
                     List<City_json> cities = apiCountriesCities.getCities(state_json.getState_name());
-                    for(City_json city:cities){
+                    for (City_json city : cities) {
                         City city1 = city.convertToCity();
                         city1.setState(stateRepository.findByStateName(state.getStateName()));
                         citiesRepository.save(city1);
@@ -111,7 +126,7 @@ public class DummyDataConfig {
             dummySuppliers.add(Motorola);
             dummySuppliers.add(Nokia);
             for (Supplier supplier : dummySuppliers) {
-                if (!supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(),1)) {
+                if (!supplierRepository.existsSupplierBySupplierNameAndActiveSupplier(supplier.getSupplierName(), 1)) {
                     supplierRepository.save(supplier);
                 }
             }
@@ -142,16 +157,18 @@ public class DummyDataConfig {
             dummyArticles.add(article4);
             dummyArticles.add(article5);
             for (Article article : dummyArticles) {
-                if (!articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(),1)) {
+                if (!articleRepository.existsArticleByArticleNameAndActiveArticle(article.getArticleName(), 1)) {
                     articleRepository.save(article);
                 }
             }
 
-            ArticleSupplier appleProduct1 = new ArticleSupplier(article1, Apple, "IPH12-2019-06", 640.00, 500.00, 1);
-            ArticleSupplier appleProduct2 = new ArticleSupplier(article4, Apple, "IPH13-2021-06", 750.00, 650.00, 1);
-            ArticleSupplier appleProduct3 = new ArticleSupplier(article2, Apple, "AIP3-2019-06", 199.00, 150.00, 1);
-            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3, Nokia, "N3310-2007-02", 150.00, 100.00, 1);
-            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5, Motorola, "Rzr010-2009-02", 350.00, 300.00, 1);
+            Currency euro = currencyService.findByCurrency("EUR");
+
+            ArticleSupplier appleProduct1 = new ArticleSupplier(article1, Apple, "IPH12-2019-06", 640.00, 500.00, euro, 1);
+            ArticleSupplier appleProduct2 = new ArticleSupplier(article4, Apple, "IPH13-2021-06", 750.00, 650.00, euro, 1);
+            ArticleSupplier appleProduct3 = new ArticleSupplier(article2, Apple, "AIP3-2019-06", 199.00, 150.00, euro, 1);
+            ArticleSupplier nokiaProduct1 = new ArticleSupplier(article3, Nokia, "N3310-2007-02", 150.00, 100.00, euro, 1);
+            ArticleSupplier motorolaProduct1 = new ArticleSupplier(article5, Motorola, "Rzr010-2009-02", 350.00, 300.00, euro, 1);
             List<ArticleSupplier> dummyArticleSuppliers = new ArrayList<ArticleSupplier>();
             dummyArticleSuppliers.add(appleProduct1);
             dummyArticleSuppliers.add(appleProduct2);
@@ -192,12 +209,12 @@ public class DummyDataConfig {
             dummyUsers.add(user4);
             dummyUsers.add(user5);
             for (User user : dummyUsers) {
-                if (!userRepository.existsUserByUserNameAndActiveUser(user.getUserName(),1)) {
+                if (!userRepository.existsUserByUserNameAndActiveUser(user.getUserName(), 1)) {
                     userRepository.save(user);
                 }
             }
             for (User user : dummyUsers) {
-                if (userRepository.findByUserNameAndActiveUser(user.getUserName(),1).getRoles().isEmpty()) {
+                if (userRepository.findByUserNameAndActiveUser(user.getUserName(), 1).getRoles().isEmpty()) {
                     user.addOneRole(roleRepository.findByName("ADMIN"));
                     userRepository.save(user);
                 }
@@ -271,29 +288,29 @@ public class DummyDataConfig {
 
             if (mutationService.getMutations().getEntities().size() == 0) {
                 //Initialize Stock to LoadingDock
-                int targetLocationIndex =0;
+                int targetLocationIndex = 0;
 
                 for (Article article : articleList) {
                     Mutation mutation = new Mutation(article, 100.00, "Initialize Stock",
                             nonSingleStorageLocationsList.get(0),
                             transactionService.getInboundTransactionType(),
-                            userList.get(randomNumberGenerator(0, userList.size()-1)), startTimeInventory.plusHours(randomNumberGenerator(0,8)).plusMinutes(randomNumberGenerator(0,59)));
+                            userList.get(randomNumberGenerator(0, userList.size() - 1)), startTimeInventory.plusHours(randomNumberGenerator(0, 8)).plusMinutes(randomNumberGenerator(0, 59)));
                     mutationService.addStock(mutation);
                     // Move stock
-                    mutation.setUser(userList.get(randomNumberGenerator(0,userList.size()-1)));
-                    long targetLocationId=singleStorageLocationsList.get(targetLocationIndex).getLocationId();
+                    mutation.setUser(userList.get(randomNumberGenerator(0, userList.size() - 1)));
+                    long targetLocationId = singleStorageLocationsList.get(targetLocationIndex).getLocationId();
                     mutation.setComment("Dummy movement");
-                    mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0,5)).plusMinutes(randomNumberGenerator(0,59)));
-                    mutationService.moveStock(mutationService.createCopyOfMutation(mutation),targetLocationId);
+                    mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0, 5)).plusMinutes(randomNumberGenerator(0, 59)));
+                    mutationService.moveStock(mutationService.createCopyOfMutation(mutation), targetLocationId);
                     targetLocationIndex++;
                     //Start selling
                     double currentAmountForSale = mutation.getAmount();
                     mutation.setLocation(locationRepository.findByLocationId(targetLocationId));
-                    while (mutation.getAmount()>=5){
+                    while (mutation.getAmount() >= 5) {
                         mutation.setComment("Dummy sale");
-                        mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0,2)).plusHours(randomNumberGenerator(0,3)).plusMinutes(randomNumberGenerator(0,59)));
-                        mutation.setAmount((double) randomNumberGenerator(1,3));
-                        currentAmountForSale-=mutation.getAmount();
+                        mutation.setLocalDateTime(mutation.getLocalDateTime().plusDays(randomNumberGenerator(0, 2)).plusHours(randomNumberGenerator(0, 3)).plusMinutes(randomNumberGenerator(0, 59)));
+                        mutation.setAmount((double) randomNumberGenerator(1, 3));
+                        currentAmountForSale -= mutation.getAmount();
                         mutationService.removeStock(mutationService.createCopyOfMutation(mutation));
                         mutation.setAmount(currentAmountForSale);
                     }
