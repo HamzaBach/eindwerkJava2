@@ -291,7 +291,7 @@ public class DummyDataConfig {
             List<Article> articleList = articleRepository.findByActiveArticle(1);
             List<Location> singleStorageLocationsList = locationRepository.getSingleStorageLocations();
             List<Location> nonSingleStorageLocationsList = locationRepository.getNonSingleStorageLocations();
-            LocalDateTime startTimeInventory = LocalDateTime.of(2021, Month.JANUARY, 1, 9, 0);
+            LocalDateTime startTimeInventory = LocalDateTime.of(2022, Month.APRIL, 1, 9, 0);
 
 
             if (mutationService.getMutations().getEntities().size() == 0) {

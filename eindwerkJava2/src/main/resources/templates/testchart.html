@@ -12,17 +12,19 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
+
     <style th:include="fragments/header::background"></style>
 </head>
 <body>
 <!--Navbar component-->
 <div th:include="fragments/header::navbar"/>
 
-<div align="center" style="width: 1000px;">
+<div align="center">
     <h2>Spring Boot Google Charts Example</h2>
-    <div id="chart_div"></div>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div" style="width: 1920px; height: 1080px; border: 1px solid #ccc" class="mb-3"></div>
+    <div id="piechart" style="width: 1920px; height: 1080px; border: 1px solid #ccc;" class="mb-3"></div>
 </div>
+
 <script th:inline="javascript">
         var real_data = /*[[${chartData}]]*/'noValue';
         $(document).ready(function() {
@@ -33,12 +35,14 @@
             google.charts.setOnLoadCallback(drawPieChart);
         });
         function drawColumnChart() {
+        // Create the data table.
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Year');
             data.addColumn('number', 'Views');
             Object.keys(real_data).forEach(function(key) {
                 data.addRow([ key, real_data[key] ]);
             });
+            // Set chart options
             var options = {
                 title : 'Blog stats',
                 hAxis : {
@@ -48,25 +52,30 @@
                     title : 'View Count'
                 }
             };
+            // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.ColumnChart(document
                     .getElementById('chart_div'));
             chart.draw(data, options);
         }
         function drawPieChart() {
+        // Create the data table.
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Year');
             data.addColumn('number', 'Views');
             Object.keys(real_data).forEach(function(key) {
                 data.addRow([ key, real_data[key] ]);
             });
+            // Set chart options
             var options = {
                 title : 'Blog stats'
             };
+            // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.PieChart(document
                     .getElementById('piechart'));
             chart.draw(data, options);
         }
-    </script>
+
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
