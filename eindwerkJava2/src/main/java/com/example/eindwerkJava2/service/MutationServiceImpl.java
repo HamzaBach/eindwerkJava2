@@ -3,13 +3,14 @@ package com.example.eindwerkJava2.service;
 import com.example.eindwerkJava2.model.Article;
 import com.example.eindwerkJava2.model.Mutation;
 import com.example.eindwerkJava2.model.Stock;
+import com.example.eindwerkJava2.model.TransactionType;
 import com.example.eindwerkJava2.repositories.MutationRepository;
-import com.example.eindwerkJava2.repositories.TransactionRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -251,6 +252,10 @@ public class MutationServiceImpl implements MutationService {
     @Override
     public List<Mutation> findByArticle(Article article) {
         return mutationRepository.findByArticle(article);
+    }
+
+    public List<Mutation> getMutationsWithStartingDateAndTransactionType(LocalDateTime startDate, TransactionType transactionType){
+        return mutationRepository.getMutationsWithStartingDateAndTransactionType(startDate, transactionType);
     }
 
 }
