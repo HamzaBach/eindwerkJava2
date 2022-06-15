@@ -37,8 +37,8 @@
         function drawColumnChart() {
         // Create the data table.
             var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Year');
-            data.addColumn('number', 'Views');
+            data.addColumn('string', 'Days');
+            data.addColumn('number', 'Sales items');
             Object.keys(real_data).forEach(function(key) {
                 data.addRow([ key, real_data[key] ]);
             });
@@ -46,10 +46,10 @@
             var options = {
                 title : 'Blog stats',
                 hAxis : {
-                    title : 'Years',
+                    title : 'Days',
                 },
                 vAxis : {
-                    title : 'View Count'
+                    title : 'Sales items'
                 }
             };
             // Instantiate and draw our chart, passing in some options.

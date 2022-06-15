@@ -104,6 +104,11 @@ public class ArticleSupplierService {
         return suppliersForArticle;
     }
 
+    public List<ArticleSupplier> getAllArticlesFromSupplier(Supplier supplier){
+        return articleSupplierRepository.getActiveArticlesFromSpecificSupplier(supplier.getSupplierId());
+    }
+
+
     public List<Article> getArticlesFromSupplier(Supplier supplier) {
         List<Article> articleList = new ArrayList<>();
         List<ArticleSupplier> articleSuppliers = getAllArticleSuppliers().getEntities();

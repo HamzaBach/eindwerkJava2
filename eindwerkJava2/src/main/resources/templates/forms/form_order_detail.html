@@ -131,24 +131,32 @@
         <table class="table table-striped table-hover dataTable" style="margin:20px" id="articlesOverview">
             <thead>
             <tr>
-                <th class="col-md-1">Line</th>
-                <th class="col-md-2">Article</th>
-                <th class="col-md-3">Expected Quantity</th>
-                <th class="col-md-3">Received Quantity</th>
-                <th class="col-md-4">Expected Date of Delivery</th>
+                <th class="col-md">Line</th>
+                <th class="col-md">Article</th>
+                <th class="col-md">Expected Quantity</th>
+                <th class="col-md">Unit price (excl. VAT)</th>
+                <th class="col-md">Currency</th>
+                <th class="col-md">Price (excl. VAT)</th>
+                <th class="col-md">VAT amount</th>
+                <th class="col-md">Price (incl. VAT)</th>
+                <th class="col-md">Expected Date of Delivery</th>
                 <th></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
 
-            <tr th:each="orderdetail : ${orderDetails}">
-                <td class="col-md-1" th:text="${orderdetail.orderlineNumber}"></td>
-                <td class="col-md-2" th:text="${orderdetail.article.articleName}"></td>
-                <td class="col-md-3" th:text="${orderdetail.expectedQuantity}"></td>
-                <td class="col-md-3" th:text="${orderdetail.receivedQuantity}"></td>
-                <td class="col-md-3" th:text="${orderdetail.expectedDayOfDelivery}"></td>
-                <td class="col-md-1">
+            <tr th:each="orderdetail : ${orderDtos}">
+                <td class="col-md" th:text="${orderdetail.orderlineNumber}"></td>
+                <td class="col-md" th:text="${orderdetail.article.articleName}"></td>
+                <td class="col-md" th:text="${orderdetail.expectedQuantity}"></td>
+                <td class="col-md" th:text="${orderdetail.buyPriceArticleExclVat}"></td>
+                <td class="col-md" th:text="${orderdetail.currency}"></td>
+                <td class="col-md" th:text="${orderdetail.totalPriceExclVat}"></td>
+                <td class="col-md" th:text="${orderdetail.vatRate}"></td>
+                <td class="col-md" th:text="${orderdetail.totalPriceInclVat}"></td>
+                <td class="col-md" th:text="${orderdetail.expectedDayOfDelivery}"></td>
+                <td class="col-md">
                 </td>
                 <div th:unless="${orderheader.dateOrderClosed}" aria-disabled="true">
                     <td class="col-md-1">
@@ -162,6 +170,39 @@
             </tr>
             </tbody>
         </table>
+
+        <!--total orderAmount-->
+        <div class="mb-3 form-group text-start">
+            <h2> Order summary</h2>
+            <div class="row">
+                <div class="col-2">
+                    <div>
+                        <label> Total amount (excl. VAT): </label>
+                    </div>
+                    <div>
+                        <label> Total amount of VAT: </label>
+                    </div>
+                    <div>
+                        <label> Total amount (incl. VAT):</label>
+                    </div>
+
+                </div>
+                <div class="col-2">
+                    <div>
+                        <label th:text="${grandTotalExclVat}"> </label>
+                    </div>
+                    <div>
+                        <label th:text="${grandTotalVat}"> </label>
+                    </div>
+                    <div>
+                        <label th:text="${grandTotalInclVat}"> </label>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
     </div>
 </div>
 

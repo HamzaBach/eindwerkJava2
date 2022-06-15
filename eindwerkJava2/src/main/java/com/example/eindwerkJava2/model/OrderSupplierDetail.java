@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +31,10 @@ public class OrderSupplierDetail {
     private double deltaQuantity;
     @Column(name="received_quantity")
     private double receivedQuantity;
+    @Column
+    private double buyPriceArticleExclVat;
+    @Column
+    private String currency;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expectedDayOfDelivery;
