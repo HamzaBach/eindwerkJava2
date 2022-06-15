@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller;
 import com.example.eindwerkJava2.model.OrderSupplierDetail;
 import com.example.eindwerkJava2.model.OrderSupplierHeader;
 import com.example.eindwerkJava2.model.Supplier;
+import com.example.eindwerkJava2.model.dto.OrderDto;
 import com.example.eindwerkJava2.service.ArticleService;
 import com.example.eindwerkJava2.service.ArticleSupplierService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -39,10 +44,16 @@ public class OrderSupplierDetailController {
         if (findOrderSuccess.getIsSuccessfull()) {
             OrderSupplierHeader orderSupplierHeader = findOrderSuccess.getEntity();
             Supplier supplier = orderSupplierHeader.getSupplier();
+            List<OrderDto> orderDtos = orderSupplierDetailService.getOrderDtos(orderSupplierHeader);
+            Map<String, Double> totals = orderSupplierDetailService.getTotalPriceFullOrder(orderDtos);
+
+            model.addAttribute("grandTotalExclVat",totals.get("totalPriceExclVat"));
+            model.addAttribute("grandTotalInclVat",totals.get("totalPriceInclVat"));
+            model.addAttribute("grandTotalVat",totals.get("totalVatAmount"));
             model.addAttribute("orderSupplierDetail", new OrderSupplierDetail());
             model.addAttribute("orderheader", orderSupplierHeader);
             model.addAttribute("articles", articleService.getArticlesWhereSupplierIsPreferredSupplier(supplier));
-            model.addAttribute("orderDetails", orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader));
+            model.addAttribute("orderDtos", orderDtos);
             model.addAttribute("lineCounter", (orderSupplierDetailService.getOrderDetailsFromHeader(orderSupplierHeader).size() + 1));
         } else {
             model.addAttribute("error", findOrderSuccess.getMessage());
@@ -51,7 +62,8 @@ public class OrderSupplierDetailController {
     }
 
     @PostMapping("/saveOrderDetail")
-    public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderSupplierDetail orderSupplierDetail) {
+    public String saveDetail(@ModelAttribute("orderSupplierDetail") OrderDto orderDto, RedirectAttributes redirAttrs) {
+        OrderSupplierDetail orderSupplierDetail = orderDto.convertOrderDtoToOrderSupplierDetail();
         this.orderSupplierDetailService.updateExpectedQuantity(orderSupplierDetail);
         return "redirect:/orderdetail/" + orderSupplierDetail.getOrderSupplierHeader().getOrderSupplierId();
     }

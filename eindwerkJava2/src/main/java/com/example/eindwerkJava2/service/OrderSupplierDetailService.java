@@ -1,6 +1,7 @@
 package com.example.eindwerkJava2.service;
 
 import com.example.eindwerkJava2.model.*;
+import com.example.eindwerkJava2.model.dto.OrderDto;
 import com.example.eindwerkJava2.model.dto.OrderReceiveDTO;
 import com.example.eindwerkJava2.repositories.OrderSupplierDetailRepository;
 import com.example.eindwerkJava2.wrappers.SuccessEvaluator;
@@ -17,16 +18,25 @@ import static java.util.stream.Collectors.*;
 
 @Service
 public class OrderSupplierDetailService {
+    @Autowired
     private final MutationServiceImpl mutationServiceImpl;
-    private OrderSupplierDetailRepository orderSupplierDetailRepository;
+    @Autowired
+    private final OrderSupplierDetailRepository orderSupplierDetailRepository;
+    @Autowired
     private final LocationService locationService;
     @Autowired
-    OrderSupplierHeaderService orderSupplierHeaderService;
+    private final OrderSupplierHeaderService orderSupplierHeaderService;
+    @Autowired
+    private final ArticleSupplierService articleSupplierService;
 
-    public OrderSupplierDetailService(MutationServiceImpl mutationServiceImpl, OrderSupplierDetailRepository orderSupplierDetailRepository, LocationService locationService) {
+    public OrderSupplierDetailService(MutationServiceImpl mutationServiceImpl, OrderSupplierDetailRepository orderSupplierDetailRepository,
+                                      LocationService locationService, OrderSupplierHeaderService orderSupplierHeaderService,
+                                      ArticleSupplierService articleSupplierService) {
         this.mutationServiceImpl = mutationServiceImpl;
         this.orderSupplierDetailRepository = orderSupplierDetailRepository;
         this.locationService = locationService;
+        this.orderSupplierHeaderService=orderSupplierHeaderService;
+        this.articleSupplierService=articleSupplierService;
     }
 
     public List<OrderSupplierDetail> getAllOrderDetails() {
@@ -44,14 +54,69 @@ public class OrderSupplierDetailService {
                 if (checkLatestDate(existingArticleOrderLine.getExpectedDayOfDelivery(), orderSupplierDetail.getExpectedDayOfDelivery())) {
                     existingArticleOrderLine.setExpectedDayOfDelivery(orderSupplierDetail.getExpectedDayOfDelivery());
                 }
+                setArticlePurchasePrice(existingArticleOrderLine);
                 orderSupplierDetailRepository.save(existingArticleOrderLine);
                 check = true;
             }
         }
         if (!check) {
             orderSupplierDetail.setDeltaQuantity(orderSupplierDetail.getExpectedQuantity());
+            setArticlePurchasePrice(orderSupplierDetail);
             orderSupplierDetailRepository.save(orderSupplierDetail);
         }
+    }
+
+    private void setArticlePurchasePrice(OrderSupplierDetail orderSupplierDetail){
+        List<ArticleSupplier> articlesFromSupplier = articleSupplierService.getAllArticlesFromSupplier(orderSupplierDetail.getOrderSupplierHeader().getSupplier());
+        for(ArticleSupplier articleSupplier:articlesFromSupplier){
+            if(articleSupplier.getArticle().getArticleId()==orderSupplierDetail.getArticle().getArticleId()){
+                orderSupplierDetail.setBuyPriceArticleExclVat(articleSupplier.getPurchasePrice());
+                orderSupplierDetail.setCurrency(articleSupplier.getCurrency().getCurrency());
+            }
+        }
+    }
+
+    public List<OrderDto> getOrderDtos(OrderSupplierHeader orderSupplierHeader){
+
+        //Adding DTO for orderSupplierDetail so that total price can be calculated:
+        List<OrderDto> orderDtos = new ArrayList<>();
+        List<OrderSupplierDetail> orderSupplierDetailList = getOrderDetailsFromHeader(orderSupplierHeader);
+        for(OrderSupplierDetail orderSupplierDetail:orderSupplierDetailList){
+            OrderDto orderDto = new OrderDto();
+            orderDto.convertOrderSupplierDetailToOrderDto(orderSupplierDetail);
+            orderDto.setTotalPriceExclVat(getTotalPriceForOrderLineExclVat(orderSupplierDetail));
+            orderDto.setTotalPriceInclVat(getTotalPriceForOrderlineInclVat(orderSupplierDetail));
+            Double vatRate = orderDto.getArticle().getCategory().getVat().getVatRate()*100;
+            orderDto.setVatRate(vatRate+" %");
+            orderDtos.add(orderDto);
+        }
+        return orderDtos;
+    }
+
+    public Double getTotalPriceForOrderLineExclVat(OrderSupplierDetail orderSupplierDetail){
+        return orderSupplierDetail.getExpectedQuantity()*orderSupplierDetail.getBuyPriceArticleExclVat();
+    }
+
+    public Double getTotalPriceForOrderlineInclVat(OrderSupplierDetail orderSupplierDetail){
+        Double totalPriceExclVat = getTotalPriceForOrderLineExclVat(orderSupplierDetail);
+        Double vatRate = orderSupplierDetail.getArticle().getCategory().getVat().getVatRate();
+        Double vatAmount = totalPriceExclVat*vatRate;
+        return totalPriceExclVat+vatAmount;
+    }
+    public Map<String,Double> getTotalPriceFullOrder(List<OrderDto> orderDtos){
+        Double totalPriceExclVat = 0.0;
+        Double totalVatAmount = 0.0;
+        Double totalPriceInclVat = 0.0;
+        for(OrderDto orderDto:orderDtos){
+            totalPriceExclVat=totalPriceExclVat+orderDto.getTotalPriceExclVat();
+            totalVatAmount=totalVatAmount+(orderDto.getTotalPriceInclVat()-orderDto.getTotalPriceExclVat());
+            totalPriceInclVat=totalPriceInclVat+orderDto.getTotalPriceInclVat();
+        }
+        Map<String,Double> totals = new HashMap<>();
+        totals.put("totalPriceExclVat",totalPriceExclVat);
+        totals.put("totalPriceInclVat",totalPriceInclVat);
+        totals.put("totalVatAmount",totalVatAmount);
+        return totals;
     }
 
     private boolean checkLatestDate(LocalDate first, LocalDate second) {
