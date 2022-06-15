@@ -3,6 +3,7 @@ package com.example.eindwerkJava2.controller.restcontroller;
 
 import com.example.eindwerkJava2.model.*;
 import com.example.eindwerkJava2.model.dto.OrderReceiveDTO;
+import com.example.eindwerkJava2.model.dto.ReceiveOrderLineDto;
 import com.example.eindwerkJava2.service.LocationService;
 import com.example.eindwerkJava2.service.OrderSupplierDetailService;
 import com.example.eindwerkJava2.service.OrderSupplierHeaderService;
@@ -10,6 +11,7 @@ import com.example.eindwerkJava2.service.UserService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +32,8 @@ public class OrderRestController {
         this.userService = userService;
     }
 
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping()
     private String getOrders() throws JSONException {
         List<OrderSupplierHeader> orders = orderSupplierHeaderService.getAllClosedOrders().getEntities();
@@ -48,6 +52,7 @@ public class OrderRestController {
         return json.toString();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "{orderNumber}")
     private String getOrderDetailsFromHeader(@PathVariable String orderNumber) throws JSONException {
         OrderSupplierHeader orderHeader = orderSupplierHeaderService.findByOrderNumber(orderNumber);
@@ -69,12 +74,12 @@ public class OrderRestController {
         return json.toString();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = "application/json", produces = "application/json")
     public String createHeader(@RequestBody ReceiveOrderLineDto receiveOrderLineDto) throws JSONException {
         OrderSupplierDetail orderDetail = orderSupplierDetailService.getById(receiveOrderLineDto.getId()).get();
         orderDetail.setReceivedQuantity(receiveOrderLineDto.getReceivedQuantity()+orderDetail.getReceivedQuantity());
         orderDetail.setDeltaQuantity(orderDetail.getDeltaQuantity()- orderDetail.getReceivedQuantity());
-
 
         OrderReceiveDTO orderReceiveDTO = new OrderReceiveDTO();
         orderReceiveDTO.setOrderSupplierDetailId(receiveOrderLineDto.getId());

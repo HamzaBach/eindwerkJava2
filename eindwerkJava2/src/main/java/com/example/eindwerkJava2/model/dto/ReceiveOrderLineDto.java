@@ -1,4 +1,4 @@
-package com.example.eindwerkJava2.controller.restcontroller;
+package com.example.eindwerkJava2.model.dto;
 
 public class ReceiveOrderLineDto {
     private final String id;

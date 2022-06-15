@@ -203,7 +203,6 @@ public class ArticleService {
                 article.getCategory().getCategoryName(),
                 article.getArticleSupplier().getSalesPrice(),
                 articleImageAsBase64);
-
     }
 
     public List<ArticleDto> articleDtos(List<Article> articles) {

@@ -19,7 +19,7 @@ public class ArticleRestController {
         this.articleService = articleService;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<ArticleDto> getAllArticles() {
         return articleService.articleDtos(articleService.getActiveArticles().getEntities());
     }
