@@ -239,6 +239,7 @@ public class DummyDataConfig {
 
                 //Defining warehouses:
                 Warehouse store = new Warehouse("Physical store");
+                store.setStore(true);
                 warehouseRepository.save(store);
                 Warehouse storage = new Warehouse("Storage");
                 warehouseRepository.save(storage);

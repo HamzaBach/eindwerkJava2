@@ -1,6 +1,5 @@
 package com.example.eindwerkJava2.model;
 
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.FileInputStream;
