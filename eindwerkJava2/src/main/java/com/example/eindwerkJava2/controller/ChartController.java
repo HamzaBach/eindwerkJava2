@@ -30,19 +30,18 @@ public class ChartController {
         model.addAttribute("chartData", graphData);
         return "testchart";
     }*/
-    @GetMapping("/chart/pie")
+    @GetMapping("/charts")
     public String getPieChart(Model model) {
         //Map<String, Integer> graphData = new TreeMap<>();
         LocalDateTime startTime = LocalDateTime.now().minusDays(30);
-        Map<LocalDateTime,Double> graphData = chartService.getSalesChartFromDateToNow(startTime);
+        Map<LocalDateTime,Double> graphDataSales = chartService.getSalesChartFromDateToNow(startTime);
+        Map<String,Double> graphDataInventory = chartService.getInventoryPerLocation();
+        Map<String,Double> graphDataValuePerLocation = chartService.getValuePerLocation();
 
 
-
-        /*graphData.put("2016", 147);
-        graphData.put("2017", 1256);
-        graphData.put("2018", 3856);
-        graphData.put("2019", 19807);*/
-        model.addAttribute("chartData", graphData);
-        return "testchart";
+        model.addAttribute("chartDataSales", graphDataSales);
+        model.addAttribute("chartDataInventory", graphDataInventory);
+        model.addAttribute("chartDataValuePerLocation", graphDataValuePerLocation);
+        return "metrics";
     }
 }
