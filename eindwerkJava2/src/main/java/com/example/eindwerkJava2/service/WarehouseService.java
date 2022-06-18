@@ -5,6 +5,7 @@ import com.example.eindwerkJava2.repositories.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,7 +80,14 @@ public class WarehouseService {
         return this.warehouseRepository.findByActiveWarehouse(1);
     }
 
-
+    public List<String> Stores(){
+        List<Warehouse> Stores = warehouseRepository.findStores();
+        List<String> storeNames = new ArrayList<>();
+        for (Warehouse store: Stores) {
+         storeNames.add(store.getWarehouseName());
+        }
+        return storeNames;
+    }
 
 
 

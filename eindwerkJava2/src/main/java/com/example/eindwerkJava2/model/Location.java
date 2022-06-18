@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class Location {
     private String locationName;
 
     @ManyToOne
+    @JsonManagedReference(value = "location-warehouse")
     @JoinColumn(name = "warehouse_Id")
     private Warehouse warehouse;
 

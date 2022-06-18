@@ -1,5 +1,6 @@
 package com.example.eindwerkJava2.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Warehouse {
     @Column(name = "warehouseName")
     private String warehouseName;
 
+    @JsonBackReference(value = "warehouse-location")
     @OneToMany(mappedBy = "warehouse")
     private List<Location> locations;
 

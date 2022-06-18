@@ -12,13 +12,15 @@ public class SaleHeaderDto {
     private LocalDateTime dateOfSale;
     private List<SaleLineDto> saleLineDtos;
     private double totalPrice;
+    private String store;
 
-    public SaleHeaderDto(Long saleHeaderId,String salesPerson, LocalDateTime dateOfSale, List<SaleLineDto> saleLineDtos, double totalPrice ) {
+    public SaleHeaderDto(Long saleHeaderId,String salesPerson, LocalDateTime dateOfSale, List<SaleLineDto> saleLineDtos, double totalPrice, String store ) {
         this.saleHeaderId = saleHeaderId;
         this.salesPerson = salesPerson;
         this.dateOfSale = dateOfSale;
         this.saleLineDtos = saleLineDtos;
         this.totalPrice = totalPrice;
+        this.store = store;
 
     }
 }

@@ -69,5 +69,10 @@ public class StockService {
         return this.stockRepository.activeStock();
     }
 
+    public List<Stock> findStockByStore(String store){
+
+    return this.stockRepository.findByStore(store);
+    }
+
 
 }

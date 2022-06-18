@@ -49,7 +49,7 @@ public class SaleLineService {
         Location locationInStore = null;
         for (Stock stock: stocks
              ) {
-           if(stock.getLocation().getWarehouse().isStore()){
+           if(stock.getLocation().getWarehouse().toString().equals(saleHeader.getStore()) && stock.getLocation().getLocationType().isSingleStorage()){
                locationInStore = stock.getLocation();
            }
         }
@@ -59,7 +59,7 @@ public class SaleLineService {
                 (double) createSaleLineDto.getQuantity(),                                 //aantal
                 "Verkocht item",                                                 //comment
                 locationInStore,                                                         //locatie
-                transactionService.getOutboundTransactionType(),                                       //transactiontype
+                transactionService.getOutboundTransactionType(),                        //transactiontype
                 userService.getUserByUserName(saleHeader.getNameSalesPerson()),
                 LocalDateTime.now());
 

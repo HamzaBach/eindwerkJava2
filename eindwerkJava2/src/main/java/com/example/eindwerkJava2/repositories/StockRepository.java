@@ -25,4 +25,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     Optional<Stock> findStockByArticleIdAndLocationId(long articleId, long locationId);
     @Query(value = "SELECT COUNT(*) FROM Stock WHERE location_id=?1", nativeQuery = true)
     int countArticlesPerLocation(long locationId);
+    @Query(value="SELECT * FROM Stock WHERE warehouse_name = ?1",nativeQuery = true)
+    List<Stock> findByStore(String store);
 }

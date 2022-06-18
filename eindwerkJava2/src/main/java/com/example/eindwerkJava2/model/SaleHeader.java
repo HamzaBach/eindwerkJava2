@@ -25,6 +25,8 @@ public class SaleHeader {
     private String nameSalesPerson;
     @Column(name = "total_price")
     private double totalPrice;
+    @Column
+    String store;
 
 
     public SaleHeader(String nameSalesPerson) {
@@ -34,5 +36,9 @@ public class SaleHeader {
 
     public String getNameSalesPerson() {
         return nameSalesPerson;
+    }
+
+    public String getStore(){
+        return store;
     }
 }

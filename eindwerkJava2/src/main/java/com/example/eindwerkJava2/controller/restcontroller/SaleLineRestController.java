@@ -32,7 +32,8 @@ public class SaleLineRestController {
                 saleHeader.getNameSalesPerson(),
                 saleHeader.getDateOfOrder(),
                 saleLineService.saleLineDtos(saleLineService.getAllSaleLinesFromHeader(saleHeader.getSaleHeaderId())),
-                saleHeader.getTotalPrice()
+                saleHeader.getTotalPrice(),
+                saleHeader.getStore()
                 );
     }
 

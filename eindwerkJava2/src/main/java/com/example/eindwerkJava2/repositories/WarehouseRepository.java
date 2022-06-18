@@ -30,4 +30,6 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      */
     List<Warehouse> findByActiveWarehouse(int activeWarehouse);
 
+    @Query(value = "select * from warehouse where store = 1", nativeQuery = true)
+    List<Warehouse> findStores();
 }
