@@ -45,7 +45,7 @@ public class VatController {
         } else {
             model.addAttribute("error", success.getMessage());
         }
-        return "form_vat_rate";
+        return "/forms/form_vat_rate";
     }
 
     @PostMapping("/saveVatRate")
